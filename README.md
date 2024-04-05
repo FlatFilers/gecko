@@ -48,7 +48,7 @@ Your entire project source code, including its `package.json`, `tsconfig.json`, 
 
 Gecko uses a file named `gecko.tsx` at the root of your project to generate files. The file contents might look something like:
 
-````/** @jsx geckoJSX */
+```/** @jsx geckoJSX */
 import {
   File,
   Folder,
@@ -98,4 +98,7 @@ A function. May be exported as default with `export="default"` or exported as na
 ### `<Text>`
 
 Plain text to be written to a file. Adjacent `<Text>` or `<Function>` tags within a `<File>` are separated by a new line.
-````
+
+```
+
+```
