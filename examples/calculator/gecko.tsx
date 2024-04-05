@@ -1,4 +1,3 @@
-/** @jsx geckoJSX */
 import {
   File,
   Folder,

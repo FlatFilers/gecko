@@ -1,0 +1,6 @@
+{
+  "name": "@flatfile/gecko-example-rest-api",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

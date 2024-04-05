@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "baseUrl": "./",
+    "esModuleInterop": true,
     "jsx": "react",
     "jsxFactory": "geckoJSX",
     "jsxFragmentFactory": "geckoJSX",
@@ -9,7 +10,9 @@
     "paths": {
       "@flatfile/gecko": ["./src/index.ts"],
       "@flatfile/gecko/*": ["./src/*"]
-    }
+    },
+    "resolveJsonModule": true,
+    "strictNullChecks": true
   },
   "exclude": ["examples/*/project"]
 }

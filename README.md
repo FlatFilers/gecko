@@ -48,8 +48,7 @@ Your entire project source code, including its `package.json`, `tsconfig.json`, 
 
 Gecko uses a file named `gecko.tsx` at the root of your project to generate files. The file contents might look something like:
 
-```/** @jsx geckoJSX */
-import {
+```import {
   File,
   Folder,
   geckoJSX,
