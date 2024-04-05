@@ -81,7 +81,7 @@ Gecko supports many JSX tags to structure generated code:
 
 ### `<Root>`
 
-This tag should wrap all other tags used. It's job is to write the generated folders and files to disk. If the `erase` attribute is present, the folder specified by `path="path/to/generated/content"` will be erased on each build. Use `erase` with extreme caution!
+This tag should wrap all other tags used. It specifies the location of generated folders and files on disk with `path="path/to/generated/content"`. If the `erase` attribute is present, the folder path specified will be erased on each build. Use `erase` with extreme caution!
 
 ### `<File>`
 
