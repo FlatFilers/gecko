@@ -1,5 +1,6 @@
 {
   "name": "@flatfile/gecko",
+  "bin": "./gecko",
   "devDependencies": {
     "@swc/core": "^1.4.12",
     "ts-node": "^10.9.2",

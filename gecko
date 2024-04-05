@@ -1,0 +1,1 @@
+ts-node --swc --project $(dirname $0)/tsconfig.json -r tsconfig-paths/register -e "import { commit } from '@flatfile/gecko' ; import generate from './gecko.tsx' ; commit(generate())"
