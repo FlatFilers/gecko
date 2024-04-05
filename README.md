@@ -1,12 +1,14 @@
-# gecko
+# Gecko
 
 ![Gecko mascot, a green gecko wearing glasses](./resources/gecko.jpeg)
 
-JSX code generation framework for TypeScript
+Gecko is a JSX code generation framework for TypeScript.
 
 ## Prerequisites
 
-Gecko is written in TypeScript, and requires either [Bun](https://bun.sh/) or [ts-node](https://www.npmjs.com/package/ts-node).
+Gecko is written in TypeScript, and requires [ts-node](https://www.npmjs.com/package/ts-node).
+
+[Bun](https://bun.sh/) support is planned.
 
 ## Examples
 
@@ -20,7 +22,7 @@ npm run gecko
 npm --prefix project run dev
 ```
 
-Gecko should run and generate files in the `./examples/calculator/project/gecko_generated` folder.
+Gecko should run and generate files in the `./examples/calculator/project/src/gecko_generated` folder.
 
 If there were no errors during the Gecko or Vite build, the calculator example will be available at http://localhost:5173 that looks like this:
 
@@ -44,6 +46,37 @@ Your entire project source code, including its `package.json`, `tsconfig.json`, 
 
 ## Reference
 
+Gecko uses a file named `gecko.tsx` at the root of your project to generate files. The file contents might look something like:
+
+````/** @jsx geckoJSX */
+import {
+  File,
+  Folder,
+  geckoJSX,
+  Root,
+  Text,
+} from '@flatfile/gecko'
+
+import { Button } from './templates/Button'
+
+export default function () {
+  return (
+    <Root path="project/src/gecko_generated" erase>
+      <File name="readme.md">
+        <Text>Hello world</Text>
+      </File>
+      <Folder name="components">
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((digit) => (
+          <File name={`Digit${digit}.tsx`}>
+            <Button label={digit} />
+          </File>
+        ))}
+      </Folder>
+    </Root>
+  )
+}
+```
+
 Gecko supports many JSX tags to structure generated code:
 
 ### `<Root>`
@@ -65,3 +98,4 @@ A function. May be exported as default with `export="default"` or exported as na
 ### `<Text>`
 
 Plain text to be written to a file. Adjacent `<Text>` or `<Function>` tags within a `<File>` are separated by a new line.
+````
