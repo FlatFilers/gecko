@@ -1,0 +1,6 @@
+{
+  "name": "@flatfile/gecko-example-calculator",
+  "scripts": {
+    "gecko": "ts-node --swc --project ../../tsconfig.json -r tsconfig-paths/register -e \"import { commit } from '@flatfile/gecko' ; import generate from './gecko.tsx' ; commit(generate())\""
+  }
+}

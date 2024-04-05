@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "baseUrl": "./",
+    "jsx": "react",
+    "jsxFactory": "geckoJSX",
+    "jsxFragmentFactory": "geckoJSX",
+    "noEmit": true,
+    "paths": {
+      "@flatfile/gecko": ["./src/index.ts"],
+      "@flatfile/gecko/*": ["./src/*"]
+    }
+  },
+  "exclude": ["examples/*/project"]
+}
