@@ -1,5 +1,8 @@
 {
   "name": "@flatfile/gecko-example-rest-api",
+  "scripts": {
+    "start": "ts-node src/gecko_generated/index.ts"
+  },
   "dependencies": {
     "express": "^4.19.2"
   }
