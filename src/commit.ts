@@ -1,8 +1,10 @@
 import { mkdir, rmdir, writeFile } from 'fs/promises'
 import { join } from 'path'
+import { GeckoClassElement } from './tags/Class'
 import { GeckoFileElement } from './tags/File'
 import { GeckoFolderElement } from './tags/Folder'
 import { GeckoFunctionElement } from './tags/Function'
+import { GeckoMethodElement } from './tags/Method'
 import { GeckoRootElement } from './tags/Root'
 import { GeckoTextElement } from './tags/Text'
 
@@ -67,17 +69,44 @@ export function collectFileContents(
 }
 
 export function renderContent(
-  content: GeckoFunctionElement | GeckoTextElement | string
+  content:
+    | GeckoClassElement
+    | GeckoMethodElement
+    | GeckoFunctionElement
+    | GeckoTextElement
+    | string
 ) {
   if (typeof content === 'string') {
     return content
   }
   switch (content.type) {
+    case 'class':
+      return renderClass(content)
     case 'function':
       return renderFunction(content)
+    case 'method':
+      return renderMethod(content)
     case 'text':
-      return content.props.children.join('\n')
+      return (
+        content.props.children
+          ?.map(renderContent)
+          ?.join?.('\n') ?? ''
+      )
   }
+}
+
+export function renderClass(_class: GeckoClassElement) {
+  const body = _class.props.children
+    ? _class.props.children
+        .flat(Infinity)
+        .map((x) => renderContent(x))
+        .join('\n')
+    : ''
+  const cls = `class ${_class.props.name} {\n${body}\n}`
+  if (_class.props.export === 'default') {
+    return `export default ${cls}`
+  }
+  return `${_class.props.export ? 'export ' : ''}${cls}`
 }
 
 export function renderFunction(func: GeckoFunctionElement) {
@@ -89,9 +118,25 @@ export function renderFunction(func: GeckoFunctionElement) {
         .map((x) => '  ' + renderContent(x))
         .join('\n')
     : ''
-  const fn = `function ${func.props.name}(${args}) {\n${body}\n}`
+  const fn = `${func.props.async ? 'async ' : ''}function ${
+    func.props.name
+  }(${args}) {\n${body}\n}`
   if (func.props.export === 'default') {
     return `export default ${fn}`
   }
   return `${func.props.export ? 'export ' : ''}${fn}`
+}
+
+export function renderMethod(method: GeckoMethodElement) {
+  const args = method.props.arguments
+    ? method.props.arguments.join(', ')
+    : ''
+  const body = method.props.children
+    ? method.props.children
+        .map((x) => '  ' + renderContent(x))
+        .join('\n')
+    : ''
+  return `${method.props.async ? 'async ' : ''}${
+    method.props.name
+  }(${args}) {\n${body}\n}\n`
 }

@@ -1,4 +1,3 @@
-/** @jsx geckoJSX */
 import { Function, geckoJSX, Text } from '@flatfile/gecko'
 
 export function CalculatorButton({

@@ -10,7 +10,7 @@ Gecko is written in TypeScript, and requires [ts-node](https://www.npmjs.com/pac
 
 [Bun](https://bun.sh/) support is planned.
 
-## Examples
+## Example: React + Vite front end
 
 To test Gecko, run the following from this repository's root folder:
 
@@ -27,6 +27,30 @@ Gecko should run and generate files in the `./examples/calculator/project/src/ge
 If there were no errors during the Gecko or Vite build, the calculator example will be available at http://localhost:5173 that looks like this:
 
 ![Calculator example](./resources/calculator.png)
+
+## Example: Express REST API
+
+To start the API, first run Gecko and then launch the resulting API:
+
+```
+npm install
+cd examples/rest-api
+npm --prefix project install
+npm run gecko
+npm --prefix project start
+```
+
+If there were no errors encountered, you should be able to visit http://localhost:3000/users and see a list of users:
+
+```
+[
+  {
+    "id": "1",
+    "name": "Test user",
+    "email": "test@example.com"
+  }
+]
+```
 
 ## Project structure
 
@@ -48,8 +72,7 @@ Your entire project source code, including its `package.json`, `tsconfig.json`, 
 
 Gecko uses a file named `gecko.tsx` at the root of your project to generate files. The file contents might look something like:
 
-```/** @jsx geckoJSX */
-import {
+```import {
   File,
   Folder,
   geckoJSX,
@@ -98,7 +121,3 @@ A function. May be exported as default with `export="default"` or exported as na
 ### `<Text>`
 
 Plain text to be written to a file. Adjacent `<Text>` or `<Function>` tags within a `<File>` are separated by a new line.
-
-```
-
-```

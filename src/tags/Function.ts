@@ -2,6 +2,7 @@ import { GeckoTextElement } from './Text'
 
 export interface FunctionProps {
   arguments?: string[]
+  async?: true
   children?: (GeckoTextElement | string)[]
   export?: boolean | 'default'
   name: string
