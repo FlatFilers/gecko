@@ -11,8 +11,12 @@ export function ControllerTestFile(props: {
     expectedStatus: number
     expectedResponseJson?: any
   }[]
+  testFileName?: string
 }) {
-  const fileName = `${props.httpMethod}${props.resourceName}.test.js`
+  const fileName = `${
+    props.testFileName ??
+    `${props.httpMethod}${props.resourceName}`
+  }.test.js`
   const testCases = props.testCases.map((testCase) => (
     <Text>
       {`test('${testCase.name}', async () => {

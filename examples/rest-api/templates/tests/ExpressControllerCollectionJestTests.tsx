@@ -27,12 +27,13 @@ global.beforeEach(() => {
         resourceName={props.resourceName}
         resourceUrl={props.resourceUrl}
         httpMethod="get"
+        testFileName="listUsers"
         testCases={[
           {
             name: 'should return an empty array when no users exist',
             setUp: { users: [] },
             expectedStatus: 200,
-            expectedResponseJson: '[]',
+            expectedResponseJson: [],
           },
           {
             name: 'should return an array of users when users exist',
