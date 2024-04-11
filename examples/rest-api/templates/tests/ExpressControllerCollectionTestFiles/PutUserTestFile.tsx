@@ -36,6 +36,67 @@ export function PutUserTestFile(props: {
           },
         },
         {
+          name: 'should return 400 with invalid name',
+          setUp: {
+            users: [
+              {
+                id: '1',
+                name: 'John Doe',
+                email: 'john@example.com',
+              },
+            ],
+          },
+          requestBodyJson: {
+            name: '',
+            email: 'updated@example.com',
+          },
+          expectedStatus: 400,
+          expectedResponseJson: {
+            errors: [
+              {
+                instancePath: '/name',
+                keyword: 'minLength',
+                message:
+                  'must NOT have fewer than 1 characters',
+                params: {
+                  limit: 1,
+                },
+                schemaPath: '#/properties/name/minLength',
+              },
+            ],
+          },
+        },
+        {
+          name: 'should return 400 with invalid email',
+          setUp: {
+            users: [
+              {
+                id: '1',
+                name: 'John Doe',
+                email: 'john@example.com',
+              },
+            ],
+          },
+          requestBodyJson: {
+            name: 'Updated Name',
+            email: 'updated-example.com',
+          },
+          expectedStatus: 400,
+          expectedResponseJson: {
+            errors: [
+              {
+                instancePath: '/email',
+                keyword: 'format',
+                message: 'must match format "email"',
+                params: {
+                  format: 'email',
+                },
+                schemaPath: '#/properties/email/format',
+              },
+            ],
+          },
+        },
+        {
           name: 'should return 404 when user is not found',
           setUp: { users: [] },
           requestBodyJson: {
