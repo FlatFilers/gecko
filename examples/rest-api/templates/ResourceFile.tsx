@@ -50,12 +50,14 @@ function PropertyDeclarations(props: {
 export function ResourceFile(props: {
   fileName: string
   resourceName: string
-  schema: JSONSchemaType<any>
+  resourceSchema: JSONSchemaType<any>
 }) {
   return (
     <File name={`${props.fileName}.ts`}>
       <Class name={`${props.resourceName}Resource`} export>
-        <PropertyDeclarations schema={props.schema} />
+        <PropertyDeclarations
+          schema={props.resourceSchema}
+        />
         <Method
           name="constructor"
           arguments={[

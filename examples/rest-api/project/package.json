@@ -5,6 +5,7 @@
     "test": "jest --config jest.config.js --runInBand"
   },
   "dependencies": {
+    "ajv-formats": "^3.0.1",
     "express": "^4.19.2"
   },
   "devDependencies": {

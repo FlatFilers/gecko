@@ -1,5 +1,6 @@
 import { Folder, geckoJSX } from '@flatfile/gecko'
 
+import { JSONSchemaType } from 'ajv'
 import { CreateController } from './CreateController'
 import { DeleteController } from './DeleteController'
 import { GetController } from './GetController'
@@ -11,6 +12,7 @@ export function ExpressControllerCollectionFolder(props: {
   resourceName: string
   repositoryType: string
   repositoryTypeImport: string
+  resourceSchema: JSONSchemaType<any>
 }) {
   return (
     <Folder name={props.name}>

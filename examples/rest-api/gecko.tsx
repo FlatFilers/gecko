@@ -44,13 +44,14 @@ export default function () {
           repositoryType="UserRepository"
           repositoryTypeImport="../../repositories/user"
           resourceName="User"
+          resourceSchema={validatedUserSchema}
         />
       </Folder>
       <Folder name="resources">
         <ResourceFile
           fileName="user"
           resourceName="User"
-          schema={validatedUserSchema}
+          resourceSchema={validatedUserSchema}
         />
       </Folder>
       <Folder name="repositories">
