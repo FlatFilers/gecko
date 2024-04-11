@@ -15,9 +15,15 @@ export default function(repository: ${props.repositoryType}) {
     const id = req.params.id
     try {
       const item = await repository.get${props.resourceName}ById(id)
-      res.status(200).json(item)
+      if (item === null) {
+        res.status(404).json({ error: 'Item not found' })
+      }
+      else {
+        res.status(200).json(item)
+      }
     } catch (error) {
-      res.status(404).json({ error: 'Item not found' })
+      console.error(error)
+      res.status(500).json({ error: 'Unknown error' })
     }
   }
 }`}

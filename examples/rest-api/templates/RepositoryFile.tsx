@@ -44,6 +44,9 @@ constructor(dataSource: DataSource<${props.resourceClassName}>) {
           arguments={['id: string']}
         >
           {`const data = await this.dataSource.select(1, 0, { id })
+if (data.length !== 1) {
+  return null
+}
 return new ${props.resourceClassName}(data[0])`}
         </Method>
         <Method

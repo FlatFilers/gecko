@@ -87,7 +87,11 @@ export function renderContent(
     case 'method':
       return renderMethod(content)
     case 'text':
-      return content.props.children?.join?.('\n') ?? ''
+      return (
+        content.props.children
+          ?.map(renderContent)
+          ?.join?.('\n') ?? ''
+      )
   }
 }
 

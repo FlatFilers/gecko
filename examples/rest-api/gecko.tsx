@@ -8,6 +8,7 @@ import { IndexFile } from './templates/IndexFile.tsx'
 import { OpenAPIYAMLFile } from './templates/OpenAPIYAML/OpenAPIYAMLFile.tsx'
 import { RepositoryFile } from './templates/RepositoryFile.tsx'
 import { ResourceFile } from './templates/ResourceFile.tsx'
+import { ExpressControllerCollectionJestTests } from './templates/tests/ExpressControllerCollectionJestTests.tsx'
 
 function validateJSONSchema7(
   schema: any
@@ -62,6 +63,13 @@ export default function () {
         />
       </Folder>
       <IndexFile />
+      <Folder name="tests">
+        <ExpressControllerCollectionJestTests
+          resourceName="User"
+          resourceUrl="/users"
+          schema={validatedUserSchema}
+        />
+      </Folder>
       <OpenAPIYAMLFile userSchema={validatedUserSchema} />
     </Root>
   )
