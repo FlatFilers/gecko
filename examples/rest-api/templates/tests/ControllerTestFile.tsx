@@ -27,9 +27,9 @@ export function ControllerTestFile(props: {
   }
   const response = await request(app)
     .${props.httpMethod}('${props.resourceUrl.replace(
-        ':id',
-        '1'
-      )}')
+      ':id',
+      '1'
+    )}')
     ${
       testCase.requestBodyJson
         ? `.send(${JSON.stringify(
@@ -55,7 +55,6 @@ export function ControllerTestFile(props: {
       <Text>
         {`const request = require('supertest')
 const fs = require('fs')
-const path = require('path')
 const { app } = require('../index.ts')
 
 function setUsers(users) {

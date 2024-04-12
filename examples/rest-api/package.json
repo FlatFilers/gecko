@@ -1,6 +1,7 @@
 {
   "name": "@flatfile/gecko-example-rest-api",
   "scripts": {
+    "format": "npx prettier -w **/*.{js,json,ts,tsx,yaml}",
     "gecko": "../../gecko"
   },
   "dependencies": {
