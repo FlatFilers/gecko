@@ -15,7 +15,7 @@ export function SchemaPropertiesToYAML(props: {
               ? `
           format: ${propSchema.format}`
               : ''
-          }`,
+          }`
         )
         .join('\n')}
     </Text>

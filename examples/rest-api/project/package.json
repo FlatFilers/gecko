@@ -1,7 +1,6 @@
 {
   "name": "@flatfile/gecko-example-rest-api",
   "scripts": {
-    "format": "npx prettier -w src/**/*.{js,json,ts,yaml}",
     "start": "ts-node src/gecko_generated/index.ts",
     "test": "jest --config jest.config.js --runInBand"
   },

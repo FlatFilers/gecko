@@ -17,7 +17,7 @@ import { ${props.repositoryType} } from '${
         }'
 
 const resourceSchema = ${JSON.stringify(
-          props.resourceSchema,
+          props.resourceSchema
         )}
 const ajv = new Ajv()
 addFormats(ajv)

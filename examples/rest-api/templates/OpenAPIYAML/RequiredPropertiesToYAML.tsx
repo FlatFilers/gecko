@@ -7,7 +7,7 @@ export function RequiredPropertiesToYAML(props: {
   return (
     <Text>
       {props.schema.required?.map(
-        (propName: string) => `        - ${propName}`,
+        (propName: string) => `        - ${propName}`
       )}
     </Text>
   )

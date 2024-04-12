@@ -28,12 +28,12 @@ export function ControllerTestFile(props: {
   const response = await request(app)
     .${props.httpMethod}('${props.resourceUrl.replace(
       ':id',
-      '1',
+      '1'
     )}')
     ${
       testCase.requestBodyJson
         ? `.send(${JSON.stringify(
-            testCase.requestBodyJson,
+            testCase.requestBodyJson
           )})`
         : ''
     }
@@ -41,7 +41,7 @@ export function ControllerTestFile(props: {
   ${
     testCase.expectedResponseJson
       ? `expect(response.body).toEqual(${JSON.stringify(
-          testCase.expectedResponseJson,
+          testCase.expectedResponseJson
         )})`
       : ''
   }
