@@ -1,12 +1,39 @@
 import { mkdir, rmdir, writeFile } from 'fs/promises'
+import { isMatch } from 'micromatch'
 import { join } from 'path'
+import prettier from 'prettier'
 import { GeckoClassElement } from './tags/Class'
 import { GeckoFileElement } from './tags/File'
+import { GeckoFileFormatterElement } from './tags/FileFormatter'
 import { GeckoFolderElement } from './tags/Folder'
 import { GeckoFunctionElement } from './tags/Function'
 import { GeckoMethodElement } from './tags/Method'
 import { GeckoRootElement } from './tags/Root'
 import { GeckoTextElement } from './tags/Text'
+
+interface CommitContext {
+  fileFormatterStack: GeckoFileFormatterElement[]
+}
+
+async function applyFormatter(
+  formatter: GeckoFileFormatterElement,
+  content: string,
+  filePath: string,
+): Promise<string> {
+  switch (formatter.props.formatter) {
+    case 'prettier':
+      const prettierConfig =
+        await prettier.resolveConfig(filePath)
+      return prettier.format(content, {
+        ...prettierConfig,
+        filepath: filePath,
+      })
+    default:
+      throw new Error(
+        `${JSON.stringify(formatter.props.formatter)} is not a recognized gecko formatter`,
+      )
+  }
+}
 
 export async function commit(root: GeckoRootElement) {
   const baseDir = root.props.path
@@ -18,48 +45,108 @@ export async function commit(root: GeckoRootElement) {
     } catch (e) {}
   }
   await mkdir(baseDir, { recursive: true })
-  await commitFolderChildren(baseDir, root)
+  const context: CommitContext = {
+    fileFormatterStack: [],
+  }
+  await commitFolderChildren(context, baseDir, root)
 }
 
 export async function commitFolder(
+  context: CommitContext,
   baseDir: string,
-  folder: GeckoFolderElement
+  folder: GeckoFolderElement,
 ) {
   const newBaseDir = join(baseDir, folder.props.name)
   await mkdir(newBaseDir, { recursive: true })
-  await commitFolderChildren(newBaseDir, folder)
+  await commitFolderChildren(context, newBaseDir, folder)
+}
+
+export async function commitFileFormatter(
+  context: CommitContext,
+  baseDir: string,
+  formatter: GeckoFileFormatterElement,
+) {
+  context.fileFormatterStack.push(formatter)
+  if (formatter.props.children) {
+    await commitFolderChildren(context, baseDir, formatter)
+  }
+  context.fileFormatterStack.pop()
 }
 
 export async function commitFolderChildren(
+  context: CommitContext,
   baseDir: string,
-  folder: GeckoFolderElement | GeckoRootElement
+  folder:
+    | GeckoFileFormatterElement
+    | GeckoFolderElement
+    | GeckoRootElement,
 ) {
   if (folder.props.children) {
     for (const child of folder.props.children) {
       switch (child.type) {
         case 'file':
-          await commitFile(baseDir, child)
+          await commitFile(context, baseDir, child)
+          break
+        case 'file-formatter':
+          await commitFileFormatter(context, baseDir, child)
           break
         case 'folder':
-          await commitFolder(baseDir, child)
+          await commitFolder(context, baseDir, child)
           break
       }
     }
   }
 }
 
+function closestMatchingFormatter(
+  context: CommitContext,
+  fileName: string,
+): undefined | GeckoFileFormatterElement {
+  for (
+    let i = context.fileFormatterStack.length - 1;
+    i >= 0;
+    i--
+  ) {
+    const formatter = context.fileFormatterStack[i]
+    if (isMatch(fileName, formatter.props.match)) {
+      return formatter
+    }
+  }
+}
+
 export async function commitFile(
+  context: CommitContext,
   baseDir: string,
-  file: GeckoFileElement
+  file: GeckoFileElement,
 ) {
   const filePath = join(baseDir, file.props.name)
-  const contents = collectFileContents(file)
-  await writeFile(filePath, contents, { encoding: 'utf8' })
-  console.log(`wrote ${filePath} (${contents.length})`)
+  const content = collectFileContents(file)
+  const formatter = closestMatchingFormatter(
+    context,
+    file.props.name,
+  )
+  if (formatter) {
+    const formattedContent = await applyFormatter(
+      formatter,
+      content,
+      filePath,
+    )
+    await writeFile(filePath, formattedContent, {
+      encoding: 'utf8',
+    })
+    console.log(
+      `wrote ${filePath} (${formattedContent.length}) and formatted with ${formatter.props.formatter}`,
+    )
+  } else {
+    await writeFile(filePath, content, {
+      encoding: 'utf8',
+    })
+    console.log(`wrote ${filePath} (${content.length})`)
+  }
 }
 
 export function collectFileContents(
-  file: GeckoFileElement
+  file: GeckoFileElement,
 ) {
   return file.props.children
     ? file.props.children
@@ -74,7 +161,7 @@ export function renderContent(
     | GeckoMethodElement
     | GeckoFunctionElement
     | GeckoTextElement
-    | string
+    | string,
 ) {
   if (typeof content === 'string') {
     return content

@@ -1,5 +1,6 @@
 import { GeckoClassElement } from './tags/Class.ts'
 import { GeckoFileElement } from './tags/File.ts'
+import { GeckoFileFormatterElement } from './tags/FileFormatter.ts'
 import { GeckoFolderElement } from './tags/Folder.ts'
 import { GeckoFunctionElement } from './tags/Function.ts'
 import { GeckoMethodElement } from './tags/Method.ts'
@@ -9,6 +10,7 @@ import { GeckoTextElement } from './tags/Text.ts'
 export { commit } from './commit.ts'
 export { Class } from './tags/Class.ts'
 export { File } from './tags/File.ts'
+export { FileFormatter } from './tags/FileFormatter.ts'
 export { Folder } from './tags/Folder.ts'
 export { Function } from './tags/Function.ts'
 export { Method } from './tags/Method.ts'
@@ -18,6 +20,7 @@ export { Text } from './tags/Text.ts'
 export type GeckoElement =
   | GeckoClassElement
   | GeckoFileElement
+  | GeckoFileFormatterElement
   | GeckoFolderElement
   | GeckoFunctionElement
   | GeckoMethodElement

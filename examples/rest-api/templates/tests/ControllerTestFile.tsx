@@ -27,13 +27,13 @@ export function ControllerTestFile(props: {
   }
   const response = await request(app)
     .${props.httpMethod}('${props.resourceUrl.replace(
-        ':id',
-        '1'
-      )}')
+      ':id',
+      '1',
+    )}')
     ${
       testCase.requestBodyJson
         ? `.send(${JSON.stringify(
-            testCase.requestBodyJson
+            testCase.requestBodyJson,
           )})`
         : ''
     }
@@ -41,7 +41,7 @@ export function ControllerTestFile(props: {
   ${
     testCase.expectedResponseJson
       ? `expect(response.body).toEqual(${JSON.stringify(
-          testCase.expectedResponseJson
+          testCase.expectedResponseJson,
         )})`
       : ''
   }
@@ -55,7 +55,6 @@ export function ControllerTestFile(props: {
       <Text>
         {`const request = require('supertest')
 const fs = require('fs')
-const path = require('path')
 const { app } = require('../index.ts')
 
 function setUsers(users) {

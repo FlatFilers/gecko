@@ -1,8 +1,13 @@
 import { GeckoFileElement } from './File'
+import { GeckoFileFormatterElement } from './FileFormatter'
 import { GeckoFolderElement } from './Folder'
 
 export interface RootProps {
-  children?: (GeckoFolderElement | GeckoFileElement)[]
+  children?: (
+    | GeckoFileElement
+    | GeckoFileFormatterElement
+    | GeckoFolderElement
+  )[]
   erase?: true
   path?: string
 }
