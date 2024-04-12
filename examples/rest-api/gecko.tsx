@@ -16,7 +16,7 @@ import { ResourceFile } from './templates/ResourceFile.tsx'
 import { ExpressControllerCollectionJestTests } from './templates/tests/ExpressControllerCollectionJestTests.tsx'
 
 function validateJSONSchema7(
-  schema: any
+  schema: any,
 ): schema is JSONSchemaType<any> {
   if (
     schema.$schema !==
@@ -29,7 +29,7 @@ function validateJSONSchema7(
 }
 
 function getValidatedSchema(
-  schema: any
+  schema: any,
 ): JSONSchemaType<any> {
   const isValid = validateJSONSchema7(schema)
   if (!isValid) {

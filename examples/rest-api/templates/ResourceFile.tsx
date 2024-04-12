@@ -8,7 +8,7 @@ import {
 import { JSONSchemaType } from 'ajv'
 
 function getTypeScriptType(
-  propSchema: JSONSchemaType<any>
+  propSchema: JSONSchemaType<any>,
 ): string {
   const { type } = propSchema
   if (type === 'string') {
@@ -38,10 +38,10 @@ function PropertyDeclarations(props: {
             {`${propName}${
               required?.includes(propName) ? '' : '?'
             }: ${getTypeScriptType(
-              propSchema as JSONSchemaType<any>
+              propSchema as JSONSchemaType<any>,
             )}`}
           </Text>
-        )
+        ),
       )}
     </>
   )

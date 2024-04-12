@@ -11,11 +11,11 @@ export function SchemaPropertiesToYAML(props: {
           ([propName, propSchema]: [string, any]) =>
             `        ${propName}:
           type: ${propSchema.type}${
-              propSchema.format
-                ? `
+            propSchema.format
+              ? `
           format: ${propSchema.format}`
-                : ''
-            }`
+              : ''
+          }`,
         )
         .join('\n')}
     </Text>
