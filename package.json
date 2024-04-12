@@ -1,6 +1,9 @@
 {
   "name": "@flatfile/gecko",
   "bin": "./gecko",
+  "scripts": {
+    "format": "npx prettier -w **/*.ts"
+  },
   "devDependencies": {
     "@swc/core": "^1.4.12",
     "@types/micromatch": "^4.0.6",

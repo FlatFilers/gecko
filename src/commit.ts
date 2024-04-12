@@ -18,7 +18,7 @@ interface CommitContext {
 async function applyFormatter(
   formatter: GeckoFileFormatterElement,
   content: string,
-  filePath: string,
+  filePath: string
 ): Promise<string> {
   switch (formatter.props.formatter) {
     case 'prettier':
@@ -30,7 +30,7 @@ async function applyFormatter(
       })
     default:
       throw new Error(
-        `${JSON.stringify(formatter.props.formatter)} is not a recognized gecko formatter`,
+        `${JSON.stringify(formatter.props.formatter)} is not a recognized gecko formatter`
       )
   }
 }
@@ -54,7 +54,7 @@ export async function commit(root: GeckoRootElement) {
 export async function commitFolder(
   context: CommitContext,
   baseDir: string,
-  folder: GeckoFolderElement,
+  folder: GeckoFolderElement
 ) {
   const newBaseDir = join(baseDir, folder.props.name)
   await mkdir(newBaseDir, { recursive: true })
@@ -64,7 +64,7 @@ export async function commitFolder(
 export async function commitFileFormatter(
   context: CommitContext,
   baseDir: string,
-  formatter: GeckoFileFormatterElement,
+  formatter: GeckoFileFormatterElement
 ) {
   context.fileFormatterStack.push(formatter)
   if (formatter.props.children) {
@@ -79,7 +79,7 @@ export async function commitFolderChildren(
   folder:
     | GeckoFileFormatterElement
     | GeckoFolderElement
-    | GeckoRootElement,
+    | GeckoRootElement
 ) {
   if (folder.props.children) {
     for (const child of folder.props.children) {
@@ -100,7 +100,7 @@ export async function commitFolderChildren(
 
 function closestMatchingFormatter(
   context: CommitContext,
-  fileName: string,
+  fileName: string
 ): undefined | GeckoFileFormatterElement {
   for (
     let i = context.fileFormatterStack.length - 1;
@@ -117,25 +117,25 @@ function closestMatchingFormatter(
 export async function commitFile(
   context: CommitContext,
   baseDir: string,
-  file: GeckoFileElement,
+  file: GeckoFileElement
 ) {
   const filePath = join(baseDir, file.props.name)
   const content = collectFileContents(file)
   const formatter = closestMatchingFormatter(
     context,
-    file.props.name,
+    file.props.name
   )
   if (formatter) {
     const formattedContent = await applyFormatter(
       formatter,
       content,
-      filePath,
+      filePath
     )
     await writeFile(filePath, formattedContent, {
       encoding: 'utf8',
     })
     console.log(
-      `wrote ${filePath} (${formattedContent.length}) and formatted with ${formatter.props.formatter}`,
+      `wrote ${filePath} (${formattedContent.length}) and formatted with ${formatter.props.formatter}`
     )
   } else {
     await writeFile(filePath, content, {
@@ -146,7 +146,7 @@ export async function commitFile(
 }
 
 export function collectFileContents(
-  file: GeckoFileElement,
+  file: GeckoFileElement
 ) {
   return file.props.children
     ? file.props.children
@@ -161,7 +161,7 @@ export function renderContent(
     | GeckoMethodElement
     | GeckoFunctionElement
     | GeckoTextElement
-    | string,
+    | string
 ) {
   if (typeof content === 'string') {
     return content
