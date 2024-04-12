@@ -16,7 +16,7 @@ export class MockORM<T extends DataItem> {
     try {
       const data = await fsPromises.readFile(
         this.jsonFilePath,
-        'utf-8',
+        'utf-8'
       )
       return JSON.parse(data)
     } catch (error) {
@@ -31,14 +31,14 @@ export class MockORM<T extends DataItem> {
     await fsPromises.writeFile(
       this.jsonFilePath,
       JSON.stringify(data),
-      'utf-8',
+      'utf-8'
     )
   }
 
   async select(
     limit: number,
     offset: number,
-    where?: object,
+    where?: object
   ): Promise<T[]> {
     const data = await this.readData()
     let filteredData = data
@@ -62,7 +62,7 @@ export class MockORM<T extends DataItem> {
     const newId = (
       Math.max(
         ...existingData.map((item) => parseInt(item.id)),
-        0,
+        0
       ) + 1
     ).toString()
     const newItem = { id: newId, ...data } as T
@@ -74,7 +74,7 @@ export class MockORM<T extends DataItem> {
   async update(id: string, data: object): Promise<void> {
     const existingData = await this.readData()
     const itemIndex = existingData.findIndex(
-      (item) => item.id === id,
+      (item) => item.id === id
     )
     if (itemIndex === -1) {
       throw new Error(`Item with id ${id} not found`)
@@ -86,7 +86,7 @@ export class MockORM<T extends DataItem> {
   async delete(id: string): Promise<boolean> {
     const existingData = await this.readData()
     const updatedData = existingData.filter(
-      (item) => item.id !== id,
+      (item) => item.id !== id
     )
     await this.writeData(updatedData)
     return updatedData.length < existingData.length

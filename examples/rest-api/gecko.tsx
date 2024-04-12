@@ -45,7 +45,7 @@ export default function () {
     <Root path="project/src/gecko_generated" erase>
       <FileFormatter
         formatter="prettier"
-        match="*.{js,json,ts}"
+        match="*.{js,json,ts,yaml}"
       >
         <Folder name="controllers">
           <ExpressControllerCollectionFolder
