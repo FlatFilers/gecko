@@ -2,12 +2,14 @@ import { mkdir, rmdir, writeFile } from 'fs/promises'
 import { isMatch } from 'micromatch'
 import { join } from 'path'
 import prettier from 'prettier'
+import { GeckoElement } from '.'
 import { GeckoClassElement } from './tags/Class'
 import { GeckoFileElement } from './tags/File'
 import { GeckoFileFormatterElement } from './tags/FileFormatter'
 import { GeckoFolderElement } from './tags/Folder'
 import { GeckoFunctionElement } from './tags/Function'
 import { GeckoMethodElement } from './tags/Method'
+import { GeckoPromptElement } from './tags/Prompt'
 import { GeckoRootElement } from './tags/Root'
 import { GeckoTextElement } from './tags/Text'
 
@@ -160,6 +162,7 @@ export function renderContent(
     | GeckoClassElement
     | GeckoMethodElement
     | GeckoFunctionElement
+    | GeckoPromptElement
     | GeckoTextElement
     | string
 ) {
@@ -173,6 +176,8 @@ export function renderContent(
       return renderFunction(content)
     case 'method':
       return renderMethod(content)
+    case 'prompt':
+      return renderPromptInFile(content)
     case 'text':
       return (
         content.props.children
@@ -226,4 +231,29 @@ export function renderMethod(method: GeckoMethodElement) {
   return `${method.props.async ? 'async ' : ''}${
     method.props.name
   }(${args}) {\n${body}\n}\n`
+}
+
+export function renderPromptInFile(
+  prompt: GeckoPromptElement
+) {
+  const rendered = prompt.props
+    .children!.map((fn) =>
+      fn([
+        { code: 'abc', name: 'ABC' },
+        { code: 'def', name: 'DEF' },
+      ])
+    )
+    .flat(Infinity) as GeckoElement[]
+  return rendered
+    .map((x) => {
+      switch (x.type) {
+        case 'text':
+          return renderContent(x)
+        default:
+          throw new Error(
+            `invalid gecko tag "${x.type}" inside a file`
+          )
+      }
+    })
+    .join('\n')
 }

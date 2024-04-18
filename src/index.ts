@@ -4,6 +4,7 @@ import { GeckoFileFormatterElement } from './tags/FileFormatter.ts'
 import { GeckoFolderElement } from './tags/Folder.ts'
 import { GeckoFunctionElement } from './tags/Function.ts'
 import { GeckoMethodElement } from './tags/Method.ts'
+import { GeckoPromptElement } from './tags/Prompt.ts'
 import { GeckoRootElement } from './tags/Root.ts'
 import { GeckoTextElement } from './tags/Text.ts'
 
@@ -14,6 +15,7 @@ export { FileFormatter } from './tags/FileFormatter.ts'
 export { Folder } from './tags/Folder.ts'
 export { Function } from './tags/Function.ts'
 export { Method } from './tags/Method.ts'
+export { Prompt } from './tags/Prompt.ts'
 export { Root } from './tags/Root.ts'
 export { Text } from './tags/Text.ts'
 
@@ -24,6 +26,7 @@ export type GeckoElement =
   | GeckoFolderElement
   | GeckoFunctionElement
   | GeckoMethodElement
+  | GeckoPromptElement
   | GeckoRootElement
   | GeckoTextElement
 
@@ -51,7 +54,7 @@ export function geckoJSX(
     return children
   }
   props = props ?? {}
-  props.children = children.flat()
+  props.children = children.flat(Infinity) as Child[]
   if (typeof elementDefinition !== 'function') {
     throw new Error(
       `Gecko component type must be function, got ${typeof elementDefinition}`
