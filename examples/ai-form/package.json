@@ -1,0 +1,7 @@
+{
+  "name": "@flatfile/gecko-example-ai-form",
+  "scripts": {
+    "gecko": "../../gecko",
+    "start": "npx http-server project"
+  }
+}
