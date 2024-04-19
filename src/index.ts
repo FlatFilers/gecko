@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import { GeckoClassElement } from './tags/Class.ts'
 import { GeckoFileElement } from './tags/File.ts'
 import { GeckoFileFormatterElement } from './tags/FileFormatter.ts'
@@ -9,6 +11,7 @@ import { GeckoRootElement } from './tags/Root.ts'
 import { GeckoTextElement } from './tags/Text.ts'
 
 export { commit } from './commit.ts'
+export { printResolveSummary, resolve } from './resolve.ts'
 export { Class } from './tags/Class.ts'
 export { File } from './tags/File.ts'
 export { FileFormatter } from './tags/FileFormatter.ts'
@@ -27,6 +30,16 @@ export type GeckoElement =
   | GeckoFunctionElement
   | GeckoMethodElement
   | GeckoPromptElement
+  | GeckoRootElement
+  | GeckoTextElement
+
+export type GeckoResolvedElement =
+  | GeckoClassElement
+  | GeckoFileElement
+  | GeckoFileFormatterElement
+  | GeckoFolderElement
+  | GeckoFunctionElement
+  | GeckoMethodElement
   | GeckoRootElement
   | GeckoTextElement
 
