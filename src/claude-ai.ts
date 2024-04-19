@@ -1,3 +1,7 @@
+import { createHash } from 'crypto'
+import fs from 'fs/promises'
+import { join } from 'path'
+
 const CLAUDE_API_URL =
   'https://api.anthropic.com/v1/messages'
 
@@ -32,7 +36,10 @@ async function makeClaudeRequest(
 
   const body = JSON.stringify({
     max_tokens: 4096,
-    model: 'claude-3-opus-20240229',
+    // https://docs.anthropic.com/claude/docs/models-overview
+    // model: 'claude-3-opus-20240229',
+    model: 'claude-3-sonnet-20240229',
+    // model: 'claude-3-haiku-20240307'
     messages,
     system,
   })
@@ -69,6 +76,42 @@ async function makeClaudeRequest(
 }
 
 export async function sendPromptToClaude(
+  system: string,
+  messages: ClaudeMessage[],
+  apiKey: string,
+  useCache: boolean = true
+) {
+  const cacheHash = createHash('sha256')
+  cacheHash.update(JSON.stringify({ system, messages }))
+  const cacheKey = cacheHash.digest('hex')
+  const cacheDirectory = join(process.cwd(), '.gecko_cache')
+  await fs.mkdir(cacheDirectory, { recursive: true })
+  const cacheFile = join(
+    cacheDirectory,
+    `${cacheKey}.cache.txt`
+  )
+  if (useCache) {
+    try {
+      const cacheStat = await fs.stat(cacheFile)
+      if (cacheStat.size > 0) {
+        return JSON.parse(
+          await fs.readFile(cacheFile, {
+            encoding: 'utf-8',
+          })
+        )
+      }
+    } catch (e) {
+      // assume cache doesn't exist
+    }
+  }
+  const result = await sendPrompt(system, messages, apiKey)
+  await fs.writeFile(cacheFile, JSON.stringify(result), {
+    encoding: 'utf-8',
+  })
+  return result
+}
+
+async function sendPrompt(
   system: string,
   messages: ClaudeMessage[],
   apiKey: string

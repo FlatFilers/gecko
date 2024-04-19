@@ -1,10 +1,13 @@
 import { performance } from 'perf_hooks'
 import { GeckoElement, GeckoResolvedElement } from '.'
 import { sendPromptToClaude } from './claude-ai'
-import { GeckoPromptElement } from './tags/Prompt'
+import { GeckoDataPromptElement } from './tags/DataPrompt'
 import { GeckoRootElement } from './tags/Root'
-
+const options = process.env.OPTIONS
+  ? process.env.OPTIONS.split(' ')
+  : []
 const { CLAUDE_API_KEY } = process.env
+const noCache = options.includes('--no-cache')
 
 if (
   typeof CLAUDE_API_KEY !== 'string' ||
@@ -30,7 +33,7 @@ export function printResolveSummary() {
 }
 
 async function resolvePrompt(
-  prompt: GeckoPromptElement
+  prompt: GeckoDataPromptElement
 ): Promise<GeckoResolvedElement[]> {
   const { input, type } = prompt.props
 
@@ -51,7 +54,8 @@ Description: ${input}
   const response = await sendPromptToClaude(
     systemText,
     [{ role: 'user', content: promptText }],
-    CLAUDE_API_KEY!
+    CLAUDE_API_KEY!,
+    !noCache
   )
 
   const resolvedChildren = prompt.props
@@ -78,8 +82,10 @@ async function resolveElement(
     return [element]
   }
   switch (element.type) {
-    case 'prompt':
-      return resolvePrompt(element as GeckoPromptElement)
+    case 'prompt:data':
+      return resolvePrompt(
+        element as GeckoDataPromptElement
+      )
     default:
       if (element.props.children) {
         const resolvedChildren = (await Promise.all(
