@@ -195,10 +195,10 @@ export function renderClass(_class: GeckoClassElement) {
         .join('\n')
     : ''
   const _extends = _class.props.extends
-    ? ' ' + _class.props.extends
+    ? ' extends ' + _class.props.extends
     : ''
   const _implements = _class.props.implements
-    ? ' ' + _class.props.implements
+    ? ' implements ' + _class.props.implements
     : ''
   const cls = `class ${_class.props.name}${_extends}${_implements} {\n${body}\n}`
   const _export =

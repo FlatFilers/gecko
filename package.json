@@ -1,20 +1,19 @@
 {
   "name": "@flatfile/gecko",
-  "version": "0.0.0",
+  "version": "0.0.4",
+  "private": false,
   "bin": "./gecko",
   "scripts": {
     "format": "npx prettier -w **/*.ts"
   },
-  "devDependencies": {
+  "dependencies": {
     "@swc/core": "^1.4.12",
     "@types/micromatch": "^4.0.6",
+    "dotenv": "^16.4.5",
+    "micromatch": "^4.0.5",
+    "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.4.3"
-  },
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "micromatch": "^4.0.5",
-    "prettier": "^3.2.5"
   }
 }
