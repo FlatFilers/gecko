@@ -10,6 +10,7 @@ import { GeckoFunctionElement } from './tags/Function'
 import { GeckoMethodElement } from './tags/Method'
 import { GeckoRootElement } from './tags/Root'
 import { GeckoTextElement } from './tags/Text'
+import { GeckoPropertyElement } from './tags/Property'
 
 interface CommitContext {
   fileFormatterStack: GeckoFileFormatterElement[]
@@ -158,8 +159,9 @@ export function collectFileContents(
 export function renderContent(
   content:
     | GeckoClassElement
-    | GeckoMethodElement
     | GeckoFunctionElement
+    | GeckoMethodElement
+    | GeckoPropertyElement
     | GeckoTextElement
     | string
 ) {
@@ -173,6 +175,8 @@ export function renderContent(
       return renderFunction(content)
     case 'method':
       return renderMethod(content)
+    case 'property':
+      return renderProperty(content)
     case 'text':
       return (
         content.props.children
@@ -183,17 +187,27 @@ export function renderContent(
 }
 
 export function renderClass(_class: GeckoClassElement) {
+  const abstract = _class.props.abstract ? 'abstract ' : ''
   const body = _class.props.children
     ? _class.props.children
         .flat(Infinity)
         .map((x) => renderContent(x))
         .join('\n')
     : ''
-  const cls = `class ${_class.props.name} {\n${body}\n}`
-  if (_class.props.export === 'default') {
-    return `export default ${cls}`
-  }
-  return `${_class.props.export ? 'export ' : ''}${cls}`
+  const _extends = _class.props.extends
+    ? ' ' + _class.props.extends
+    : ''
+  const _implements = _class.props.implements
+    ? ' ' + _class.props.implements
+    : ''
+  const cls = `class ${_class.props.name}${_extends}${_implements} {\n${body}\n}`
+  const _export =
+    _class.props.export === 'default'
+      ? 'export default '
+      : _class.props.export
+        ? 'export '
+        : ''
+  return `${_export}${abstract}${cls}`
 }
 
 export function renderFunction(func: GeckoFunctionElement) {
@@ -223,7 +237,33 @@ export function renderMethod(method: GeckoMethodElement) {
         .map((x) => '  ' + renderContent(x))
         .join('\n')
     : ''
+  const returnType = method.props.returnType
+    ? ': ' + method.props.returnType
+    : ''
   return `${method.props.async ? 'async ' : ''}${
     method.props.name
-  }(${args}) {\n${body}\n}\n`
+  }(${args})${returnType} {\n${body}\n}\n`
+}
+
+export function renderProperty(
+  property: GeckoPropertyElement
+) {
+  const flag = property.props.private
+    ? 'private '
+    : property.props.protected
+      ? 'protected '
+      : property.props.public
+        ? 'public '
+        : ''
+  const type = property.props.type
+    ? `: ${property.props.type}`
+    : ''
+  const _static = property.props.static ? 'static ' : ''
+  const _readonly = property.props.readonly
+    ? 'readonly '
+    : ''
+  const value = property.props.value
+    ? ' = ' + property.props.value
+    : ''
+  return `${flag}${_static}${_readonly}${property.props.name}${type}${value}\n`
 }

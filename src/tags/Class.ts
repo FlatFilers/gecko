@@ -1,9 +1,11 @@
 import { GeckoTextElement } from './Text'
 
 export interface ClassProps {
+  abstract?: true
   children?: (GeckoTextElement | string)[]
   export?: boolean | 'default'
   extends?: string
+  implements?: string
   name: string
 }
 

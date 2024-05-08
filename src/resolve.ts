@@ -9,16 +9,6 @@ const options = process.env.OPTIONS
 const { CLAUDE_API_KEY } = process.env
 const noCache = options.includes('--no-cache')
 
-if (
-  typeof CLAUDE_API_KEY !== 'string' ||
-  !CLAUDE_API_KEY ||
-  CLAUDE_API_KEY.length < 40
-) {
-  throw new Error(
-    `required environment variable missing or invalid: CLAUDE_API_KEY`
-  )
-}
-
 let totalGenerationCount = 0
 let totalGenerationTime = 0
 
@@ -27,14 +17,29 @@ function formatMilliseconds(time: number) {
 }
 
 export function printResolveSummary() {
-  console.log(
-    `Generated ${totalGenerationCount} feature${totalGenerationCount === 1 ? '' : 's'} with AI, total time ${formatMilliseconds(totalGenerationTime)}`
-  )
+  if (totalGenerationCount > 0) {
+    console.log(
+      `Generated ${totalGenerationCount} feature${totalGenerationCount === 1 ? '' : 's'} with AI, total time ${formatMilliseconds(totalGenerationTime)}`
+    )
+  }
+}
+
+function ensureClaudeAPIKey() {
+  if (
+    typeof CLAUDE_API_KEY !== 'string' ||
+    !CLAUDE_API_KEY ||
+    CLAUDE_API_KEY.length < 40
+  ) {
+    throw new Error(
+      `required environment variable missing or invalid: CLAUDE_API_KEY`
+    )
+  }
 }
 
 async function resolvePrompt(
   prompt: GeckoDataPromptElement
 ): Promise<GeckoResolvedElement[]> {
+  ensureClaudeAPIKey()
   const { input, type } = prompt.props
 
   const start = performance.now()
@@ -86,6 +91,8 @@ async function resolveElement(
       return resolvePrompt(
         element as GeckoDataPromptElement
       )
+    case 'property':
+      return element
     default:
       if (element.props.children) {
         const resolvedChildren = (await Promise.all(

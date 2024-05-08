@@ -2,6 +2,7 @@ import {
   Class,
   File,
   Method,
+  Property,
   Text,
   geckoJSX,
 } from '@flatfile/gecko'
@@ -30,14 +31,19 @@ interface DataSource<Model> {
         name={`${props.resourceName}Repository`}
         export
       >
-        <Text>
-          {`private dataSource: DataSource<${props.resourceClassName}>
-
-constructor(dataSource: DataSource<${props.resourceClassName}>) {
-  this.dataSource = dataSource
-}
-`}
-        </Text>
+        <Property
+          private
+          name="dataSource"
+          type={`DataSource<${props.resourceClassName}>`}
+        />
+        <Method
+          name="constructor"
+          arguments={[
+            `dataSource: DataSource<${props.resourceClassName}>`,
+          ]}
+        >
+          {'this.dataSource = dataSource'}
+        </Method>
         <Method
           name={`get${props.resourceName}ById`}
           async

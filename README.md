@@ -106,17 +106,67 @@ Gecko supports many JSX tags to structure generated code:
 
 This tag should wrap all other tags used. It specifies the location of generated folders and files on disk with `path="path/to/generated/content"`. If the `erase` attribute is present, the folder path specified will be erased on each build. Use `erase` with extreme caution!
 
-### `<File>`
-
-A file. Takes a `name="fileName.ext"` argument. Children of this tag will be the contents written to the file.
-
 ### `<Folder>`
 
 A folder. Takes a `name="myFolderName"` property. This tag may contain other `<Folder>` or `<File>` tags as children.
 
+### `<File>`
+
+A file. Takes a `name="fileName.ext"` argument. Children of this tag will be the contents written to the file.
+
+### The following may only be used within a `<File>`
+
+### `<Class>`
+
+A class.
+
+Optional flags (attributes) include `export` to export the class and `abstract` for abstract classes. May be exported as default with `export="default"` or exported as named with `export name="MyClass"`.
+
+Example:
+
+```jsx
+<Class
+  export
+  name="User"
+  extends="BaseModel"
+  implements="AuthProvider"
+>
+  ... class implementation ...
+</Class>
+```
+
 ### `<Function>`
 
 A function. May be exported as default with `export="default"` or exported as named with `export name="myFunctionName"`.
+
+### `<Method>`
+
+A class method. May only be used inside of a `<Class>` element.
+
+Example:
+
+```jsx
+<Method
+  name="getUser"
+  async
+  arguments={['id: string']}
+  returnType="Promise<User>"
+>
+  {'// implementation here'}
+</Method>
+```
+
+### `<Property>`
+
+A class property. May only be used inside of a `<Class>` element.
+
+Flags (attributes) include at most one of `private`, `protected`, or `public`, and optionally `readonly` or `static`.
+
+Example:
+
+```jsx
+<Property private name="count" type="number" value="4" />
+```
 
 ### `<Text>`
 

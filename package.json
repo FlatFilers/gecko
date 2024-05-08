@@ -1,5 +1,6 @@
 {
   "name": "@flatfile/gecko",
+  "version": "0.0.0",
   "bin": "./gecko",
   "scripts": {
     "format": "npx prettier -w **/*.ts"
