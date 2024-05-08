@@ -1,18 +1,20 @@
 {
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
     "baseUrl": "./",
+    "declaration": true,
     "esModuleInterop": true,
     "jsx": "react",
     "jsxFactory": "geckoJSX",
     "jsxFragmentFactory": "geckoJSX",
-    "noEmit": true,
+    "outDir": "./dist",
     "paths": {
-      "@flatfile/gecko": ["./src/index.ts"],
-      "@flatfile/gecko/*": ["./src/*"]
+      "@flatfile/gecko": ["./index.ts"],
+      "@flatfile/gecko/*": ["./*"]
     },
     "resolveJsonModule": true,
+    "rootDir": "src",
     "strictNullChecks": true
   },
-  "exclude": ["examples/*/project"]
+  "include": ["src/**/*"],
+  "exclude": []
 }

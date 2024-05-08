@@ -3,8 +3,11 @@
   "version": "0.0.0",
   "bin": "./gecko",
   "scripts": {
-    "format": "npx prettier -w **/*.ts"
+    "format": "npx prettier -w **/*.ts",
+    "prepublish": "tsc"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "devDependencies": {
     "@swc/core": "^1.4.12",
     "@types/micromatch": "^4.0.6",
