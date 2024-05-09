@@ -247,9 +247,12 @@ export function renderMethod(method: GeckoMethodElement) {
       : method.props.public
         ? 'public '
         : ''
+  const typeArguments = method.props.typeArguments?.length
+    ? `<${method.props.typeArguments.join(', ')}>`
+    : ''
   const _async = method.props.async ? 'async ' : ''
   const _static = method.props.static ? 'static ' : ''
-  return `${flag}${_static}${_async}${method.props.name}(${args})${returnType} {\n${body}\n}\n`
+  return `${flag}${_static}${_async}${method.props.name}${typeArguments}(${args})${returnType} {\n${body}\n}\n`
 }
 
 export function renderProperty(
