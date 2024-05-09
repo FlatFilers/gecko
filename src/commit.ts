@@ -240,9 +240,16 @@ export function renderMethod(method: GeckoMethodElement) {
   const returnType = method.props.returnType
     ? ': ' + method.props.returnType
     : ''
-  return `${method.props.async ? 'async ' : ''}${
-    method.props.name
-  }(${args})${returnType} {\n${body}\n}\n`
+  const flag = method.props.private
+    ? 'private '
+    : method.props.protected
+      ? 'protected '
+      : method.props.public
+        ? 'public '
+        : ''
+  const _async = method.props.async ? 'async ' : ''
+  const _static = method.props.static ? 'static ' : ''
+  return `${flag}${_static}${_async}${method.props.name}(${args})${returnType} {\n${body}\n}\n`
 }
 
 export function renderProperty(

@@ -5,7 +5,11 @@ export interface MethodProps {
   async?: true
   children?: (GeckoTextElement | string)[]
   name: string
+  private?: true
+  protected?: true
+  public?: true
   returnType?: string
+  static?: true
 }
 
 export interface GeckoMethodElement {
