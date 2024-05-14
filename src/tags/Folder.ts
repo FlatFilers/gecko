@@ -1,10 +1,12 @@
 import { GeckoFileElement } from './File'
 import { GeckoFileFormatterElement } from './FileFormatter'
+import { GeckoFileTemplateElement } from './FileTemplate'
 
 export interface FolderProps {
   children?: (
     | GeckoFileElement
     | GeckoFileFormatterElement
+    | GeckoFileTemplateElement
     | GeckoFolderElement
   )[]
   name: string

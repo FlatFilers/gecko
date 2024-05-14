@@ -5,15 +5,20 @@ import prettier from 'prettier'
 import { GeckoClassElement } from './tags/Class'
 import { GeckoFileElement } from './tags/File'
 import { GeckoFileFormatterElement } from './tags/FileFormatter'
+import {
+  GeckoFileTemplateElement,
+  TemplateMatch,
+} from './tags/FileTemplate'
 import { GeckoFolderElement } from './tags/Folder'
 import { GeckoFunctionElement } from './tags/Function'
 import { GeckoMethodElement } from './tags/Method'
+import { GeckoPropertyElement } from './tags/Property'
 import { GeckoRootElement } from './tags/Root'
 import { GeckoTextElement } from './tags/Text'
-import { GeckoPropertyElement } from './tags/Property'
 
 interface CommitContext {
   fileFormatterStack: GeckoFileFormatterElement[]
+  fileTemplateStack: GeckoFileTemplateElement[]
 }
 
 async function applyFormatter(
@@ -36,6 +41,26 @@ async function applyFormatter(
   }
 }
 
+function applyTemplates(
+  templates: string[],
+  rawContent: string,
+  replacements: Record<string, string>
+): string {
+  let body = rawContent
+  let intermediate: string = ''
+  const replacementsArray = Object.entries(replacements)
+  for (const template of templates) {
+    intermediate = template
+    for (const [key, value] of replacementsArray) {
+      do {
+        intermediate = intermediate.replace(key, value)
+      } while (intermediate.indexOf(key) > -1)
+    }
+    body = intermediate.replace('{{body}}', body)
+  }
+  return body
+}
+
 export async function commit(root: GeckoRootElement) {
   const baseDir = root.props.path
     ? join(process.cwd(), root.props.path)
@@ -48,6 +73,7 @@ export async function commit(root: GeckoRootElement) {
   await mkdir(baseDir, { recursive: true })
   const context: CommitContext = {
     fileFormatterStack: [],
+    fileTemplateStack: [],
   }
   await commitFolderChildren(context, baseDir, root)
 }
@@ -74,11 +100,24 @@ export async function commitFileFormatter(
   context.fileFormatterStack.pop()
 }
 
+export async function commitFileTemplate(
+  context: CommitContext,
+  baseDir: string,
+  template: GeckoFileTemplateElement
+) {
+  context.fileTemplateStack.push(template)
+  if (template.props.children) {
+    await commitFolderChildren(context, baseDir, template)
+  }
+  context.fileTemplateStack.pop()
+}
+
 export async function commitFolderChildren(
   context: CommitContext,
   baseDir: string,
   folder:
     | GeckoFileFormatterElement
+    | GeckoFileTemplateElement
     | GeckoFolderElement
     | GeckoRootElement
 ) {
@@ -90,6 +129,9 @@ export async function commitFolderChildren(
           break
         case 'file-formatter':
           await commitFileFormatter(context, baseDir, child)
+          break
+        case 'file-template':
+          await commitFileTemplate(context, baseDir, child)
           break
         case 'folder':
           await commitFolder(context, baseDir, child)
@@ -115,17 +157,46 @@ function closestMatchingFormatter(
   }
 }
 
+function matchingTemplates(
+  context: CommitContext,
+  fileName: string
+): string[] {
+  const templateMatches: string[] = []
+  for (
+    let i = context.fileTemplateStack.length - 1;
+    i >= 0;
+    i--
+  ) {
+    const fileTemplateElement = context.fileTemplateStack[i]
+    for (const fileTemplate of fileTemplateElement.props
+      .templates) {
+      if (isMatch(fileName, fileTemplate.match)) {
+        templateMatches.push(fileTemplate.template)
+      }
+    }
+  }
+  return templateMatches
+}
+
 export async function commitFile(
   context: CommitContext,
   baseDir: string,
   file: GeckoFileElement
 ) {
   const filePath = join(baseDir, file.props.name)
-  const content = collectFileContents(file)
+  const rawContent = collectFileContents(file)
   const formatter = closestMatchingFormatter(
     context,
     file.props.name
   )
+  const templates = matchingTemplates(
+    context,
+    file.props.name
+  )
+  const content = applyTemplates(templates, rawContent, {
+    '{{filename}}': file.props.name,
+    '{{timestamp}}': new Date().toISOString(),
+  })
   if (formatter) {
     const formattedContent = await applyFormatter(
       formatter,

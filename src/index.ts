@@ -4,6 +4,7 @@ import { GeckoClassElement } from './tags/Class.ts'
 import { GeckoDataPromptElement } from './tags/DataPrompt.ts'
 import { GeckoFileElement } from './tags/File.ts'
 import { GeckoFileFormatterElement } from './tags/FileFormatter.ts'
+import { GeckoFileTemplateElement } from './tags/FileTemplate.ts'
 import { GeckoFolderElement } from './tags/Folder.ts'
 import { GeckoFunctionElement } from './tags/Function.ts'
 import { GeckoMethodElement } from './tags/Method.ts'
@@ -17,6 +18,10 @@ export { Class } from './tags/Class.ts'
 export { DataPrompt } from './tags/DataPrompt.ts'
 export { File } from './tags/File.ts'
 export { FileFormatter } from './tags/FileFormatter.ts'
+export {
+  FileTemplate,
+  TemplateMatch,
+} from './tags/FileTemplate.ts'
 export { Folder } from './tags/Folder.ts'
 export { Function } from './tags/Function.ts'
 export { Method } from './tags/Method.ts'
@@ -29,6 +34,7 @@ export type GeckoElement =
   | GeckoDataPromptElement
   | GeckoFileElement
   | GeckoFileFormatterElement
+  | GeckoFileTemplateElement
   | GeckoFolderElement
   | GeckoFunctionElement
   | GeckoMethodElement
@@ -40,6 +46,7 @@ export type GeckoResolvedElement =
   | GeckoClassElement
   | GeckoFileElement
   | GeckoFileFormatterElement
+  | GeckoFileTemplateElement
   | GeckoFolderElement
   | GeckoFunctionElement
   | GeckoMethodElement
