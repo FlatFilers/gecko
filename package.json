@@ -4,7 +4,8 @@
   "private": false,
   "bin": "./gecko",
   "scripts": {
-    "format": "npx prettier -w **/*.ts"
+    "format": "npx prettier -w **/*.ts",
+    "clean": "find ./ '(' -name 'node_modules' -o -name 'gecko_generated' ')' -type d -exec rm -rf {} +"
   },
   "dependencies": {
     "@types/micromatch": "^4.0.6",

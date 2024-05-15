@@ -66,7 +66,7 @@ export default function () {
         <Folder name="repositories">
           <RepositoryFile
             fileName="user"
-            resourceClassImport="../resources/user.ts"
+            resourceClassImport="../resources/user"
             resourceClassName="UserResource"
             resourceName="User"
             resourceNamePlural="Users"

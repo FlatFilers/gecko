@@ -35,6 +35,7 @@ To start the API, first run Gecko and then launch the resulting API:
 ```
 npm install
 cd examples/rest-api
+npm install
 npm --prefix project install
 npm run gecko
 npm --prefix project start
