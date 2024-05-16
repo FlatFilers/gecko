@@ -7,14 +7,14 @@
     "jsxFactory": "geckoJSX",
     "jsxFragmentFactory": "geckoJSX",
     "noEmit": true,
-    "lib": ["ES2015"],
+    "lib": ["ES2022"],
     "target": "ES2022",
     "paths": {
       "@flatfile/gecko": ["./src/index.ts"],
       "@flatfile/gecko/*": ["./src/*"]
     },
     "strictNullChecks": true,
-    "module": "ES2022"
+    "module": "NodeNext"
   },
   "exclude": ["examples/*/project"]
 }

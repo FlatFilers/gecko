@@ -8,7 +8,7 @@ async function main() {
   const { default: generate } = await import(
     process.cwd() + '/gecko.tsx'
   )
-  commit(await resolve(generate()))
+  commit(await resolve(await generate()))
 }
 
 main()

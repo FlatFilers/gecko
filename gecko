@@ -1,2 +1,13 @@
-export DIR=$(dirname $0)
+# Base directory where the script is located
+BASE_DIR=$(dirname "$0")
+
+# Default directory assuming the script is run within its own directory
+DIR="$BASE_DIR"
+
+# Check if run.ts exists in the expected directory within node_modules
+if [ ! -f "$DIR/run.ts" ]; then
+    # Adjust the directory to the @flatfile/gecko directory within node_modules
+    DIR="$BASE_DIR/../@flatfile/gecko"
+fi
+
 OPTIONS="$@" tsx --tsconfig $DIR/tsconfig.json -r tsconfig-paths/register $DIR/run.ts
