@@ -1,16 +1,7 @@
-import { GeckoClassElement } from './Class'
-import { GeckoFunctionElement } from './Function'
-import { GeckoImportElement } from './Import'
-import { GeckoTextElement } from './Text'
+import { GeckoElement } from '..'
 
 export interface FileProps {
-  children?: (
-    | GeckoClassElement
-    | GeckoFunctionElement
-    | GeckoImportElement
-    | GeckoTextElement
-    | string
-  )[]
+  children?: (GeckoElement | string)[]
   name: string
 }
 

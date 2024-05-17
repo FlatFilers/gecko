@@ -73,11 +73,11 @@ type ElementDefinition =
   | (() => any)
   | ((props: any) => GeckoElement)
 
-export function geckoJSX(
+export function geckoJSX<T extends GeckoElement>(
   elementDefinition: ElementDefinition,
   props: PropsArg,
   ...children: Children
-): GeckoElement | Children {
+): T | Children {
   if (elementDefinition === geckoJSX) {
     return children
   }

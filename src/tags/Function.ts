@@ -1,9 +1,9 @@
-import { GeckoTextElement } from './Text'
+import { GeckoElement } from '..'
 
 export interface FunctionProps {
   arguments?: string[]
   async?: true
-  children?: (GeckoTextElement | string)[]
+  children?: (GeckoElement | string)[]
   export?: boolean | 'default'
   name: string
 }

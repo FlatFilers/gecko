@@ -1,15 +1,8 @@
-import { GeckoMethodElement } from './Method'
-import { GeckoPropertyElement } from './Property'
-import { GeckoTextElement } from './Text'
+import { GeckoElement } from '..'
 
 export interface ClassProps {
   abstract?: true
-  children?: (
-    | GeckoTextElement
-    | GeckoMethodElement
-    | GeckoPropertyElement
-    | string
-  )[]
+  children?: (GeckoElement | string)[]
   export?: boolean | 'default'
   extends?: string
   implements?: string
