@@ -253,6 +253,9 @@ export function renderContent(
     case 'property':
       return renderProperty(content)
     case 'text':
+      if (typeof content.props.children === 'string') {
+        return content.props.children
+      }
       return (
         content.props.children
           ?.map(renderContent)

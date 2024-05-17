@@ -1,5 +1,5 @@
 export interface TextProps {
-  children?: string[]
+  children?: string[] | string
 }
 
 export interface GeckoTextElement {
