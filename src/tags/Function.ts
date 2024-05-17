@@ -3,7 +3,9 @@ import { GeckoElement } from '..'
 export interface FunctionProps {
   arguments?: string[]
   async?: true
-  children?: (GeckoElement | GeckoElement[] | string)[]
+  children?:
+    | GeckoElement
+    | (GeckoElement | GeckoElement[] | string)[]
   export?: boolean | 'default'
   name: string
 }
