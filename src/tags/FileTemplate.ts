@@ -6,7 +6,7 @@ export interface TemplateMatch {
 }
 
 export interface FileTemplateProps {
-  children?: GeckoElement[]
+  children?: GeckoElement | GeckoElement[]
   templates: TemplateMatch[]
 }
 
