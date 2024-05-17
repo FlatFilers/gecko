@@ -3,7 +3,9 @@ import { GeckoFileElement } from './File'
 import { GeckoFolderElement } from './Folder'
 
 export interface FileFormatterProps {
-  children?: GeckoElement | GeckoElement[]
+  children?:
+    | GeckoElement
+    | (GeckoElement | GeckoElement[])[]
   formatter: 'prettier'
   match: string
 }
