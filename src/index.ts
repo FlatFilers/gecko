@@ -7,6 +7,7 @@ import { GeckoFileFormatterElement } from './tags/FileFormatter.ts'
 import { GeckoFileTemplateElement } from './tags/FileTemplate.ts'
 import { GeckoFolderElement } from './tags/Folder.ts'
 import { GeckoFunctionElement } from './tags/Function.ts'
+import { GeckoImportElement } from './tags/Import.ts'
 import { GeckoMethodElement } from './tags/Method.ts'
 import { GeckoPropertyElement } from './tags/Property.ts'
 import { GeckoRootElement } from './tags/Root.ts'
@@ -24,6 +25,7 @@ export {
 } from './tags/FileTemplate.ts'
 export { Folder } from './tags/Folder.ts'
 export { Function } from './tags/Function.ts'
+export { Import } from './tags/Import.ts'
 export { Method } from './tags/Method.ts'
 export { Property } from './tags/Property.ts'
 export { Root } from './tags/Root.ts'
@@ -37,6 +39,7 @@ export type GeckoElement =
   | GeckoFileTemplateElement
   | GeckoFolderElement
   | GeckoFunctionElement
+  | GeckoImportElement
   | GeckoMethodElement
   | GeckoPropertyElement
   | GeckoRootElement
@@ -49,6 +52,7 @@ export type GeckoResolvedElement =
   | GeckoFileTemplateElement
   | GeckoFolderElement
   | GeckoFunctionElement
+  | GeckoImportElement
   | GeckoMethodElement
   | GeckoPropertyElement
   | GeckoRootElement

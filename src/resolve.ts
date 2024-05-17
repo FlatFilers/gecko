@@ -91,22 +91,23 @@ async function resolveElement(
       return resolvePrompt(
         element as GeckoDataPromptElement
       )
-    case 'property':
-      return element
     default:
-      if (element.props.children) {
-        const resolvedChildren = (await Promise.all(
-          element.props.children.map(resolveElement)
-        )) as GeckoResolvedElement[]
-        return {
-          ...element,
-          props: {
-            ...element.props,
-            children: resolvedChildren.flat(Infinity),
-          },
-        } as GeckoResolvedElement
+      if (
+        !('children' in element.props) ||
+        !element.props.children?.length
+      ) {
+        return element
       }
-      return element
+      const resolvedChildren = (await Promise.all(
+        element.props.children.map(resolveElement)
+      )) as GeckoResolvedElement[]
+      return {
+        ...element,
+        props: {
+          ...element.props,
+          children: resolvedChildren.flat(Infinity),
+        },
+      } as GeckoResolvedElement
   }
 }
 

@@ -1,13 +1,21 @@
-import { File, Text, geckoJSX } from '@flatfile/gecko'
+import {
+  File,
+  Import,
+  Text,
+  geckoJSX,
+} from '@flatfile/gecko'
 import { ExpressControllerCollectionRoutes } from './ExpressControllerCollection/ExpressControllerCollectionRoutes'
 
 export function IndexFile() {
   return (
     <File name="index.ts">
-      <Text>import express from 'express'</Text>
-      <Text>{`import { join } from 'path'`}</Text>
-      <Text>{`import { MockORM } from '../MockORM'`}</Text>
-      <Text>{`import { UserRepository } from './repositories/user'`}</Text>
+      <Import default="express" from="express" />
+      <Import named={['join']} from="path" />
+      <Import named={['MockORM']} from="../MockORM" />
+      <Import
+        named={['UserRepository']}
+        from="./repositories/user"
+      />
       <Text />
       <Text>export const app = express()</Text>
       <Text>app.use(express.json())</Text>

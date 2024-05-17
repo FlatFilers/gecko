@@ -15,6 +15,7 @@ import { GeckoMethodElement } from './tags/Method'
 import { GeckoPropertyElement } from './tags/Property'
 import { GeckoRootElement } from './tags/Root'
 import { GeckoTextElement } from './tags/Text'
+import { GeckoImportElement } from './tags/Import'
 
 interface CommitContext {
   fileFormatterStack: GeckoFileFormatterElement[]
@@ -231,6 +232,7 @@ export function renderContent(
   content:
     | GeckoClassElement
     | GeckoFunctionElement
+    | GeckoImportElement
     | GeckoMethodElement
     | GeckoPropertyElement
     | GeckoTextElement
@@ -244,6 +246,8 @@ export function renderContent(
       return renderClass(content)
     case 'function':
       return renderFunction(content)
+    case 'import':
+      return renderImport(content)
     case 'method':
       return renderMethod(content)
     case 'property':
@@ -297,6 +301,21 @@ export function renderFunction(func: GeckoFunctionElement) {
     return `export default ${fn}`
   }
   return `${func.props.export ? 'export ' : ''}${fn}`
+}
+
+export function renderImport(_import: GeckoImportElement) {
+  const { default: _default, from, named } = _import.props
+
+  const importParts = [
+    ...(_default ? [_default] : []),
+    ...(named?.length ? [`{ ${named.join(', ')} }`] : []),
+  ]
+
+  const imports = importParts.length
+    ? `${importParts.join(', ')} `
+    : ''
+
+  return `import ${imports}from'${from}'`
 }
 
 export function renderMethod(method: GeckoMethodElement) {

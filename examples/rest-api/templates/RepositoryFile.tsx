@@ -1,6 +1,7 @@
 import {
   Class,
   File,
+  Import,
   Method,
   Property,
   Text,
@@ -17,9 +18,12 @@ export function RepositoryFile(props: {
   return (
     <File name={`${props.fileName}.ts`}>
       <Text>
-        {`import { ${props.resourceClassName} } from '${props.resourceClassImport}'
-
-interface DataSource<Model> {
+        <Import
+          named={[props.resourceClassName]}
+          from={props.resourceClassImport}
+        />
+        <Text />
+        {`interface DataSource<Model> {
   select(limit: number, offset: number, where?: Partial<Model>): Promise<Model[]>
   insert(data: Omit<Model, 'id'>): Promise<string>
   update(id: string, data: Partial<Omit<Model, 'id'>>): Promise<void>
