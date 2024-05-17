@@ -3,7 +3,7 @@ import { GeckoElement } from '..'
 export interface MethodProps {
   arguments?: string[]
   async?: true
-  children?: (GeckoElement | string)[]
+  children?: (GeckoElement | GeckoElement[] | string)[]
   name: string
   private?: true
   protected?: true
