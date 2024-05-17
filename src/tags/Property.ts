@@ -1,5 +1,3 @@
-import { GeckoTextElement } from './Text'
-
 export interface PropertyProps {
   name: string
   private?: true

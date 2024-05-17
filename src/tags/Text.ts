@@ -1,5 +1,10 @@
+import { GeckoElement } from '..'
+
 export interface TextProps {
-  children?: string[] | string
+  children?:
+    | string
+    | GeckoElement
+    | (string | string[] | GeckoElement | GeckoElement[])[]
 }
 
 export interface GeckoTextElement {

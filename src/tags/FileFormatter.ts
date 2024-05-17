@@ -1,6 +1,4 @@
 import { GeckoElement } from '..'
-import { GeckoFileElement } from './File'
-import { GeckoFolderElement } from './Folder'
 
 export interface FileFormatterProps {
   children?:
