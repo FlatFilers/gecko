@@ -1,7 +1,7 @@
 import { GeckoElement } from '..'
 
 export interface RootProps {
-  children?: GeckoElement[]
+  children?: GeckoElement | GeckoElement[]
   erase?: true
   path?: string
 }
