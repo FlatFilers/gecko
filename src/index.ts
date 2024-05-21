@@ -60,15 +60,21 @@ export type GeckoResolvedElement =
 
 interface PropsArg {
   [prop: string]:
-    | Children
+    | GeckoChildren
     | string
     | (() => any)
     | undefined
-  children?: Children
+  children?: GeckoChildren
 }
 
-type Child = GeckoElement | string
-type Children = Child[] | Child[][]
+type GeckoChild = string | GeckoElement
+
+export type GeckoChildren =
+  | null
+  | string
+  | GeckoElement
+  | GeckoChildren[]
+
 type ElementDefinition =
   | (() => any)
   | ((props: any) => GeckoElement)
@@ -76,15 +82,15 @@ type ElementDefinition =
 export function geckoJSX<T extends GeckoElement>(
   elementDefinition: ElementDefinition,
   props: PropsArg,
-  ...children: Children
-): T | Children {
+  ...children: GeckoChildren[]
+): T | GeckoChildren {
   if (elementDefinition === geckoJSX) {
     return children
   }
   props = props ?? {}
-  props.children = children
+  props.children = (children as GeckoElement[])
     .flat(Infinity)
-    .filter((x) => x !== null) as Child[]
+    .filter((x) => x !== null) as GeckoChild[]
   if (typeof elementDefinition !== 'function') {
     throw new Error(
       `Gecko component type must be function, got ${typeof elementDefinition}`

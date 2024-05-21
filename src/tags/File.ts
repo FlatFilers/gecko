@@ -1,9 +1,7 @@
-import { GeckoElement } from '..'
+import { GeckoChildren } from '..'
 
 export interface FileProps {
-  children?:
-    | GeckoElement
-    | (GeckoElement | GeckoElement[] | string)[]
+  children?: GeckoChildren
   name: string
 }
 

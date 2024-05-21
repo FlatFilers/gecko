@@ -1,4 +1,4 @@
-import { GeckoElement } from '..'
+import { GeckoChildren } from '..'
 
 export interface TemplateMatch {
   match: string
@@ -6,9 +6,7 @@ export interface TemplateMatch {
 }
 
 export interface FileTemplateProps {
-  children?:
-    | GeckoElement
-    | (GeckoElement | GeckoElement[])[]
+  children?: GeckoChildren
   templates: TemplateMatch[]
 }
 

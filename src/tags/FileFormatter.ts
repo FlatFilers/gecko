@@ -1,9 +1,7 @@
-import { GeckoElement } from '..'
+import { GeckoChildren } from '..'
 
 export interface FileFormatterProps {
-  children?:
-    | GeckoElement
-    | (GeckoElement | GeckoElement[])[]
+  children?: GeckoChildren
   formatter: 'prettier'
   match: string
 }

@@ -1,10 +1,8 @@
-import { GeckoElement } from '..'
+import { GeckoChildren } from '..'
 
 export interface ClassProps {
   abstract?: true
-  children?:
-    | GeckoElement
-    | (GeckoElement | GeckoElement[] | string)[]
+  children?: GeckoChildren
   export?: boolean | 'default'
   extends?: string
   implements?: string

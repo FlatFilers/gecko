@@ -1,7 +1,7 @@
-import { GeckoElement } from '..'
+import { GeckoChildren } from '..'
 
 export interface DataPromptProps {
-  children?: ((...props: any[]) => GeckoElement[])[]
+  children?: ((...props: any[]) => GeckoChildren)[]
   input: string
   type: string
 }

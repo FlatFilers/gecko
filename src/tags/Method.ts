@@ -1,11 +1,9 @@
-import { GeckoElement } from '..'
+import { GeckoChildren } from '..'
 
 export interface MethodProps {
   arguments?: string[]
   async?: true
-  children?:
-    | GeckoElement
-    | (GeckoElement | GeckoElement[] | string)[]
+  children?: GeckoChildren
   name: string
   private?: true
   protected?: true

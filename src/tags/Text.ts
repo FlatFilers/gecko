@@ -1,10 +1,7 @@
-import { GeckoElement } from '..'
+import { GeckoChildren } from '..'
 
 export interface TextProps {
-  children?:
-    | string
-    | GeckoElement
-    | (string | string[] | GeckoElement | GeckoElement[])[]
+  children?: GeckoChildren
 }
 
 export interface GeckoTextElement {

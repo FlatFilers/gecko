@@ -1,11 +1,9 @@
-import { GeckoElement } from '..'
+import { GeckoChildren } from '..'
 
 export interface FunctionProps {
   arguments?: string[]
   async?: true
-  children?:
-    | GeckoElement
-    | (GeckoElement | GeckoElement[] | string)[]
+  children?: GeckoChildren
   export?: boolean | 'default'
   name: string
 }
