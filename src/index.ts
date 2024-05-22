@@ -8,6 +8,7 @@ import { GeckoFileTemplateElement } from './tags/FileTemplate.ts'
 import { GeckoFolderElement } from './tags/Folder.ts'
 import { GeckoFunctionElement } from './tags/Function.ts'
 import { GeckoImportElement } from './tags/Import.ts'
+import { GeckoInterfaceElement } from './tags/Interface.ts'
 import { GeckoMethodElement } from './tags/Method.ts'
 import { GeckoPropertyElement } from './tags/Property.ts'
 import { GeckoRootElement } from './tags/Root.ts'
@@ -26,6 +27,7 @@ export {
 export { Folder } from './tags/Folder.ts'
 export { Function } from './tags/Function.ts'
 export { Import } from './tags/Import.ts'
+export { Interface } from './tags/Interface.ts'
 export { Method } from './tags/Method.ts'
 export { Property } from './tags/Property.ts'
 export { Root } from './tags/Root.ts'
@@ -40,6 +42,7 @@ export type GeckoElement =
   | GeckoFolderElement
   | GeckoFunctionElement
   | GeckoImportElement
+  | GeckoInterfaceElement
   | GeckoMethodElement
   | GeckoPropertyElement
   | GeckoRootElement
@@ -53,6 +56,7 @@ export type GeckoResolvedElement =
   | GeckoFolderElement
   | GeckoFunctionElement
   | GeckoImportElement
+  | GeckoInterfaceElement
   | GeckoMethodElement
   | GeckoPropertyElement
   | GeckoRootElement
@@ -67,9 +71,10 @@ interface PropsArg {
   children?: GeckoChildren
 }
 
-type GeckoChild = string | GeckoElement
+export type GeckoChild = string | GeckoElement
 
 export type GeckoChildren =
+  | undefined
   | null
   | string
   | GeckoElement

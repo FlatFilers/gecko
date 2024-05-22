@@ -140,6 +140,19 @@ Example:
 
 A function. May be exported as default with `export="default"` or exported as named with `export name="myFunctionName"`.
 
+### `<Interface>`
+
+A TypeScript type interface.
+
+Example:
+
+```jsx
+<Interface export name="MyComponentProps">
+  <Method name="onClick" returnType="void" />
+  <Property name="count" type="number" />
+</Interface>
+```
+
 ### `<Method>`
 
 A class method. May only be used inside of a `<Class>` element.

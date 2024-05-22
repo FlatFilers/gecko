@@ -64,7 +64,7 @@ Description: ${input}
   )
 
   const resolvedChildren = prompt.props
-    .children!.map((fn) => fn(response))
+    .children!.map((fn) => fn(response) as GeckoElement)
     .flat(Infinity) as GeckoResolvedElement[]
 
   const end = performance.now()
@@ -94,12 +94,19 @@ async function resolveElement(
     default:
       if (
         !('children' in element.props) ||
-        !element.props.children?.length
+        typeof element.props.children === 'string' ||
+        (Array.isArray(element.props.children) &&
+          !element.props.children?.length)
       ) {
         return element
       }
+      const children = (
+        Array.isArray(element.props.children)
+          ? element.props.children
+          : [element.props.children]
+      ).filter((x) => typeof x !== 'undefined')
       const resolvedChildren = (await Promise.all(
-        element.props.children.map(resolveElement)
+        children.map(resolveElement)
       )) as GeckoResolvedElement[]
       return {
         ...element,

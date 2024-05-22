@@ -1,4 +1,9 @@
-import { Function, geckoJSX, Text } from '@flatfile/gecko'
+import {
+  Function,
+  geckoJSX,
+  Interface,
+  Method,
+} from '@flatfile/gecko'
 
 export function CalculatorButton({
   digit,
@@ -7,9 +12,9 @@ export function CalculatorButton({
 }) {
   return (
     <>
-      <Text>
-        {`interface DigitProps { onClick(): void }\n`}
-      </Text>
+      <Interface name="DigitProps">
+        <Method name="onClick" returnType="void" />
+      </Interface>
       <Function
         export
         name={`Digit${digit}Button`}
