@@ -379,7 +379,7 @@ export function renderProperty(
     !inInterface && property.props.value
       ? ' = ' + property.props.value
       : ''
-  return `${flag}${_static}${_readonly}${property.props.name}${type}${value}\n`
+  return `${flag}${_static}${_readonly}${property.props.name}${type}${value}`
 }
 
 export function renderInterface(
