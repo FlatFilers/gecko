@@ -149,7 +149,7 @@ Example:
 ```jsx
 <Interface export name="MyComponentProps">
   <Method name="onClick" returnType="void" />
-  <Property name="count" type="number" />
+  <Property name="count" type="number" required />
 </Interface>
 ```
 
@@ -179,7 +179,13 @@ Flags (attributes) include at most one of `private`, `protected`, or `public`, a
 Example:
 
 ```jsx
-<Property private name="count" type="number" value="4" />
+<Property
+  private
+  name="count"
+  type="number"
+  value="4"
+  required
+/>
 ```
 
 ### `<Text>`

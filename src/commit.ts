@@ -369,7 +369,7 @@ export function renderProperty(
         ? 'public '
         : ''
   const type = property.props.type
-    ? `: ${property.props.type}`
+    ? `${property.props.required ? '' : '?'}: ${property.props.type}`
     : ''
   const _static = property.props.static ? 'static ' : ''
   const _readonly = property.props.readonly
@@ -385,7 +385,6 @@ export function renderProperty(
 export function renderInterface(
   _interface: GeckoInterfaceElement
 ) {
-  console.log(_interface.props.children)
   const body = formatChildren(_interface.props.children)
     .map((x) => '  ' + renderContent(x, true))
     .join('\n')

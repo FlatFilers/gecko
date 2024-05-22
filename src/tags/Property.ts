@@ -4,6 +4,7 @@ export interface PropertyProps {
   protected?: true
   public?: true
   readonly?: true
+  required?: true
   static?: true
   type?: string
   value?: string

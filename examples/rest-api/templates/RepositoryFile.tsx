@@ -39,6 +39,7 @@ export function RepositoryFile(props: {
           private
           name="dataSource"
           type={`DataSource<${props.resourceClassName}>`}
+          required
         />
         <Method
           name="constructor"
