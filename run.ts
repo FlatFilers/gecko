@@ -1,8 +1,4 @@
-import {
-  commit,
-  printResolveSummary,
-  resolve,
-} from '@flatfile/gecko'
+import { commit, printResolveSummary, resolve } from './src'
 
 async function main() {
   const { default: generate } = await import(
