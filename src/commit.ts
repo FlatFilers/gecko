@@ -385,10 +385,13 @@ export function renderProperty(
 export function renderInterface(
   _interface: GeckoInterfaceElement
 ) {
+  const _extends = _interface.props.extends
+    ? ' extends ' + _interface.props.extends
+    : ''
   const body = formatChildren(_interface.props.children)
     .map((x) => '  ' + renderContent(x, true))
     .join('\n')
-  const interfaceDefinition = `interface ${_interface.props.name} {\n${body}\n}`
+  const interfaceDefinition = `interface ${_interface.props.name}${_extends} {\n${body}\n}`
 
   if (_interface.props.export === 'default') {
     return `export default ${interfaceDefinition}`

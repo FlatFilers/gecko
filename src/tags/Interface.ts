@@ -3,6 +3,7 @@ import { GeckoChildren } from '..'
 export interface InterfaceProps {
   children?: GeckoChildren
   export?: boolean | 'default'
+  extends?: string
   name: string
 }
 
