@@ -1,4 +1,6 @@
 import {
+  DocumentationFormat,
+  Documented,
   File,
   FileFormatter,
   FileTemplate,
@@ -31,13 +33,17 @@ export default function () {
           <Text>Hello world</Text>
         </File>
         <FileTemplate templates={[generatedTypeScriptFile]}>
-          <Folder name="components">
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((digit) => (
-              <File name={`Digit${digit}.tsx`}>
-                <CalculatorButton digit={digit} />
-              </File>
-            ))}
-          </Folder>
+          <Documented formats={[DocumentationFormat.JSDoc]}>
+            <Folder name="components">
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(
+                (digit) => (
+                  <File name={`Digit${digit}.tsx`}>
+                    <CalculatorButton digit={digit} />
+                  </File>
+                )
+              )}
+            </Folder>
+          </Documented>
         </FileTemplate>
       </FileFormatter>
     </Root>

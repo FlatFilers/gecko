@@ -3,6 +3,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "isolatedModules": true,
+    "moduleResolution": "NodeNext",
     "lib": ["es2022"],
     "target": "es2022"
   }

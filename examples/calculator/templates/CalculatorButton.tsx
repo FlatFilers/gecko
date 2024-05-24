@@ -19,6 +19,7 @@ export function CalculatorButton({
         export
         name={`Digit${digit}Button`}
         arguments={['{ onClick }: DigitProps']}
+        returnType="JSX.Element"
       >
         {`return <button onClick={onClick}>${digit}</button>`}
       </Function>

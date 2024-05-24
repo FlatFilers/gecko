@@ -2,6 +2,7 @@ import 'dotenv/config'
 
 import { GeckoClassElement } from './tags/Class.ts'
 import { GeckoDataPromptElement } from './tags/DataPrompt.ts'
+import { GeckoDocumentedElement } from './tags/Documented.ts'
 import { GeckoFileElement } from './tags/File.ts'
 import { GeckoFileFormatterElement } from './tags/FileFormatter.ts'
 import { GeckoFileTemplateElement } from './tags/FileTemplate.ts'
@@ -18,6 +19,10 @@ export { commit } from './commit.ts'
 export { printResolveSummary, resolve } from './resolve.ts'
 export { Class } from './tags/Class.ts'
 export { DataPrompt } from './tags/DataPrompt.ts'
+export {
+  DocumentationFormat,
+  Documented,
+} from './tags/Documented.ts'
 export { File } from './tags/File.ts'
 export { FileFormatter } from './tags/FileFormatter.ts'
 export {
@@ -33,9 +38,10 @@ export { Property } from './tags/Property.ts'
 export { Root } from './tags/Root.ts'
 export { Text } from './tags/Text.ts'
 
-export type GeckoElement =
+// Post-AI processed elements
+export type GeckoResolvedElement =
   | GeckoClassElement
-  | GeckoDataPromptElement
+  | GeckoDocumentedElement
   | GeckoFileElement
   | GeckoFileFormatterElement
   | GeckoFileTemplateElement
@@ -48,19 +54,10 @@ export type GeckoElement =
   | GeckoRootElement
   | GeckoTextElement
 
-export type GeckoResolvedElement =
-  | GeckoClassElement
-  | GeckoFileElement
-  | GeckoFileFormatterElement
-  | GeckoFileTemplateElement
-  | GeckoFolderElement
-  | GeckoFunctionElement
-  | GeckoImportElement
-  | GeckoInterfaceElement
-  | GeckoMethodElement
-  | GeckoPropertyElement
-  | GeckoRootElement
-  | GeckoTextElement
+// All possible elements, including AI prompt elements
+export type GeckoElement =
+  | GeckoResolvedElement
+  | GeckoDataPromptElement
 
 interface PropsArg {
   [prop: string]:

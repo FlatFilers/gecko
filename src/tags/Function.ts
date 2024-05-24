@@ -6,6 +6,8 @@ export interface FunctionProps {
   children?: GeckoChildren
   export?: boolean | 'default'
   name: string
+  returnType?: string
+  typeArguments?: string[]
 }
 
 export interface GeckoFunctionElement {

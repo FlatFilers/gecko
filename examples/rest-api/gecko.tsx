@@ -3,6 +3,8 @@ import userSchema from './project/src/models/user.json'
 const ajv = new Ajv()
 
 import {
+  DocumentationFormat,
+  Documented,
   FileFormatter,
   Folder,
   geckoJSX,
@@ -47,40 +49,44 @@ export default function () {
         formatter="prettier"
         match="*.{js,json,ts,yaml}"
       >
-        <Folder name="controllers">
-          <ExpressControllerCollectionFolder
-            name="users"
-            repositoryType="UserRepository"
-            repositoryTypeImport="../../repositories/user"
-            resourceName="User"
-            resourceSchema={validatedUserSchema}
+        <Documented formats={[DocumentationFormat.JSDoc]}>
+          <Folder name="controllers">
+            <ExpressControllerCollectionFolder
+              name="users"
+              repositoryType="UserRepository"
+              repositoryTypeImport="../../repositories/user"
+              resourceName="User"
+              resourceSchema={validatedUserSchema}
+            />
+          </Folder>
+          <Folder name="resources">
+            <ResourceFile
+              fileName="user"
+              resourceName="User"
+              resourceSchema={validatedUserSchema}
+            />
+          </Folder>
+          <Folder name="repositories">
+            <RepositoryFile
+              fileName="user"
+              resourceClassImport="../resources/user"
+              resourceClassName="UserResource"
+              resourceName="User"
+              resourceNamePlural="Users"
+            />
+          </Folder>
+          <IndexFile />
+          <Folder name="tests">
+            <ExpressControllerCollectionJestTests
+              resourceName="User"
+              resourceUrl="/users"
+              schema={validatedUserSchema}
+            />
+          </Folder>
+          <OpenAPIYAMLFile
+            userSchema={validatedUserSchema}
           />
-        </Folder>
-        <Folder name="resources">
-          <ResourceFile
-            fileName="user"
-            resourceName="User"
-            resourceSchema={validatedUserSchema}
-          />
-        </Folder>
-        <Folder name="repositories">
-          <RepositoryFile
-            fileName="user"
-            resourceClassImport="../resources/user"
-            resourceClassName="UserResource"
-            resourceName="User"
-            resourceNamePlural="Users"
-          />
-        </Folder>
-        <IndexFile />
-        <Folder name="tests">
-          <ExpressControllerCollectionJestTests
-            resourceName="User"
-            resourceUrl="/users"
-            schema={validatedUserSchema}
-          />
-        </Folder>
-        <OpenAPIYAMLFile userSchema={validatedUserSchema} />
+        </Documented>
       </FileFormatter>
     </Root>
   )

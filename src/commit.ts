@@ -2,27 +2,15 @@ import { mkdir, rmdir, writeFile } from 'fs/promises'
 import { isMatch } from 'micromatch'
 import { join } from 'path'
 import prettier from 'prettier'
-import { GeckoClassElement } from './tags/Class'
+import { renderContent } from './render/renderContent'
+import { GeckoDocumentedElement } from './tags/Documented'
 import { GeckoFileElement } from './tags/File'
 import { GeckoFileFormatterElement } from './tags/FileFormatter'
-import {
-  GeckoFileTemplateElement,
-  TemplateMatch,
-} from './tags/FileTemplate'
+import { GeckoFileTemplateElement } from './tags/FileTemplate'
 import { GeckoFolderElement } from './tags/Folder'
-import { GeckoFunctionElement } from './tags/Function'
-import { GeckoMethodElement } from './tags/Method'
-import { GeckoPropertyElement } from './tags/Property'
 import { GeckoRootElement } from './tags/Root'
-import { GeckoTextElement } from './tags/Text'
-import { GeckoImportElement } from './tags/Import'
-import { GeckoChild, GeckoChildren, GeckoElement } from '.'
-import { GeckoInterfaceElement } from './tags/Interface'
-
-interface CommitContext {
-  fileFormatterStack: GeckoFileFormatterElement[]
-  fileTemplateStack: GeckoFileTemplateElement[]
-}
+import { CommitContext } from './types/CommitContext'
+import { formatChildren } from './util/formatChildren'
 
 async function applyFormatter(
   formatter: GeckoFileFormatterElement,
@@ -75,6 +63,7 @@ export async function commit(root: GeckoRootElement) {
   }
   await mkdir(baseDir, { recursive: true })
   const context: CommitContext = {
+    documentedStack: [],
     fileFormatterStack: [],
     fileTemplateStack: [],
   }
@@ -103,6 +92,18 @@ export async function commitFileFormatter(
   context.fileFormatterStack.pop()
 }
 
+export async function commitDocumented(
+  context: CommitContext,
+  baseDir: string,
+  documented: GeckoDocumentedElement
+) {
+  context.documentedStack.push(documented)
+  if (documented.props.children) {
+    await commitFolderChildren(context, baseDir, documented)
+  }
+  context.documentedStack.pop()
+}
+
 export async function commitFileTemplate(
   context: CommitContext,
   baseDir: string,
@@ -115,16 +116,11 @@ export async function commitFileTemplate(
   context.fileTemplateStack.pop()
 }
 
-function formatChildren(x: GeckoChildren): GeckoChild[] {
-  return ((Array.isArray(x) ? x : [x]) as GeckoChild[])
-    .flat(Infinity)
-    .filter((x) => typeof x !== 'undefined' && x !== null)
-}
-
 export async function commitFolderChildren(
   context: CommitContext,
   baseDir: string,
   folder:
+    | GeckoDocumentedElement
     | GeckoFileFormatterElement
     | GeckoFileTemplateElement
     | GeckoFolderElement
@@ -138,6 +134,9 @@ export async function commitFolderChildren(
         return child
       }
       switch (child.type) {
+        case 'documented':
+          await commitDocumented(context, baseDir, child)
+          break
         case 'file':
           await commitFile(context, baseDir, child)
           break
@@ -150,6 +149,10 @@ export async function commitFolderChildren(
         case 'folder':
           await commitFolder(context, baseDir, child)
           break
+        default:
+          throw new Error(
+            `unexpected '${child.type}' in JSX tree at this position`
+          )
       }
     }
   }
@@ -198,7 +201,7 @@ export async function commitFile(
   file: GeckoFileElement
 ) {
   const filePath = join(baseDir, file.props.name)
-  const rawContent = collectFileContents(file)
+  const rawContent = collectFileContents(context, file)
   const formatter = closestMatchingFormatter(
     context,
     file.props.name
@@ -232,169 +235,12 @@ export async function commitFile(
 }
 
 export function collectFileContents(
+  context: CommitContext,
   file: GeckoFileElement
 ) {
   return file.props.children
     ? formatChildren(file.props.children)
-        .map((x) => renderContent(x))
+        .map((x) => renderContent(context, x))
         .join('\n')
     : ''
-}
-
-export function renderContent(
-  content: GeckoChild,
-  inInterface: boolean = false
-) {
-  if (typeof content === 'string') {
-    return content
-  }
-  switch (content.type) {
-    case 'class':
-      return renderClass(content)
-    case 'function':
-      return renderFunction(content)
-    case 'import':
-      return renderImport(content)
-    case 'interface':
-      return renderInterface(content)
-    case 'method':
-      return renderMethod(content, inInterface)
-    case 'property':
-      return renderProperty(content, inInterface)
-    case 'text':
-      if (typeof content.props.children === 'string') {
-        return content.props.children
-      }
-      return (
-        formatChildren(content.props.children)
-          ?.map((x) => renderContent(x))
-          ?.join?.('\n') ?? ''
-      )
-  }
-}
-
-export function renderClass(_class: GeckoClassElement) {
-  const abstract = _class.props.abstract ? 'abstract ' : ''
-  const body = formatChildren(_class.props.children)
-    .map((x) => renderContent(x))
-    .join('\n')
-  const _extends = _class.props.extends
-    ? ' extends ' + _class.props.extends
-    : ''
-  const _implements = _class.props.implements
-    ? ' implements ' + _class.props.implements
-    : ''
-  const cls = `class ${_class.props.name}${_extends}${_implements} {\n${body}\n}`
-  const _export =
-    _class.props.export === 'default'
-      ? 'export default '
-      : _class.props.export
-        ? 'export '
-        : ''
-  return `${_export}${abstract}${cls}`
-}
-
-export function renderFunction(func: GeckoFunctionElement) {
-  const args = func.props.arguments
-    ? func.props.arguments.join(', ')
-    : ''
-  const body = formatChildren(func.props.children)
-    .map((x) => '  ' + renderContent(x))
-    .join('\n')
-  const fn = `${func.props.async ? 'async ' : ''}function ${
-    func.props.name
-  }(${args}) {\n${body}\n}`
-  if (func.props.export === 'default') {
-    return `export default ${fn}`
-  }
-  return `${func.props.export ? 'export ' : ''}${fn}`
-}
-
-export function renderImport(_import: GeckoImportElement) {
-  const { default: _default, from, named } = _import.props
-
-  const importParts = [
-    ...(_default ? [_default] : []),
-    ...(named?.length ? [`{ ${named.join(', ')} }`] : []),
-  ]
-
-  const imports = importParts.length
-    ? `${importParts.join(', ')} `
-    : ''
-
-  return `import ${imports}from'${from}'`
-}
-
-export function renderMethod(
-  method: GeckoMethodElement,
-  inInterface: boolean = false
-) {
-  const args = method.props.arguments
-    ? method.props.arguments.join(', ')
-    : ''
-
-  const returnType = method.props.returnType
-    ? ': ' + method.props.returnType
-    : ''
-  const flag = method.props.private
-    ? 'private '
-    : method.props.protected
-      ? 'protected '
-      : method.props.public
-        ? 'public '
-        : ''
-  const typeArguments = method.props.typeArguments?.length
-    ? `<${method.props.typeArguments.join(', ')}>`
-    : ''
-  const _async = method.props.async ? 'async ' : ''
-  const _static = method.props.static ? 'static ' : ''
-  if (inInterface) {
-    return `${flag}${_static}${_async}${method.props.name}${typeArguments}(${args})${returnType}`
-  }
-  const body = formatChildren(method.props.children)
-    .map((x) => '  ' + renderContent(x))
-    .join('\n')
-  return `${flag}${_static}${_async}${method.props.name}${typeArguments}(${args})${returnType} {\n${body}\n}\n`
-}
-
-export function renderProperty(
-  property: GeckoPropertyElement,
-  inInterface: boolean = false
-) {
-  const flag = property.props.private
-    ? 'private '
-    : property.props.protected
-      ? 'protected '
-      : property.props.public
-        ? 'public '
-        : ''
-  const type = property.props.type
-    ? `${property.props.required ? '' : '?'}: ${property.props.type}`
-    : ''
-  const _static = property.props.static ? 'static ' : ''
-  const _readonly = property.props.readonly
-    ? 'readonly '
-    : ''
-  const value =
-    !inInterface && property.props.value
-      ? ' = ' + property.props.value
-      : ''
-  return `${flag}${_static}${_readonly}${property.props.name}${type}${value}`
-}
-
-export function renderInterface(
-  _interface: GeckoInterfaceElement
-) {
-  const _extends = _interface.props.extends
-    ? ' extends ' + _interface.props.extends
-    : ''
-  const body = formatChildren(_interface.props.children)
-    .map((x) => '  ' + renderContent(x, true))
-    .join('\n')
-  const interfaceDefinition = `interface ${_interface.props.name}${_extends} {\n${body}\n}`
-
-  if (_interface.props.export === 'default') {
-    return `export default ${interfaceDefinition}`
-  }
-  return `${_interface.props.export ? 'export ' : ''}${interfaceDefinition}`
 }

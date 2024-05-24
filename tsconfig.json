@@ -13,6 +13,7 @@
       "@flatfile/gecko": ["./src/index.ts"],
       "@flatfile/gecko/*": ["./src/*"]
     },
+    "resolveJsonModule": true,
     "strictNullChecks": true,
     "module": "NodeNext"
   },
