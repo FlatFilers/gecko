@@ -8,6 +8,7 @@ export interface FunctionProps {
   name: string
   returnType?: string
   typeArguments?: string[]
+  undocumented?: true
 }
 
 export interface GeckoFunctionElement {

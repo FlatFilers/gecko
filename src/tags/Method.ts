@@ -11,6 +11,7 @@ export interface MethodProps {
   returnType?: string
   static?: true
   typeArguments?: string[]
+  undocumented?: true
 }
 
 export interface GeckoMethodElement {
