@@ -83,5 +83,9 @@ export function contentIsEquivalent(
     position.existing += replace.length
     position.updated += replace.length
   }
-  return true
+  const remainder = {
+    existing: existing.substring(position.existing),
+    updated: updated.substring(position.updated),
+  }
+  return remainder.existing === remainder.updated
 }
