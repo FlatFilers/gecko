@@ -1,11 +1,15 @@
 {
   "name": "@flatfile/gecko",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "private": false,
   "bin": "./gecko",
   "scripts": {
     "format": "npx prettier -w **/*.ts",
     "clean": "find ./ '(' -name 'node_modules' -o -name 'gecko_generated' ')' -type d -exec rm -rf {} +"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FlatFilers/gecko.git"
   },
   "dependencies": {
     "@types/micromatch": "^4.0.6",
