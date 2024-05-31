@@ -3,6 +3,8 @@ import { GeckoElement, GeckoResolvedElement } from '.'
 import { sendPromptToClaude } from './claude-ai'
 import { GeckoDataPromptElement } from './tags/DataPrompt'
 import { GeckoRootElement } from './tags/Root'
+import { formatMilliseconds } from './util/formatMilliseconds'
+
 const options = process.env.OPTIONS
   ? process.env.OPTIONS.split(' ')
   : []
@@ -11,10 +13,6 @@ const noCache = options.includes('--no-cache')
 
 let totalGenerationCount = 0
 let totalGenerationTime = 0
-
-function formatMilliseconds(time: number) {
-  return `${(time / 1e3).toPrecision(3)}s`
-}
 
 export function printResolveSummary() {
   if (totalGenerationCount > 0) {

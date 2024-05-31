@@ -1,7 +1,5 @@
 import { mkdir, rmdir, writeFile } from 'fs/promises'
-import { isMatch } from 'micromatch'
 import { join } from 'path'
-import prettier from 'prettier'
 import { renderContent } from './render/renderContent'
 import { GeckoDocumentedElement } from './tags/Documented'
 import { GeckoFileElement } from './tags/File'
@@ -10,47 +8,13 @@ import { GeckoFileTemplateElement } from './tags/FileTemplate'
 import { GeckoFolderElement } from './tags/Folder'
 import { GeckoRootElement } from './tags/Root'
 import { CommitContext } from './types/CommitContext'
+import { applyFormatter } from './util/applyFormatter'
+import { applyTemplates } from './util/applyTemplates'
+import { closestMatchingFormatter } from './util/closestMatchingFormatter'
+import { contentIsEquivalent } from './util/contentIsEquivalent'
 import { formatChildren } from './util/formatChildren'
-
-async function applyFormatter(
-  formatter: GeckoFileFormatterElement,
-  content: string,
-  filePath: string
-): Promise<string> {
-  switch (formatter.props.formatter) {
-    case 'prettier':
-      const prettierConfig =
-        await prettier.resolveConfig(filePath)
-      return prettier.format(content, {
-        ...prettierConfig,
-        filepath: filePath,
-      })
-    default:
-      throw new Error(
-        `${JSON.stringify(formatter.props.formatter)} is not a recognized gecko formatter`
-      )
-  }
-}
-
-function applyTemplates(
-  templates: string[],
-  rawContent: string,
-  replacements: Record<string, string>
-): string {
-  let body = rawContent
-  let intermediate: string = ''
-  const replacementsArray = Object.entries(replacements)
-  for (const template of templates) {
-    intermediate = template
-    for (const [key, value] of replacementsArray) {
-      do {
-        intermediate = intermediate.replace(key, value)
-      } while (intermediate.indexOf(key) > -1)
-    }
-    body = intermediate.replace('{{body}}', body)
-  }
-  return body
-}
+import { loadFileMaybe } from './util/loadFileMaybe'
+import { matchingTemplates } from './util/matchingTemplates'
 
 export async function commit(root: GeckoRootElement) {
   const baseDir = root.props.path
@@ -158,43 +122,6 @@ export async function commitFolderChildren(
   }
 }
 
-function closestMatchingFormatter(
-  context: CommitContext,
-  fileName: string
-): undefined | GeckoFileFormatterElement {
-  for (
-    let i = context.fileFormatterStack.length - 1;
-    i >= 0;
-    i--
-  ) {
-    const formatter = context.fileFormatterStack[i]
-    if (isMatch(fileName, formatter.props.match)) {
-      return formatter
-    }
-  }
-}
-
-function matchingTemplates(
-  context: CommitContext,
-  fileName: string
-): string[] {
-  const templateMatches: string[] = []
-  for (
-    let i = context.fileTemplateStack.length - 1;
-    i >= 0;
-    i--
-  ) {
-    const fileTemplateElement = context.fileTemplateStack[i]
-    for (const fileTemplate of fileTemplateElement.props
-      .templates) {
-      if (isMatch(fileName, fileTemplate.match)) {
-        templateMatches.push(fileTemplate.template)
-      }
-    }
-  }
-  return templateMatches
-}
-
 export async function commitFile(
   context: CommitContext,
   baseDir: string,
@@ -210,16 +137,43 @@ export async function commitFile(
     context,
     file.props.name
   )
-  const content = applyTemplates(templates, rawContent, {
+  const replacements = {
     '{{filename}}': file.props.name,
-    '{{timestamp}}': new Date().toISOString(),
-  })
+    '{{timestamp}}':
+      new Date().toISOString().slice(0, -5) + 'Z',
+  }
+  const [content, unreplacedContent] = applyTemplates(
+    templates,
+    rawContent,
+    replacements
+  )
+  const existingFileContent = await loadFileMaybe(filePath)
   if (formatter) {
     const formattedContent = await applyFormatter(
       formatter,
       content,
       filePath
     )
+    const formattedUnreplacedContent = await applyFormatter(
+      formatter,
+      unreplacedContent,
+      filePath
+    )
+    if (
+      existingFileContent &&
+      existingFileContent?.length > 0 &&
+      contentIsEquivalent(
+        formattedUnreplacedContent,
+        existingFileContent,
+        formattedContent,
+        replacements
+      )
+    ) {
+      console.log(
+        `skipped ${filePath} (${formattedContent.length}) because file content did not change`
+      )
+      return
+    }
     await writeFile(filePath, formattedContent, {
       encoding: 'utf8',
     })
@@ -227,6 +181,21 @@ export async function commitFile(
       `wrote ${filePath} (${formattedContent.length}) and formatted with ${formatter.props.formatter}`
     )
   } else {
+    if (
+      existingFileContent &&
+      existingFileContent?.length > 0 &&
+      contentIsEquivalent(
+        unreplacedContent,
+        existingFileContent,
+        content,
+        replacements
+      )
+    ) {
+      console.log(
+        `skipped ${filePath} (${content.length}) because file content did not change`
+      )
+      return
+    }
     await writeFile(filePath, content, {
       encoding: 'utf8',
     })
