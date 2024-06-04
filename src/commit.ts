@@ -149,37 +149,47 @@ export async function commitFile(
   )
   const existingFileContent = await loadFileMaybe(filePath)
   if (formatter) {
-    const formattedContent = await applyFormatter(
-      formatter,
-      content,
-      filePath
-    )
-    const formattedUnreplacedContent = await applyFormatter(
-      formatter,
-      unreplacedContent,
-      filePath
-    )
-    if (
-      existingFileContent &&
-      existingFileContent?.length > 0 &&
-      contentIsEquivalent(
-        formattedUnreplacedContent,
-        existingFileContent,
-        formattedContent,
-        replacements
+    try {
+      const formattedContent = await applyFormatter(
+        formatter,
+        content,
+        filePath
       )
-    ) {
+      const formattedUnreplacedContent =
+        await applyFormatter(
+          formatter,
+          unreplacedContent,
+          filePath
+        )
+      if (
+        existingFileContent &&
+        existingFileContent?.length > 0 &&
+        contentIsEquivalent(
+          formattedUnreplacedContent,
+          existingFileContent,
+          formattedContent,
+          replacements
+        )
+      ) {
+        console.log(
+          `[gecko] skipped ${filePath} (${formattedContent.length}) because file content did not change`
+        )
+        return
+      }
+      await writeFile(filePath, formattedContent, {
+        encoding: 'utf8',
+      })
       console.log(
-        `skipped ${filePath} (${formattedContent.length}) because file content did not change`
+        `[gecko] wrote ${filePath} (${formattedContent.length}) and formatted with ${formatter.props.formatter}`
       )
       return
+    } catch (e) {
+      console.error(
+        `[gecko] unable to write ${filePath} due to formatting error with ${formatter.props.formatter}`
+      )
+      console.error(e)
+      return
     }
-    await writeFile(filePath, formattedContent, {
-      encoding: 'utf8',
-    })
-    console.log(
-      `wrote ${filePath} (${formattedContent.length}) and formatted with ${formatter.props.formatter}`
-    )
   } else {
     if (
       existingFileContent &&
@@ -192,14 +202,16 @@ export async function commitFile(
       )
     ) {
       console.log(
-        `skipped ${filePath} (${content.length}) because file content did not change`
+        `[gecko] skipped ${filePath} (${content.length}) because file content did not change`
       )
       return
     }
     await writeFile(filePath, content, {
       encoding: 'utf8',
     })
-    console.log(`wrote ${filePath} (${content.length})`)
+    console.log(
+      `[gecko] wrote ${filePath} (${content.length})`
+    )
   }
 }
 
