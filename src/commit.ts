@@ -185,9 +185,16 @@ export async function commitFile(
       return
     } catch (e) {
       console.error(
-        `[gecko] unable to write ${filePath} due to formatting error with ${formatter.props.formatter}`
+        `[gecko] unable to write ${filePath} due to error when applying '${formatter.props.formatter}' formatter:`
       )
-      console.error(e)
+      const message = e.stack.split('\n')
+      const traceStartsAt = message.findIndex((x: string) =>
+        x.trimStart().startsWith('at ')
+      )
+      if (traceStartsAt > -1) {
+        message.length = traceStartsAt
+      }
+      console.error(message.join('\n'))
       return
     }
   } else {
