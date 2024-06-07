@@ -16,5 +16,3 @@ export function Export(
 ): GeckoExportElement {
   return { type: 'export', props }
 }
-
-export * as default from '@flatfile/gecko'
