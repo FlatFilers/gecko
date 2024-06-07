@@ -2,6 +2,7 @@ export interface ImportProps {
   default?: string
   from: string
   named?: string[]
+  type?: true
 }
 
 export interface GeckoImportElement {

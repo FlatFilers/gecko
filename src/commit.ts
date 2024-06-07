@@ -27,6 +27,7 @@ export async function commit(root: GeckoRootElement) {
   }
   await mkdir(baseDir, { recursive: true })
   const context: CommitContext = {
+    committedFilePaths: new Set(),
     documentedStack: [],
     fileFormatterStack: [],
     fileTemplateStack: [],
@@ -128,6 +129,13 @@ export async function commitFile(
   file: GeckoFileElement
 ) {
   const filePath = join(baseDir, file.props.name)
+  if (context.committedFilePaths.has(filePath)) {
+    console.error(
+      `[gecko] warning, additional attempts to write to file ${JSON.stringify(filePath)} are ignored, since this file has already been generated, avoid writing to the same file more than once`
+    )
+    return
+  }
+  context.committedFilePaths.add(filePath)
   const rawContent = collectFileContents(context, file)
   const formatter = closestMatchingFormatter(
     context,

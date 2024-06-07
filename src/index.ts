@@ -3,6 +3,7 @@ import 'dotenv/config'
 import { GeckoClassElement } from './tags/Class.ts'
 import { GeckoDataPromptElement } from './tags/DataPrompt.ts'
 import { GeckoDocumentedElement } from './tags/Documented.ts'
+import { GeckoExportElement } from './tags/Export.ts'
 import { GeckoFileElement } from './tags/File.ts'
 import { GeckoFileFormatterElement } from './tags/FileFormatter.ts'
 import { GeckoFileTemplateElement } from './tags/FileTemplate.ts'
@@ -23,6 +24,7 @@ export {
   DocumentationFormat,
   Documented,
 } from './tags/Documented.ts'
+export { Export } from './tags/Export.ts'
 export { File } from './tags/File.ts'
 export { FileFormatter } from './tags/FileFormatter.ts'
 export {
@@ -42,6 +44,7 @@ export { Text } from './tags/Text.ts'
 export type GeckoResolvedElement =
   | GeckoClassElement
   | GeckoDocumentedElement
+  | GeckoExportElement
   | GeckoFileElement
   | GeckoFileFormatterElement
   | GeckoFileTemplateElement

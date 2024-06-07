@@ -2,6 +2,7 @@ import { GeckoChild } from '..'
 import { CommitContext } from '../types/CommitContext'
 import { formatChildren } from '../util/formatChildren'
 import { renderClass } from './renderClass'
+import { renderExport } from './renderExport'
 import { renderFunction } from './renderFunction'
 import { renderImport } from './renderImport'
 import { renderInterface } from './renderInterface'
@@ -19,6 +20,8 @@ export function renderContent(
   switch (content.type) {
     case 'class':
       return renderClass(context, content)
+    case 'export':
+      return renderExport(context, content)
     case 'function':
       return renderFunction(context, content)
     case 'import':

@@ -5,7 +5,12 @@ export function renderImport(
   context: CommitContext,
   _import: GeckoImportElement
 ) {
-  const { default: _default, from, named } = _import.props
+  const {
+    default: _default,
+    from,
+    named,
+    type,
+  } = _import.props
 
   const importParts = [
     ...(_default ? [_default] : []),
@@ -16,5 +21,5 @@ export function renderImport(
     ? `${importParts.join(', ')} `
     : ''
 
-  return `import ${imports}from'${from}'`
+  return `import ${type ? 'type ' : ''}${imports}from '${from}'`
 }

@@ -136,9 +136,31 @@ Example:
 </Class>
 ```
 
+### `<Export>`
+
+An export statement, which re-exports.
+
+Example:
+
+```jsx
+<Export all as='React' from 'react' />
+<Export type named={[ 'ReactDOM' ]} from 'react' />
+```
+
 ### `<Function>`
 
 A function. May be exported as default with `export="default"` or exported as named with `export name="myFunctionName"`.
+
+### `<Import>`
+
+An import statement.
+
+Example:
+
+```jsx
+<Import default='React' from 'react' />
+<Import type named={[ 'ReactDOM' ]} from 'react' />
+```
 
 ### `<Interface>`
 
