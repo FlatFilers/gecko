@@ -135,6 +135,17 @@ export async function commitFile(
     )
     return
   }
+  const existingFileContent = await loadFileMaybe(filePath)
+  if (
+    file.props.once &&
+    typeof existingFileContent === 'string' &&
+    existingFileContent.length > 0
+  ) {
+    console.warn(
+      `[gecko] skipped write-once file ${JSON.stringify(filePath)} because the file already exists and is not empty`
+    )
+    return
+  }
   context.committedFilePaths.add(filePath)
   const rawContent = collectFileContents(context, file)
   const formatter = closestMatchingFormatter(
@@ -155,7 +166,6 @@ export async function commitFile(
     rawContent,
     replacements
   )
-  const existingFileContent = await loadFileMaybe(filePath)
   if (formatter) {
     try {
       const formattedContent = await applyFormatter(
@@ -180,7 +190,7 @@ export async function commitFile(
         )
       ) {
         console.log(
-          `[gecko] skipped ${filePath} (${formattedContent.length}) because file content did not change`
+          `[gecko] skipped ${JSON.stringify(filePath)} (${formattedContent.length}) because file content did not change`
         )
         return
       }
@@ -188,12 +198,12 @@ export async function commitFile(
         encoding: 'utf8',
       })
       console.log(
-        `[gecko] wrote ${filePath} (${formattedContent.length}) and formatted with ${formatter.props.formatter}`
+        `[gecko] wrote ${JSON.stringify(filePath)} (${formattedContent.length}) and formatted with ${formatter.props.formatter}`
       )
       return
     } catch (e) {
       console.error(
-        `[gecko] unable to write ${filePath} due to error when applying '${formatter.props.formatter}' formatter:`
+        `[gecko] unable to write ${JSON.stringify(filePath)} due to error when applying '${formatter.props.formatter}' formatter:`
       )
       const message = e.stack.split('\n')
       const traceStartsAt = message.findIndex((x: string) =>
@@ -217,7 +227,7 @@ export async function commitFile(
       )
     ) {
       console.log(
-        `[gecko] skipped ${filePath} (${content.length}) because file content did not change`
+        `[gecko] skipped ${JSON.stringify(filePath)} (${content.length}) because file content did not change`
       )
       return
     }
@@ -225,7 +235,7 @@ export async function commitFile(
       encoding: 'utf8',
     })
     console.log(
-      `[gecko] wrote ${filePath} (${content.length})`
+      `[gecko] wrote ${JSON.stringify(filePath)} (${content.length})`
     )
   }
 }

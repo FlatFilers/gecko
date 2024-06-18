@@ -3,6 +3,7 @@ import { GeckoChildren } from '..'
 export interface FileProps {
   children?: GeckoChildren
   name: string
+  once?: true
 }
 
 export interface GeckoFileElement {

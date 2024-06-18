@@ -113,7 +113,18 @@ A folder. Takes a `name="myFolderName"` property. This tag may contain other `<F
 
 ### `<File>`
 
-A file. Takes a `name="fileName.ext"` argument. Children of this tag will be the contents written to the file.
+A file. Takes a `name="fileName.ext"` argument. Children of this tag will be the contents written to the file. You may specify the attribute `once` to ensure that the file is only generated if it does not already exist. This is useful for files that must be manually modified after being generated.
+
+Example:
+
+```jsx
+<File name="README.md" once>
+  <Text>
+    This file is generated only once, and then may be
+    manually edited without being overwritten by Gecko later
+  </Text>
+</File>
+```
 
 ### The following may only be used within a `<File>`
 

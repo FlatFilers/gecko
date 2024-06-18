@@ -29,7 +29,7 @@ export default function () {
         formatter="prettier"
         match="*.(ts|tsx)"
       >
-        <File name="readme.md">
+        <File once name="readme.md">
           <Text>Hello world</Text>
         </File>
         <FileTemplate templates={[generatedTypeScriptFile]}>
