@@ -48,8 +48,11 @@ export function renderMethod(
     : ''
   const _async = method.props.async ? 'async ' : ''
   const _static = method.props.static ? 'static ' : ''
+  const _accessor = method.props.accessor
+    ? `${method.props.accessor} `
+    : ''
   if (inInterface) {
-    return `${flag}${_static}${_async}${method.props.name}${typeArguments}(${args})${returnType}`
+    return `${flag}${_static}${_async}${_accessor}${method.props.name}${typeArguments}(${args})${returnType}`
   }
   const body = formatChildren(method.props.children)
     .map((x) => '  ' + renderContent(context, x))
@@ -59,5 +62,5 @@ export function renderMethod(
     methodDocumentation,
     method
   )
-  return `${docs}${flag}${_static}${_async}${method.props.name}${typeArguments}(${args})${returnType} {\n${body}\n}\n`
+  return `${docs}${flag}${_static}${_async}${_accessor}${method.props.name}${typeArguments}(${args})${returnType} {\n${body}\n}\n`
 }

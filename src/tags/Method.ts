@@ -12,6 +12,7 @@ export interface MethodProps {
   static?: true
   typeArguments?: string[]
   undocumented?: true
+  accessor?: 'get' | 'set'
 }
 
 export interface GeckoMethodElement {
