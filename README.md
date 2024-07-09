@@ -221,6 +221,24 @@ Example:
 />
 ```
 
+### `<Get>` and `<Set>`
+
+Class property accessors. `<Get>` creates a getter function and `<Set>` creates a setter function. Both of these may only be used inside of a `<Class>` element.
+
+Flags (attributes) include at most one of `private`, `protected`, or `public`.
+
+```jsx
+<Get protected name="foo">
+  {'return 4'}
+</Get>
+```
+
+```jsx
+<Set public name="foo" argument="value: number">
+  {'this.fooInternal = value'}
+</Set>
+```
+
 ### `<Text>`
 
 Plain text to be written to a file. Adjacent `<Text>` or `<Function>` tags within a `<File>` are separated by a new line.
