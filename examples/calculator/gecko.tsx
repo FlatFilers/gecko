@@ -50,13 +50,11 @@ export default function () {
                 <File name="digits.md">
                   {s.match(/Digit\d\.tsx$/).map((file) => (
                     <Text>
-                      Component '
-                      {
+                      {`Component '${
                         file.pathSegments?.[
                           file.pathSegments.length - 1
                         ]
-                      }
-                      '
+                      }' (${file.path ? s.read(file.path).content?.length ?? '(empty)' : '(none)'}b)`}
                     </Text>
                   ))}
                 </File>

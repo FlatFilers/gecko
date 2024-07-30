@@ -1,11 +1,9 @@
+import { existsSync, readFileSync } from 'fs'
 import { mkdir, rmdir, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { GeckoChildren, GeckoElement } from '.'
 import { renderContent } from './render/renderContent'
-import {
-  AfterwardsProps,
-  GeckoAfterwardsElement,
-} from './tags/Afterwards'
+import { GeckoAfterwardsElement } from './tags/Afterwards'
 import { GeckoDocumentedElement } from './tags/Documented'
 import { GeckoFileElement } from './tags/File'
 import { GeckoFileFormatterElement } from './tags/FileFormatter'
@@ -87,6 +85,27 @@ function setGeckoSource(context: CommitContext) {
         }
       }
       return files
+    },
+    read(path, encoding = 'utf-8' as 'utf-8') {
+      const pathSegments = path.split('/')
+      if (existsSync(path)) {
+        const content = readFileSync(path, encoding)
+        return {
+          content,
+          encoding,
+          name: pathSegments[pathSegments.length - 1],
+          path,
+          pathSegments,
+          source: true,
+        }
+      }
+      return {
+        encoding,
+        name: pathSegments[pathSegments.length - 1],
+        path,
+        pathSegments,
+        source: true,
+      }
     },
   }
 }

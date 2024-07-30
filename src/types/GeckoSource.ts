@@ -13,4 +13,5 @@ export interface GeckoFile {
 export interface GeckoSource {
   context: CommitContext
   match(re?: RegExp): GeckoFile[]
+  read(path: string): GeckoFile
 }
