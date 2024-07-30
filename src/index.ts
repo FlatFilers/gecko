@@ -1,5 +1,6 @@
 import 'dotenv/config'
 
+import { GeckoAfterwardsElement } from './tags/Afterwards.ts'
 import { GeckoClassElement } from './tags/Class.ts'
 import { GeckoDataPromptElement } from './tags/DataPrompt.ts'
 import { GeckoDocumentedElement } from './tags/Documented.ts'
@@ -15,9 +16,11 @@ import { GeckoMethodElement } from './tags/Method.ts'
 import { GeckoPropertyElement } from './tags/Property.ts'
 import { GeckoRootElement } from './tags/Root.ts'
 import { GeckoTextElement } from './tags/Text.ts'
+import { GeckoSource } from './types/GeckoSource.ts'
 
 export { commit } from './commit.ts'
 export { printResolveSummary, resolve } from './resolve.ts'
+export { Afterwards } from './tags/Afterwards.ts'
 export { Class } from './tags/Class.ts'
 export { DataPrompt } from './tags/DataPrompt.ts'
 export {
@@ -35,13 +38,18 @@ export { Folder } from './tags/Folder.ts'
 export { Function } from './tags/Function.ts'
 export { Import } from './tags/Import.ts'
 export { Interface } from './tags/Interface.ts'
-export { Method, Get, Set } from './tags/Method.ts'
+export { Get, Method, Set } from './tags/Method.ts'
 export { Property } from './tags/Property.ts'
 export { Root } from './tags/Root.ts'
 export { Text } from './tags/Text.ts'
+export {
+  GeckoFile,
+  GeckoSource,
+} from './types/GeckoSource.ts'
 
 // Post-AI processed elements
 export type GeckoResolvedElement =
+  | GeckoAfterwardsElement
   | GeckoClassElement
   | GeckoDocumentedElement
   | GeckoExportElement
@@ -83,6 +91,11 @@ export type GeckoChildren =
 type ElementDefinition =
   | (() => any)
   | ((props: any) => GeckoElement)
+
+export type GeckoContentFunction = (
+  s: GeckoSource,
+  baseDir: string
+) => GeckoChildren
 
 export function geckoJSX<T extends GeckoElement>(
   elementDefinition: ElementDefinition,

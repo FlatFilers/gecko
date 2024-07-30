@@ -18,6 +18,10 @@ export function renderContent(
     return content
   }
   switch (content.type) {
+    case 'afterwards':
+      throw new Error(
+        `Afterwards in file contents not yet implemented`
+      )
     case 'class':
       return renderClass(context, content)
     case 'export':
@@ -39,7 +43,7 @@ export function renderContent(
       return (
         formatChildren(content.props.children)
           ?.map((x) => renderContent(context, x))
-          ?.join?.('\n') ?? ''
+          ?.join?.('') ?? ''
       )
   }
 }
