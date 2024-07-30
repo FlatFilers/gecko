@@ -1,5 +1,9 @@
 import { performance } from 'perf_hooks'
-import { GeckoElement, GeckoResolvedElement } from '.'
+import {
+  GeckoContentFunction,
+  GeckoElement,
+  GeckoResolvedElement,
+} from '.'
 import { sendPromptToClaude } from './claude-ai'
 import { GeckoDataPromptElement } from './tags/DataPrompt'
 import { GeckoRootElement } from './tags/Root'
@@ -80,9 +84,13 @@ async function resolveElement(
   | (GeckoResolvedElement | string)[]
   | GeckoResolvedElement
   | string
+  | GeckoContentFunction
 > {
   if (typeof element === 'string') {
     return [element]
+  }
+  if (typeof element === 'function') {
+    return element
   }
   switch (element.type) {
     case 'prompt:data':
@@ -90,6 +98,11 @@ async function resolveElement(
         element as GeckoDataPromptElement
       )
     default:
+      if (!element.props) {
+        throw new Error(
+          `element missing props ${typeof element}`
+        )
+      }
       if (
         !('children' in element.props) ||
         typeof element.props.children === 'string' ||
@@ -104,7 +117,7 @@ async function resolveElement(
           : [element.props.children]
       ).filter((x) => typeof x !== 'undefined')
       const resolvedChildren = (await Promise.all(
-        children.map(resolveElement)
+        children.filter((x) => x).map(resolveElement)
       )) as GeckoResolvedElement[]
       return {
         ...element,

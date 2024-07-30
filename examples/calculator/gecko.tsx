@@ -1,4 +1,5 @@
 import {
+  Afterwards,
   DocumentationFormat,
   Documented,
   File,
@@ -6,6 +7,7 @@ import {
   FileTemplate,
   Folder,
   geckoJSX,
+  GeckoSource,
   Root,
   TemplateMatch,
   Text,
@@ -43,6 +45,23 @@ export default function () {
                 )
               )}
             </Folder>
+            <Afterwards>
+              {(s: GeckoSource) => (
+                <File name="digits.md">
+                  {s.match(/Digit\d\.tsx$/).map((file) => (
+                    <Text>
+                      Component '
+                      {
+                        file.pathSegments?.[
+                          file.pathSegments.length - 1
+                        ]
+                      }
+                      '
+                    </Text>
+                  ))}
+                </File>
+              )}
+            </Afterwards>
           </Documented>
         </FileTemplate>
       </FileFormatter>
