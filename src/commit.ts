@@ -71,8 +71,12 @@ let afterwards_timeoutQueued: any
 const afterwards_timeoutQueue: GeckoAfterwardsElement[] = []
 let geckoSource: GeckoSource
 
-function setGeckoSource(context: CommitContext) {
+function setGeckoSource(
+  context: CommitContext,
+  baseDir: string
+) {
   geckoSource = {
+    baseDir,
     context,
     match(re) {
       const files: GeckoFile[] = []
@@ -88,8 +92,11 @@ function setGeckoSource(context: CommitContext) {
     },
     read(path, encoding = 'utf-8' as 'utf-8') {
       const pathSegments = path.split('/')
-      if (existsSync(path)) {
-        const content = readFileSync(path, encoding)
+      const fullPath = path.startsWith('/')
+        ? path
+        : join(baseDir, path)
+      if (existsSync(fullPath)) {
+        const content = readFileSync(fullPath, encoding)
         return {
           content,
           encoding,
@@ -120,7 +127,7 @@ export async function commitAfterwards(
   if (typeof afterwards_timeoutQueued === 'undefined') {
     afterwards_timeoutQueued = setImmediate(
       async function () {
-        setGeckoSource(context)
+        setGeckoSource(context, baseDir)
         const contentsToWrite = await (async function () {
           if (afterwards.props.children) {
             return afterwards.props.children?.[0](

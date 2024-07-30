@@ -11,6 +11,7 @@ export interface GeckoFile {
 }
 
 export interface GeckoSource {
+  baseDir: string
   context: CommitContext
   match(re?: RegExp): GeckoFile[]
   read(path: string): GeckoFile
