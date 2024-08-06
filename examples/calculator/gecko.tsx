@@ -68,7 +68,7 @@ export default function () {
                             file.pathSegments?.[
                               file.pathSegments.length - 1
                             ]
-                          }' (${file.path ? s.read(`components/${file.name}`).content?.length ?? '(empty)' : '(none)'}b)`}
+                          }' (${file.content.length ? '(empty)' : '(none)'}b)`}
                         </Text>
                       ))}
                   </File>
