@@ -4,6 +4,7 @@ export interface RootProps {
   children?: GeckoChildren
   erase?: true
   path?: string
+  requires?: string[]
 }
 
 export interface GeckoRootElement {

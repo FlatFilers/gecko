@@ -24,9 +24,10 @@ export async function commit(
   root: GeckoRootElement,
   context?: CommitContext
 ) {
+  const thisDir = process.cwd()
   const baseDir = root.props.path
-    ? join(process.cwd(), root.props.path)
-    : process.cwd()
+    ? join(thisDir, root.props.path)
+    : thisDir
   if (root.props.erase) {
     try {
       await rmdir(baseDir)
@@ -35,14 +36,33 @@ export async function commit(
   await mkdir(baseDir, { recursive: true })
   if (!context) {
     context = {
+      afterwardsPromises: [],
       committedFilePaths: new Set(),
       committedFiles: new Map(),
       documentedStack: [],
       fileFormatterStack: [],
       fileTemplateStack: [],
+      requiredFilePaths: new Set(
+        root.props.requires?.map((x) => join(thisDir, x))
+      ),
+      restart: false,
+      restartFiles: new Set(),
     }
   }
   await commitFolderChildren(context!, baseDir, root)
+  await Promise.all(context.afterwardsPromises)
+  if (context.restart) {
+    console.log(
+      `[gecko] restarting because changes were written to the following <Root requires={[...]}> files:`
+    )
+    for (const file of context.restartFiles.values()) {
+      console.log(`[gecko] • ${file}`)
+    }
+    await writeFile(
+      join(thisDir, 'GECKO_RESTART_SIGNAL'),
+      ''
+    )
+  }
 }
 
 export async function commitFolder(
@@ -122,34 +142,44 @@ export async function commitAfterwards(
   baseDir: string,
   afterwards: GeckoAfterwardsElement
 ) {
-  console.log('[gecko] Committing <Afterwards>')
-  afterwards_timeoutQueue.push(afterwards)
-  if (typeof afterwards_timeoutQueued === 'undefined') {
-    afterwards_timeoutQueued = setImmediate(
-      async function () {
-        setGeckoSource(context, baseDir)
-        const contentsToWrite = await (async function () {
-          if (afterwards.props.children) {
-            return afterwards.props.children?.[0](
-              geckoSource,
-              baseDir
-            )
+  context.afterwardsPromises.push(
+    new Promise(function (resolve, reject) {
+      console.log('[gecko] Committing <Afterwards>')
+      afterwards_timeoutQueue.push(afterwards)
+      if (typeof afterwards_timeoutQueued === 'undefined') {
+        afterwards_timeoutQueued = setImmediate(
+          async function () {
+            try {
+              setGeckoSource(context, baseDir)
+              const contentsToWrite =
+                await (async function () {
+                  if (afterwards.props.children) {
+                    return afterwards.props.children?.[0](
+                      geckoSource,
+                      baseDir
+                    )
+                  }
+                })()
+              if (
+                contentsToWrite &&
+                typeof contentsToWrite !== 'string'
+              ) {
+                await commitFolderChildren(
+                  context,
+                  baseDir,
+                  contentsToWrite
+                )
+              }
+              console.log('[gecko] <Afterwards> completed ')
+              resolve()
+            } catch (e) {
+              reject(e)
+            }
           }
-        })()
-        if (
-          contentsToWrite &&
-          typeof contentsToWrite !== 'string'
-        ) {
-          await commitFolderChildren(
-            context,
-            baseDir,
-            contentsToWrite
-          )
-        }
-        console.log('[gecko] <Afterwards> completed ')
+        )
       }
-    )
-  }
+    })
+  )
 }
 
 export async function commitDocumented(
@@ -247,6 +277,24 @@ export async function commitFolderChildren(
   }
 }
 
+async function writeModifiedFile(
+  context: CommitContext,
+  filePath: string,
+  content: string,
+  info?: string
+) {
+  await writeFile(filePath, content, {
+    encoding: 'utf-8',
+  })
+  console.log(
+    `[gecko] wrote ${JSON.stringify(filePath)} (${content.length})${typeof info === 'string' && info.length > 0 ? ' ' : ''}${info ?? ''}`
+  )
+  if (context.requiredFilePaths?.has(filePath)) {
+    context.restart = true
+    context.restartFiles.add(filePath)
+  }
+}
+
 export async function commitFile(
   context: CommitContext,
   baseDir: string,
@@ -327,11 +375,11 @@ export async function commitFile(
         )
         return
       }
-      await writeFile(filePath, formattedContent, {
-        encoding: 'utf-8',
-      })
-      console.log(
-        `[gecko] wrote ${JSON.stringify(filePath)} (${formattedContent.length}) and formatted with ${formatter.props.formatter}`
+      await writeModifiedFile(
+        context,
+        filePath,
+        formattedContent,
+        `formatted with ${formatter.props.formatter}`
       )
       return
     } catch (e) {
@@ -373,12 +421,7 @@ export async function commitFile(
       )
       return
     }
-    await writeFile(filePath, content, {
-      encoding: 'utf8',
-    })
-    console.log(
-      `[gecko] wrote ${JSON.stringify(filePath)} (${content.length})`
-    )
+    await writeModifiedFile(context, filePath, content)
   }
 }
 
