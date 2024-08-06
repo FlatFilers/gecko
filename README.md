@@ -6,7 +6,7 @@ Gecko is a JSX code generation framework for TypeScript.
 
 ## Prerequisites
 
-Gecko is written in TypeScript, and requires [ts-node](https://www.npmjs.com/package/ts-node).
+Gecko is written in TypeScript, and requires [tsx](https://www.npmjs.com/package/tsx).
 
 [Bun](https://bun.sh/) support is planned.
 
@@ -73,7 +73,8 @@ Your entire project source code, including its `package.json`, `tsconfig.json`, 
 
 Gecko uses a file named `gecko.tsx` at the root of your project to generate files. The file contents might look something like:
 
-```import {
+```jsx
+import {
   File,
   Folder,
   geckoJSX,
