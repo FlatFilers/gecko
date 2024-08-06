@@ -1,7 +1,7 @@
 import { GeckoContentFunction } from '..'
 
 export interface AfterwardsProps {
-  children?: GeckoContentFunction[]
+  children?: GeckoContentFunction | GeckoContentFunction[]
 }
 
 export interface GeckoAfterwardsElement {
