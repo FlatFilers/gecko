@@ -195,8 +195,8 @@ An import statement.
 Example:
 
 ```jsx
-<Import default='React' from 'react' />
-<Import type named={[ 'ReactDOM' ]} from 'react' />
+<Import default='React' from='react' />
+<Import type named={[ 'ReactDOM' ]} from='react' />
 ```
 
 ### `<Interface>`
