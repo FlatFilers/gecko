@@ -6,8 +6,30 @@ DIR="$BASE_DIR"
 
 # Check if run.ts exists in the expected directory within node_modules
 if [ ! -f "$DIR/run.ts" ]; then
-    # Adjust the directory to the @flatfile/gecko directory within node_modules
-    DIR="$BASE_DIR/../@flatfile/gecko"
+  # Adjust the directory to the @flatfile/gecko directory within node_modules
+  DIR="$BASE_DIR/../@flatfile/gecko"
 fi
 
-OPTIONS="$@" tsx --tsconfig $DIR/tsconfig.json -r tsconfig-paths/register $DIR/run.ts
+first_run=true
+re_run=true
+
+while [ "$first_run" = true ] || [ "$re_run" = true ]; do
+  if [ "$first_run" = true ]; then
+    echo "[gecko] Start"
+  else
+    echo "[gecko] Restart"
+  fi
+  first_run=false
+  re_run=false
+
+  # Run the Gecko TypeScript script
+  OPTIONS="$@" tsx --tsconfig $DIR/tsconfig.json -r tsconfig-paths/register $DIR/run.ts
+
+  # Check if the GECKO_RESTART_SIGNAL file exists
+  if [ -f "GECKO_RESTART_SIGNAL" ]; then
+    re_run=true
+    rm GECKO_RESTART_SIGNAL
+  else
+    echo "[gecko] Done"
+  fi
+done
