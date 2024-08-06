@@ -1,12 +1,12 @@
 import { GeckoDocumentedElement } from '../tags/Documented'
 import { GeckoFileFormatterElement } from '../tags/FileFormatter'
 import { GeckoFileTemplateElement } from '../tags/FileTemplate'
-import { GeckoFile } from './GeckoSource'
+import { GeckoDestinationFile } from './GeckoSource'
 
 export interface CommitContext {
   afterwardsPromises: Promise<void>[]
   committedFilePaths: Set<string>
-  committedFiles: Map<string, GeckoFile>
+  committedFiles: Map<string, GeckoDestinationFile>
   documentedStack: GeckoDocumentedElement[]
   fileFormatterStack: GeckoFileFormatterElement[]
   fileTemplateStack: GeckoFileTemplateElement[]

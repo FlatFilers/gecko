@@ -10,9 +10,17 @@ export interface GeckoFile {
   pathSegments?: string[]
 }
 
+export interface GeckoDestinationFile extends GeckoFile {
+  content: string
+  destination: true
+  path: string
+  name: string
+  pathSegments: string[]
+}
+
 export interface GeckoSource {
   baseDir: string
   context: CommitContext
-  match(re?: RegExp): GeckoFile[]
+  match(re?: RegExp): GeckoDestinationFile[]
   read(path: string): GeckoFile
 }

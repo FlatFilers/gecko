@@ -11,7 +11,10 @@ import { GeckoFileTemplateElement } from './tags/FileTemplate'
 import { GeckoFolderElement } from './tags/Folder'
 import { GeckoRootElement } from './tags/Root'
 import { CommitContext } from './types/CommitContext'
-import { GeckoFile, GeckoSource } from './types/GeckoSource'
+import {
+  GeckoDestinationFile,
+  GeckoSource,
+} from './types/GeckoSource'
 import { applyFormatter } from './util/applyFormatter'
 import { applyTemplates } from './util/applyTemplates'
 import { closestMatchingFormatter } from './util/closestMatchingFormatter'
@@ -99,7 +102,7 @@ function setGeckoSource(
     baseDir,
     context,
     match(re) {
-      const files: GeckoFile[] = []
+      const files: GeckoDestinationFile[] = []
       for (const [
         path,
         file,
