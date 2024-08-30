@@ -1,5 +1,6 @@
 import {
   Afterwards,
+  Collect,
   DocumentationFormat,
   Documented,
   File,
@@ -8,6 +9,7 @@ import {
   Folder,
   geckoJSX,
   GeckoSource,
+  Part,
   Root,
   TemplateMatch,
   Text,
@@ -42,11 +44,14 @@ export default function () {
               .fill(0)
               .map((_, i) => i)
               .join(', ')}]`}</Text>
+            <Folder name="project/src/gecko_generated">
+              <Part tag="readme" order={0}>
+                <Text># Gecko Generated Code</Text>
+                <Text />
+              </Part>
+            </Folder>
           </File>
           <Folder name="project/src/gecko_generated">
-            <File once name="readme.md">
-              <Text>Hello world</Text>
-            </File>
             <Documented
               formats={[DocumentationFormat.JSDoc]}
             >
@@ -57,21 +62,26 @@ export default function () {
                   </File>
                 ))}
               </Folder>
+              <File name="readme.md">
+                <Collect tag="readme" />
+              </File>
               <Afterwards>
                 {(s: GeckoSource) => (
-                  <File name="digits.md">
-                    {s
-                      .match(/Digit\d\.tsx$/)
-                      .map((file) => (
-                        <Text>
-                          {`Component '${
-                            file.pathSegments?.[
-                              file.pathSegments.length - 1
-                            ]
-                          }' (${file.content.length}b)`}
-                        </Text>
-                      ))}
-                  </File>
+                  <>
+                    <File name="digits.md">
+                      {s
+                        .match(/Digit\d\.tsx$/)
+                        .map((file) => (
+                          <Text>
+                            {`Component '${
+                              file.pathSegments?.[
+                                file.pathSegments.length - 1
+                              ]
+                            }' (${file.content.length}b)`}
+                          </Text>
+                        ))}
+                    </File>
+                  </>
                 )}
               </Afterwards>
             </Documented>
@@ -81,3 +91,7 @@ export default function () {
     </Root>
   )
 }
+
+export const aiOutputReadmeMd123809128312 = `
+...
+`

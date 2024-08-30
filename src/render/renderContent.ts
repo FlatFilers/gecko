@@ -2,6 +2,7 @@ import { GeckoChild } from '..'
 import { CommitContext } from '../types/CommitContext'
 import { formatChildren } from '../util/formatChildren'
 import { renderClass } from './renderClass'
+import { renderCollect } from './renderCollect'
 import { renderExport } from './renderExport'
 import { renderFunction } from './renderFunction'
 import { renderImport } from './renderImport'
@@ -14,7 +15,9 @@ export function renderContent(
   content: GeckoChild,
   inInterface: boolean = false
 ) {
-  if (typeof content === 'string') {
+  if (typeof content === 'number') {
+    return content.toString(10)
+  } else if (typeof content === 'string') {
     return content
   }
   switch (content.type) {
@@ -24,6 +27,8 @@ export function renderContent(
       )
     case 'class':
       return renderClass(context, content)
+    case 'collect':
+      return renderCollect(context, content)
     case 'export':
       return renderExport(context, content)
     case 'function':
@@ -37,7 +42,11 @@ export function renderContent(
     case 'property':
       return renderProperty(context, content, inInterface)
     case 'text':
-      if (typeof content.props.children === 'string') {
+      if (typeof content.props.children === 'number') {
+        return content.props.children.toString(10)
+      } else if (
+        typeof content.props.children === 'string'
+      ) {
         return content.props.children
       }
       return (

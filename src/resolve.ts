@@ -1,3 +1,4 @@
+import { join } from 'path'
 import { performance } from 'perf_hooks'
 import {
   GeckoContentFunction,
@@ -6,7 +7,12 @@ import {
 } from '.'
 import { sendPromptToClaude } from './claude-ai'
 import { GeckoDataPromptElement } from './tags/DataPrompt'
+import { GeckoPartElement } from './tags/Part'
 import { GeckoRootElement } from './tags/Root'
+import {
+  CommitContext,
+  PartElementsByOrder,
+} from './types/CommitContext'
 import { formatMilliseconds } from './util/formatMilliseconds'
 
 const options = process.env.OPTIONS
@@ -79,14 +85,19 @@ Description: ${input}
 }
 
 async function resolveElement(
-  element: GeckoElement | string
+  context: CommitContext,
+  element: GeckoElement | number | string
 ): Promise<
+  | void
   | (GeckoResolvedElement | string)[]
   | GeckoResolvedElement
+  | number
   | string
   | GeckoContentFunction
 > {
-  if (typeof element === 'string') {
+  if (typeof element === 'number') {
+    return element.toString(10)
+  } else if (typeof element === 'string') {
     return [element]
   }
   if (typeof element === 'function') {
@@ -97,6 +108,24 @@ async function resolveElement(
       return resolvePrompt(
         element as GeckoDataPromptElement
       )
+    case 'part':
+      const { tag, order = 0 } = element.props
+      const partsByOrder: PartElementsByOrder =
+        context.partsByTagAndOrder.get(tag) ??
+        (() => {
+          const p: PartElementsByOrder = new Map()
+          context.partsByTagAndOrder.set(tag, p)
+          return p
+        })()
+      const parts: GeckoPartElement[] =
+        partsByOrder.get(order) ??
+        (() => {
+          const p: GeckoPartElement[] = []
+          partsByOrder.set(order, p)
+          return p
+        })()
+      parts.push(element)
+      break
     default:
       if (!element.props) {
         throw new Error(
@@ -117,20 +146,37 @@ async function resolveElement(
           : [element.props.children]
       ).filter((x) => typeof x !== 'undefined')
       const resolvedChildren = (await Promise.all(
-        children.filter((x) => x).map(resolveElement)
+        children
+          .filter((x) => x)
+          .map((x) =>
+            resolveElement(context, x as GeckoElement)
+          )
       )) as GeckoResolvedElement[]
       return {
         ...element,
         props: {
           ...element.props,
-          children: resolvedChildren.flat(Infinity),
+          children: resolvedChildren
+            .flat(Infinity)
+            .filter((x) => x),
         },
       } as GeckoResolvedElement
   }
 }
 
 export async function resolve(
+  context: CommitContext,
   root: GeckoRootElement
 ): Promise<GeckoRootElement> {
-  return resolveElement(root) as Promise<GeckoRootElement>
+  const thisDir = process.cwd()
+  const rootElement = resolveElement(
+    context,
+    root
+  ) as Promise<GeckoRootElement>
+  for (const r of root.props.requires?.map((x) =>
+    join(thisDir, x)
+  ) ?? []) {
+    context.requiredFilePaths.add(r)
+  }
+  return rootElement
 }

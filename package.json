@@ -1,6 +1,6 @@
 {
   "name": "@flatfile/gecko",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": false,
   "bin": "./gecko",
   "scripts": {
@@ -12,13 +12,13 @@
     "url": "git+https://github.com/FlatFilers/gecko.git"
   },
   "dependencies": {
-    "@types/micromatch": "^4.0.6",
-    "@types/node": "^20.12.12",
+    "@types/micromatch": "^4.0.9",
+    "@types/node": "^22.5.1",
     "dotenv": "^16.4.5",
-    "micromatch": "^4.0.5",
-    "prettier": "^3.2.5",
+    "micromatch": "^4.0.8",
+    "prettier": "^3.3.3",
     "tsconfig-paths": "^4.2.0",
-    "tsx": "^4.10.2",
-    "typescript": "^5.4.3"
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
   }
 }
