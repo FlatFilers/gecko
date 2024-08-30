@@ -91,7 +91,3 @@ export default function () {
     </Root>
   )
 }
-
-export const aiOutputReadmeMd123809128312 = `
-...
-`
