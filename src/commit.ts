@@ -25,7 +25,7 @@ import { matchingTemplates } from './util/matchingTemplates'
 
 export async function commit(
   root: GeckoRootElement,
-  context?: CommitContext
+  context: CommitContext
 ) {
   const thisDir = process.cwd()
   const baseDir = root.props.path
@@ -37,21 +37,6 @@ export async function commit(
     } catch (e) {}
   }
   await mkdir(baseDir, { recursive: true })
-  if (!context) {
-    context = {
-      afterwardsPromises: [],
-      committedFilePaths: new Set(),
-      committedFiles: new Map(),
-      documentedStack: [],
-      fileFormatterStack: [],
-      fileTemplateStack: [],
-      requiredFilePaths: new Set(
-        root.props.requires?.map((x) => join(thisDir, x))
-      ),
-      restart: false,
-      restartFiles: new Set(),
-    }
-  }
   await commitFolderChildren(context!, baseDir, root)
   await Promise.all(context.afterwardsPromises)
   if (context.restart) {
@@ -218,8 +203,9 @@ export async function commitFolderChildren(
     folder.forEach(
       (f) =>
         f !== null &&
-        typeof f !== 'undefined' &&
+        typeof f !== 'number' &&
         typeof f !== 'string' &&
+        typeof f !== 'undefined' &&
         commitFolderChildren(context, baseDir, f)
     )
     return
@@ -249,7 +235,9 @@ export async function commitFolderChildren(
     for (const child of formatChildren(
       folder.props.children as GeckoChildren
     )) {
-      if (typeof child === 'string') {
+      if (typeof child === 'number') {
+        return child.toString(10)
+      } else if (typeof child === 'string') {
         return child
       }
       switch (child.type) {

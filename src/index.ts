@@ -2,6 +2,7 @@ import 'dotenv/config'
 
 import { GeckoAfterwardsElement } from './tags/Afterwards.ts'
 import { GeckoClassElement } from './tags/Class.ts'
+import { GeckoCollectElement } from './tags/Collect.ts'
 import { GeckoDataPromptElement } from './tags/DataPrompt.ts'
 import { GeckoDocumentedElement } from './tags/Documented.ts'
 import { GeckoExportElement } from './tags/Export.ts'
@@ -13,6 +14,7 @@ import { GeckoFunctionElement } from './tags/Function.ts'
 import { GeckoImportElement } from './tags/Import.ts'
 import { GeckoInterfaceElement } from './tags/Interface.ts'
 import { GeckoMethodElement } from './tags/Method.ts'
+import { GeckoPartElement } from './tags/Part.ts'
 import { GeckoPropertyElement } from './tags/Property.ts'
 import { GeckoRootElement } from './tags/Root.ts'
 import { GeckoTextElement } from './tags/Text.ts'
@@ -22,6 +24,7 @@ export { commit } from './commit.ts'
 export { printResolveSummary, resolve } from './resolve.ts'
 export { Afterwards } from './tags/Afterwards.ts'
 export { Class } from './tags/Class.ts'
+export { Collect } from './tags/Collect.ts'
 export { DataPrompt } from './tags/DataPrompt.ts'
 export {
   DocumentationFormat,
@@ -39,6 +42,7 @@ export { Function } from './tags/Function.ts'
 export { Import } from './tags/Import.ts'
 export { Interface } from './tags/Interface.ts'
 export { Get, Method, Set } from './tags/Method.ts'
+export { Part } from './tags/Part.ts'
 export { Property } from './tags/Property.ts'
 export { Root } from './tags/Root.ts'
 export { Text } from './tags/Text.ts'
@@ -51,6 +55,7 @@ export {
 export type GeckoResolvedElement =
   | GeckoAfterwardsElement
   | GeckoClassElement
+  | GeckoCollectElement
   | GeckoDocumentedElement
   | GeckoExportElement
   | GeckoFileElement
@@ -61,6 +66,7 @@ export type GeckoResolvedElement =
   | GeckoImportElement
   | GeckoInterfaceElement
   | GeckoMethodElement
+  | GeckoPartElement
   | GeckoPropertyElement
   | GeckoRootElement
   | GeckoTextElement
@@ -79,11 +85,12 @@ interface PropsArg {
   children?: GeckoChildren
 }
 
-export type GeckoChild = string | GeckoElement
+export type GeckoChild = number | string | GeckoElement
 
 export type GeckoChildren =
   | undefined
   | null
+  | number
   | string
   | GeckoElement
   | GeckoChildren[]
