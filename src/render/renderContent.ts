@@ -9,6 +9,9 @@ import { renderImport } from './renderImport'
 import { renderInterface } from './renderInterface'
 import { renderMethod } from './renderMethod'
 import { renderProperty } from './renderProperty'
+import { renderType } from './renderType'
+
+const DEBUG = false
 
 export function renderContent(
   context: CommitContext,
@@ -16,9 +19,20 @@ export function renderContent(
   inInterface: boolean = false
 ) {
   if (typeof content === 'number') {
+    if (DEBUG) {
+      console.log(`number: ${content.toString(10)}`)
+    }
     return content.toString(10)
   } else if (typeof content === 'string') {
+    if (DEBUG) {
+      console.log(`string: ${JSON.stringify(content)}`)
+    }
     return content
+  }
+  if (DEBUG) {
+    console.log(
+      `<${content.type} ${JSON.stringify(content?.props)}>`
+    )
   }
   switch (content.type) {
     case 'afterwards':
@@ -53,6 +67,18 @@ export function renderContent(
         formatChildren(content.props.children)
           ?.map((x) => renderContent(context, x))
           ?.join?.('') ?? ''
+      )
+    case 'type':
+      return renderType(context, content)
+    case 'folder':
+      return `// Error: Gecko <Folder ${JSON.stringify(content.props)}> not supported at this location.`
+    default:
+      if (DEBUG) {
+        console.dir(context)
+        console.dir(content)
+      }
+      throw new Error(
+        `unknown Gecko tag type: ${JSON.stringify(content.type)}`
       )
   }
 }

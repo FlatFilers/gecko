@@ -234,7 +234,7 @@ Example:
 
 ### `<Interface>`
 
-A TypeScript type interface.
+A TypeScript interface type.
 
 Example:
 
@@ -301,3 +301,23 @@ Flags (attributes) include at most one of `private`, `protected`, or `public`.
 ### `<Text>`
 
 Plain text to be written to a file. Adjacent `<Text>` or `<Function>` tags within a `<File>` are separated by a new line.
+
+### `<Type>`
+
+A TypeScript type.
+
+Example:
+
+```jsx
+<Type export name="Digit">
+  {
+    "'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'"
+  }
+</Type>
+```
+
+Produces:
+
+```js
+export type Digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+```
