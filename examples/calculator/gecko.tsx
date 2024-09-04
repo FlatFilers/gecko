@@ -44,12 +44,10 @@ export default function () {
               .fill(0)
               .map((_, i) => i)
               .join(', ')}]`}</Text>
-            <Folder name="project/src/gecko_generated">
-              <Part tag="readme" order={0}>
-                <Text># Gecko Generated Code</Text>
-                <Text />
-              </Part>
-            </Folder>
+            <Part tag="readme" order={0}>
+              <Text># Gecko Generated Code</Text>
+              <Text />
+            </Part>
           </File>
           <Folder name="project/src/gecko_generated">
             <Documented

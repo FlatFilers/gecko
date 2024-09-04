@@ -18,6 +18,7 @@ import { GeckoPartElement } from './tags/Part.ts'
 import { GeckoPropertyElement } from './tags/Property.ts'
 import { GeckoRootElement } from './tags/Root.ts'
 import { GeckoTextElement } from './tags/Text.ts'
+import { GeckoTypeElement } from './tags/Type.ts'
 import { GeckoSource } from './types/GeckoSource.ts'
 
 export { commit } from './commit.ts'
@@ -46,6 +47,7 @@ export { Part } from './tags/Part.ts'
 export { Property } from './tags/Property.ts'
 export { Root } from './tags/Root.ts'
 export { Text } from './tags/Text.ts'
+export { Type } from './tags/Type.ts'
 export {
   GeckoFile,
   GeckoSource,
@@ -70,6 +72,7 @@ export type GeckoResolvedElement =
   | GeckoPropertyElement
   | GeckoRootElement
   | GeckoTextElement
+  | GeckoTypeElement
 
 // All possible elements, including AI prompt elements
 export type GeckoElement =

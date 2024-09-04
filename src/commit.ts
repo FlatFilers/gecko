@@ -23,6 +23,8 @@ import { formatChildren } from './util/formatChildren'
 import { loadFileMaybe } from './util/loadFileMaybe'
 import { matchingTemplates } from './util/matchingTemplates'
 
+const DEBUG = false
+
 export async function commit(
   root: GeckoRootElement,
   context: CommitContext
@@ -310,7 +312,17 @@ export async function commitFile(
     return
   }
   context.committedFilePaths.add(filePath)
+  if (DEBUG) {
+    console.log(
+      `[gecko] <file path=${JSON.stringify(filePath)}>`
+    )
+  }
   const rawContent = collectFileContents(context, file)
+  if (DEBUG) {
+    console.log(
+      `[gecko] </file path=${JSON.stringify(filePath)}>`
+    )
+  }
   const formatter = closestMatchingFormatter(
     context,
     file.props.name
@@ -420,9 +432,17 @@ export function collectFileContents(
   context: CommitContext,
   file: GeckoFileElement
 ) {
+  if (DEBUG) {
+    console.log('file children:')
+  }
   return file.props.children
     ? formatChildren(file.props.children)
-        .map((x) => renderContent(context, x))
+        .map((x) => {
+          if (DEBUG) {
+            console.dir(x)
+          }
+          return renderContent(context, x)
+        })
         .join('\n')
     : ''
 }
