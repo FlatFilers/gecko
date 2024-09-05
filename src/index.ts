@@ -17,6 +17,7 @@ import { GeckoMethodElement } from './tags/Method.ts'
 import { GeckoObjectElement } from './tags/Object.ts'
 import { GeckoPartElement } from './tags/Part.ts'
 import { GeckoPropertyElement } from './tags/Property.ts'
+import { GeckoReturnElement } from './tags/Return.ts'
 import { GeckoRootElement } from './tags/Root.ts'
 import { GeckoTextElement } from './tags/Text.ts'
 import { GeckoTypeElement } from './tags/Type.ts'
@@ -48,6 +49,7 @@ export { Get, Method, Set } from './tags/Method.ts'
 export { Object } from './tags/Object.ts'
 export { Part } from './tags/Part.ts'
 export { Property } from './tags/Property.ts'
+export { Return } from './tags/Return.ts'
 export { Root } from './tags/Root.ts'
 export { Text } from './tags/Text.ts'
 export { Type } from './tags/Type.ts'
@@ -75,6 +77,7 @@ export type GeckoResolvedElement =
   | GeckoObjectElement
   | GeckoPartElement
   | GeckoPropertyElement
+  | GeckoReturnElement
   | GeckoRootElement
   | GeckoTextElement
   | GeckoTypeElement
