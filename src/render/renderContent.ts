@@ -8,15 +8,18 @@ import { renderFunction } from './renderFunction'
 import { renderImport } from './renderImport'
 import { renderInterface } from './renderInterface'
 import { renderMethod } from './renderMethod'
+import { renderObject } from './renderObject'
 import { renderProperty } from './renderProperty'
 import { renderType } from './renderType'
+import { renderVariable } from './renderVariable'
 
 const DEBUG = false
 
 export function renderContent(
   context: CommitContext,
   content: GeckoChild,
-  inInterface: boolean = false
+  inInterface: boolean = false,
+  inObject: boolean = false
 ) {
   if (typeof content === 'number') {
     if (DEBUG) {
@@ -54,7 +57,12 @@ export function renderContent(
     case 'method':
       return renderMethod(context, content, inInterface)
     case 'property':
-      return renderProperty(context, content, inInterface)
+      return renderProperty(
+        context,
+        content,
+        inInterface,
+        inObject
+      )
     case 'text':
       if (typeof content.props.children === 'number') {
         return content.props.children.toString(10)
@@ -70,8 +78,14 @@ export function renderContent(
       )
     case 'type':
       return renderType(context, content)
+    case 'file':
+      return `// Error: Gecko <File ${JSON.stringify(content.props)}> not supported at this location.`
     case 'folder':
       return `// Error: Gecko <Folder ${JSON.stringify(content.props)}> not supported at this location.`
+    case 'object':
+      return renderObject(context, content)
+    case 'variable':
+      return renderVariable(context, content)
     default:
       if (DEBUG) {
         console.dir(context)

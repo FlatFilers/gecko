@@ -22,7 +22,7 @@ export function RepositoryFile(props: {
           named={[props.resourceClassName]}
           from={props.resourceClassImport}
         />
-        <Text />
+        <Text>{`\n`}</Text>
         {`interface DataSource<Model> {
   select(limit: number, offset: number, where?: Partial<Model>): Promise<Model[]>
   insert(data: Omit<Model, 'id'>): Promise<string>

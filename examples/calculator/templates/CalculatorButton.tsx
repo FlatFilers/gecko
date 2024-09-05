@@ -3,8 +3,11 @@ import {
   geckoJSX,
   Interface,
   Method,
+  Object,
   Part,
+  Property,
   Text,
+  Variable,
 } from '@flatfile/gecko'
 
 export function CalculatorButton({
@@ -17,6 +20,26 @@ export function CalculatorButton({
       <Interface name="DigitProps">
         <Method name="onClick" returnType="void" />
       </Interface>
+      <Text />
+      <Variable
+        export
+        name={`button${digit}`}
+        type={
+          <Object type>
+            <Property
+              name="digit"
+              required
+              type={digit.toString(10)}
+            />
+          </Object>
+        }
+      >
+        <Object>
+          <Property name="digit">
+            {digit.toString(10)}
+          </Property>
+        </Object>
+      </Variable>
       <Function
         export
         name={`Digit${digit}Button`}

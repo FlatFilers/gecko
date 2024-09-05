@@ -14,11 +14,13 @@ import { GeckoFunctionElement } from './tags/Function.ts'
 import { GeckoImportElement } from './tags/Import.ts'
 import { GeckoInterfaceElement } from './tags/Interface.ts'
 import { GeckoMethodElement } from './tags/Method.ts'
+import { GeckoObjectElement } from './tags/Object.ts'
 import { GeckoPartElement } from './tags/Part.ts'
 import { GeckoPropertyElement } from './tags/Property.ts'
 import { GeckoRootElement } from './tags/Root.ts'
 import { GeckoTextElement } from './tags/Text.ts'
 import { GeckoTypeElement } from './tags/Type.ts'
+import { GeckoVariableElement } from './tags/Variable.ts'
 import { GeckoSource } from './types/GeckoSource.ts'
 
 export { commit } from './commit.ts'
@@ -43,11 +45,13 @@ export { Function } from './tags/Function.ts'
 export { Import } from './tags/Import.ts'
 export { Interface } from './tags/Interface.ts'
 export { Get, Method, Set } from './tags/Method.ts'
+export { Object } from './tags/Object.ts'
 export { Part } from './tags/Part.ts'
 export { Property } from './tags/Property.ts'
 export { Root } from './tags/Root.ts'
 export { Text } from './tags/Text.ts'
 export { Type } from './tags/Type.ts'
+export { Variable } from './tags/Variable.ts'
 export {
   GeckoFile,
   GeckoSource,
@@ -68,11 +72,13 @@ export type GeckoResolvedElement =
   | GeckoImportElement
   | GeckoInterfaceElement
   | GeckoMethodElement
+  | GeckoObjectElement
   | GeckoPartElement
   | GeckoPropertyElement
   | GeckoRootElement
   | GeckoTextElement
   | GeckoTypeElement
+  | GeckoVariableElement
 
 // All possible elements, including AI prompt elements
 export type GeckoElement =

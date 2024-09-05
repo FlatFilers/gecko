@@ -16,12 +16,13 @@ export function ExpressControllerCollectionRoutes(props: {
     return (
       <Text>
         {`import ${routeProps.controllerName}Controller from '${props.controllerPath}/${routeProps.controllerFile}'`}
+        {`\n`}
         {`app.${routeProps.httpMethod}('${
           props.resourceUrl
         }${routeProps.itemRoute ? '/:id' : ''}', ${
           routeProps.controllerName
         }Controller(${props.repositoryVariableName}))`}
-        {''}
+        {`\n`}
       </Text>
     )
   }
