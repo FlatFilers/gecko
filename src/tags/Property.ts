@@ -1,4 +1,7 @@
+import { GeckoChildren } from '..'
+
 export interface PropertyProps {
+  children?: GeckoChildren
   name: string
   private?: true
   protected?: true

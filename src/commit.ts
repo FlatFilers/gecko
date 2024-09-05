@@ -386,8 +386,14 @@ export async function commitFile(
       )
       return
     } catch (e) {
+      await writeModifiedFile(
+        context,
+        filePath,
+        content,
+        `error when formatting with ${formatter.props.formatter}`
+      )
       console.error(
-        `[gecko] unable to write ${JSON.stringify(filePath)} due to error when applying '${formatter.props.formatter}' formatter:`
+        `[gecko] unable to format ${JSON.stringify(filePath)} due to error when applying '${formatter.props.formatter}' formatter:`
       )
       const message = e.stack.split('\n')
       const traceStartsAt = message.findIndex((x: string) =>

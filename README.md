@@ -262,6 +262,32 @@ Example:
 </Method>
 ```
 
+### `<Object>`
+
+An object.
+
+Example:
+
+```jsx
+<Object>
+  <Property name="id">123</Property>
+  <Property name="name">{"'John Doe'"}</Property>
+  <Property name="email">
+    {"'john.doe@example.com'"}
+  </Property>
+</Object>
+```
+
+Produces:
+
+```js
+{
+  id: 123,
+  name: 'John Doe',
+  email: 'john.doe@example.com'
+}
+```
+
 ### `<Property>`
 
 A class property. May only be used inside of a `<Class>` element.
@@ -320,4 +346,28 @@ Produces:
 
 ```js
 export type Digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+```
+
+### `<Variable>`
+
+A variable.
+
+Example:
+
+```jsx
+<>
+  <Variable export name="title" type="string">
+    {'My Title'}
+  </Variable>
+  <Variable export mutable name="count" type="number">
+    4
+  </Variable>
+</>
+```
+
+Produces:
+
+```js
+export const title = 'My Title'
+export let count = 4
 ```
