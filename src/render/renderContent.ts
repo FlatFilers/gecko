@@ -10,6 +10,7 @@ import { renderInterface } from './renderInterface'
 import { renderMethod } from './renderMethod'
 import { renderObject } from './renderObject'
 import { renderProperty } from './renderProperty'
+import { renderReturn } from './renderReturn'
 import { renderType } from './renderType'
 import { renderVariable } from './renderVariable'
 
@@ -63,6 +64,8 @@ export function renderContent(
         inInterface,
         inObject
       )
+    case 'return':
+      return renderReturn(context, content)
     case 'text':
       if (typeof content.props.children === 'number') {
         return content.props.children.toString(10)

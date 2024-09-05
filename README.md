@@ -290,7 +290,13 @@ Produces:
 
 ### `<Property>`
 
-A class property. May only be used inside of a `<Class>` element.
+A class property. May only be used inside of a `<Class>`, `<Interface>`, or `<Object>` element. Depending on the context, the property may be a class property, interface property, or object property.
+
+Class properties can use the `value` attribute or the children to set the initial value of the property, and can use the `type` attribute to set the type of the property, and can set flags `private`, `protected`, or `public`, and optionally `readonly` or `static`.
+
+Interface properties can only use the `type` attribute and flags to set the type of the property, and can set flags `readonly` or `static`.
+
+Object properties can use the `value` attribute or the children to set the initial value of the property, unless the Object has the `type` attribute set, in which case the Object is a type object and no value is allowed. Object properties that are type objects can set flags `private`, `protected`, or `public`, and optionally `readonly` or `static`. Object properties with values cannot set flags `private`, `protected`, or `public`, and cannot set `readonly` or `static`.
 
 Flags (attributes) include at most one of `private`, `protected`, or `public`, and optionally `readonly` or `static`.
 

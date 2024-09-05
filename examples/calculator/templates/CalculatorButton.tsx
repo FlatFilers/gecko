@@ -6,6 +6,7 @@ import {
   Object,
   Part,
   Property,
+  Return,
   Text,
   Variable,
 } from '@flatfile/gecko'
@@ -46,7 +47,7 @@ export function CalculatorButton({
         arguments={['{ onClick }: DigitProps']}
         returnType="JSX.Element"
       >
-        {`return <button onClick={onClick}>${digit}</button>`}
+        <Return>{`<button onClick={onClick}>${digit}</button>`}</Return>
       </Function>
       <Part tag="readme" order={1}>
         <Text>## {`Digit${digit}Button`}</Text>
