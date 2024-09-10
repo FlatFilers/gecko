@@ -35,38 +35,3 @@ export function Method(
   }
   return { type: 'method', props }
 }
-
-export function Get(
-  props: Pick<
-    MethodProps,
-    | 'children'
-    | 'name'
-    | 'private'
-    | 'protected'
-    | 'public'
-    | 'returnType'
-    | 'undocumented'
-  >
-) {
-  return Method({ ...props, accessor: 'get' })
-}
-
-export function Set(
-  props: Pick<
-    MethodProps,
-    | 'children'
-    | 'name'
-    | 'private'
-    | 'protected'
-    | 'public'
-    | 'undocumented'
-  > & {
-    argument: string
-  }
-) {
-  return Method({
-    ...props,
-    accessor: 'set',
-    arguments: [props.argument],
-  })
-}
