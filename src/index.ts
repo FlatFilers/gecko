@@ -26,6 +26,11 @@ import { GeckoSource } from './types/GeckoSource.ts'
 
 export { commit } from './commit.ts'
 export { printResolveSummary, resolve } from './resolve.ts'
+export {
+  GeckoFile,
+  GeckoSource,
+} from './types/GeckoSource.ts'
+
 export { Afterwards } from './tags/Afterwards.ts'
 export { Class } from './tags/Class.ts'
 export { Collect } from './tags/Collect.ts'
@@ -43,21 +48,71 @@ export {
 } from './tags/FileTemplate.ts'
 export { Folder } from './tags/Folder.ts'
 export { Function } from './tags/Function.ts'
+export { Get } from './tags/Get.ts'
 export { Import } from './tags/Import.ts'
 export { Interface } from './tags/Interface.ts'
-export { Get, Method, Set } from './tags/Method.ts'
+export { Method } from './tags/Method.ts'
 export { Object } from './tags/Object.ts'
 export { Part } from './tags/Part.ts'
 export { Property } from './tags/Property.ts'
 export { Return } from './tags/Return.ts'
 export { Root } from './tags/Root.ts'
+export { Set } from './tags/Set.ts'
 export { Text } from './tags/Text.ts'
 export { Type } from './tags/Type.ts'
 export { Variable } from './tags/Variable.ts'
-export {
-  GeckoFile,
-  GeckoSource,
-} from './types/GeckoSource.ts'
+
+import { Afterwards } from './tags/Afterwards.ts'
+import { Class } from './tags/Class.ts'
+import { Collect } from './tags/Collect.ts'
+import { DataPrompt } from './tags/DataPrompt.ts'
+import { Documented } from './tags/Documented.ts'
+import { Export } from './tags/Export.ts'
+import { File } from './tags/File.ts'
+import { FileFormatter } from './tags/FileFormatter.ts'
+import { FileTemplate } from './tags/FileTemplate.ts'
+import { Folder } from './tags/Folder.ts'
+import { Function } from './tags/Function.ts'
+import { Get } from './tags/Get.ts'
+import { Import } from './tags/Import.ts'
+import { Interface } from './tags/Interface.ts'
+import { Method } from './tags/Method.ts'
+import { Object } from './tags/Object.ts'
+import { Part } from './tags/Part.ts'
+import { Property } from './tags/Property.ts'
+import { Return } from './tags/Return.ts'
+import { Root } from './tags/Root.ts'
+import { Set } from './tags/Set.ts'
+import { Text } from './tags/Text.ts'
+import { Type } from './tags/Type.ts'
+import { Variable } from './tags/Variable.ts'
+
+export const AllTags = {
+  Afterwards,
+  Class,
+  Collect,
+  DataPrompt,
+  Documented,
+  Export,
+  File,
+  FileFormatter,
+  FileTemplate,
+  Folder,
+  Function,
+  Get,
+  Import,
+  Interface,
+  Method,
+  Object,
+  Part,
+  Property,
+  Return,
+  Root,
+  Set,
+  Text,
+  Type,
+  Variable,
+}
 
 // Post-AI processed elements
 export type GeckoResolvedElement =
