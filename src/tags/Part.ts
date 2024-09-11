@@ -1,8 +1,13 @@
 import { GeckoChildren } from '..'
 
 export interface PartProps {
+  /** The child elements of the part declaration */
   children?: GeckoChildren
+
+  /** The tag of the part */
   tag: string
+
+  /** The order of the part */
   order?: number
 }
 

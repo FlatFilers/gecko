@@ -1,7 +1,10 @@
 import { GeckoChildren } from '..'
 
 export interface CollectProps {
+  /** The child elements of the collect tag */
   children?: GeckoChildren
+
+  /** The tag name of the collect tag */
   tag: string
 }
 

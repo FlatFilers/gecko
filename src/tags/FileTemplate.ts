@@ -6,20 +6,23 @@ export interface TemplateMatch {
 }
 
 export interface FileTemplateProps {
+  /** The child elements of the file template */
   children?: GeckoChildren
+
+  /** The templates to match */
   templates: TemplateMatch[]
 }
 
+export type type = 'file-template'
+export const type: type = 'file-template'
+
 export interface GeckoFileTemplateElement {
-  type: 'file-template'
+  type: type
   props: FileTemplateProps
 }
 
 export function FileTemplate(
   props: FileTemplateProps
 ): GeckoFileTemplateElement {
-  return {
-    type: 'file-template',
-    props,
-  }
+  return { type, props }
 }

@@ -38,12 +38,11 @@
 [↥ Table of Contents](#table-of-contents)
 ### `<Afterwards>`
 
-
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoContentFunction \| GeckoContentFunction[]` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoContentFunction \| GeckoContentFunction[]` | The child elements of the afterwards declaration, can be a single function or an array of functions |
 
 Content to write to disk or operations to perform after all other content is written to disk. Takes a callback function, with access to a `GeckoSource` instance as the first argument. Use the `match` function to get files matching a given regular expression. To match all files, pass undefined or an empty regular expression.
 
@@ -71,22 +70,16 @@ Produces a file `stats.md` with the text:
 [↥ Table of Contents](#table-of-contents)
 ### `<Class>`
 
-### Required Props
-
-| Name | Type |
-| -------- | -------- |
-| `name` | `string` |
-
-
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `abstract` | `true` |
-| `children` | `GeckoChildren` |
-| `export` | `boolean \| "default"` |
-| `extends` | `string` |
-| `implements` | `string` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the class |
+| `abstract` | `true` | Whether the class is abstract |
+| `export` | `boolean \| "default"` | Specifies if the class should be exported. Can be a boolean or 'default' for default export |
+| `extends` | `string` | The class that the current class extends |
+| `implements` | `string` | The interfaces that the current class implements |
+| `name` | `string` | The name of the class |
 
 A class.
 
@@ -131,19 +124,17 @@ export default class User {
 <a name="collect"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Collect>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `tag` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `tag` | `string` |  |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the collect tag |
 
 Collect all [`<Part>`](#part)s matching a tag.
 
@@ -179,20 +170,18 @@ This is part of the readme
 <a name="dataprompt"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<DataPrompt>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `input` | `string` |
-| `type` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `input` | `string` | The input of the prompt |
+| `type` | `string` | The TypeScript type of the expected output data |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `((...props: any[]) => GeckoChildren)[]` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `((...props: any[]) => GeckoChildren)[]` | The child elements of the data prompt. This is a function that takes in the props and returns new children |
 
 A data prompt, which prompts an AI agent to return the specified data in the given TypeScript type format before continuing code generation.
 
@@ -237,19 +226,17 @@ Produces:
 <a name="documented"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Documented>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `formats` | `DocumentationFormat[]` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `formats` | `DocumentationFormat[]` | The formats to document |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the documented tag |
 
 The `<Documented>` tag is used to specify the automated documentation format for the generated code.
 
@@ -284,22 +271,20 @@ function greet(name: string) {
 <a name="export"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Export>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `from` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `from` | `string` | The name of the module or file to export from |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `as` | `string` |
-| `all` | `true` |
-| `named` | `string[]` |
-| `type` | `true` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `as` | `string` | The name to export as |
+| `all` | `true` | Whether to export all exports from the module |
+| `named` | `string[]` | The names to export |
+| `type` | `true` | Whether to export as types |
 
 An export statement, which re-exports some or all of the exports from a module.
 
@@ -325,20 +310,18 @@ export * from './my-module'
 <a name="file"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<File>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `name` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `name` | `string` | The name of the file |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
-| `once` | `true` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the file |
+| `once` | `true` | Whether the file should be overwritten if it already exists, if this is set the file will not be overwritten |
 
 A file. Takes a `name="fileName.ext"` argument. Children of this tag will be the contents written to the file. You may specify the attribute `once` to ensure that the file is only generated if it does not already exist. This is useful for files that must be manually modified after being generated.
 
@@ -364,20 +347,18 @@ manually edited without being overwritten by Gecko later
 <a name="fileformatter"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<FileFormatter>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `formatter` | `"prettier"` |
-| `match` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `formatter` | `"prettier"` | The formatter to use |
+| `match` | `string` | The match pattern to look for |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the file formatter |
 
 The `<FileFormatter>` tag specifies a file formatter to apply to all matching files.
 
@@ -402,19 +383,17 @@ This `hello.ts` file will be formatted with [Prettier](https://prettier.io).
 <a name="filetemplate"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<FileTemplate>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `templates` | `TemplateMatch[]` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `templates` | `TemplateMatch[]` | The templates to match |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the file template |
 
 A file template. File templates apply to all files that match a given glob pattern. The available template variables are:
 
@@ -463,19 +442,17 @@ console.log('Hello world')
 <a name="folder"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Folder>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `name` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `name` | `string` | The name of the folder |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the folder |
 
 A folder. Takes a `name="myFolderName"` property. This tag may contain other `<Folder>` or `<File>` tags as children. You may nest folders as deeply as you like, and files may be placed anywhere within the nesting.
 
@@ -498,26 +475,22 @@ The `hello.ts` file will be generated inside the `myFolderName/example` folder.
 [↥ Table of Contents](#table-of-contents)
 ### `<Function>`
 
-### Required Props
-
-| Name | Type |
-| -------- | -------- |
-| `name` | `string` |
-
-
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `arguments` | `string[]` |
-| `async` | `true` |
-| `children` | `GeckoChildren` |
-| `export` | `boolean \| "default"` |
-| `returnType` | `string` |
-| `typeArguments` | `string[]` |
-| `undocumented` | `true` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `arguments` | `string[]` | The arguments of the function. Arguments may include type annotations, i.e. `name: string`. |
+| `async` | `true` | Whether the function is asynchronous. |
+| `children` | `GeckoChildren` | The content of the function. |
+| `export` | `boolean \| "default"` | Specifies if the function should be exported. Can be a boolean or 'default' for default export |
+| `name` | `string` | The name of the function. |
+| `returnType` | `string` | The return type of the function. |
+| `typeArguments` | `string[]` | The type arguments of the function. |
+| `undocumented` | `true` | Whether the function is undocumented when inside a `Documented` tag. |
 
 A function. May be exported as default with `export="default"` or exported as named with `export name="myFunctionName"`.
+
+A `name` is required when exporting as named, ok to omit `name` with `export="default"` or for unexported, anonymous functions.
 
 Example:
 
@@ -534,17 +507,6 @@ export default function myFunctionName() {
   console.log('Hello world')
 }
 ```
-
-The `<Function>` tag accepts the following properties:
-
-- `name` (required): A string representing the name of the function.
-- `arguments`: An optional array of strings representing the function's parameters.
-- `async`: An optional boolean (true) to make the function asynchronous.
-- `children`: Optional child elements representing the function's body.
-- `export`: An optional boolean or string ('default') to specify if and how the function should be exported.
-- `returnType`: An optional string specifying the function's return type.
-- `typeArguments`: An optional array of strings representing generic type parameters.
-- `undocumented`: An optional boolean (true) to indicate if the function should be skipped when documentation is generated with [`<Documented>`](#documented).
 
 Example:
 
@@ -582,24 +544,22 @@ async function greetSlowly(name: string): Promise<void> {
 <a name="get"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Get>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `name` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `name` | `string` | The name of the method |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
-| `private` | `true` |
-| `protected` | `true` |
-| `public` | `true` |
-| `returnType` | `string` |
-| `undocumented` | `true` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the method declaration |
+| `private` | `true` | If true, the method will be private |
+| `protected` | `true` | If true, the method will be protected |
+| `public` | `true` | If true, the method will be public |
+| `returnType` | `string` | The return type of the method |
+| `undocumented` | `true` | If true, the method will be undocumented when inside a `<Documented>` block |
 
 `<Get>` creates a class property getter function, and may only be used inside of a `<Class>` element.
 
@@ -627,21 +587,19 @@ class MyClass {
 <a name="import"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Import>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `from` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `from` | `string` | The file path or moduleof the import |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `default` | `string` |
-| `named` | `string[]` |
-| `type` | `true` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `default` | `string` | Import the default export of the module |
+| `named` | `string[]` | The named exports of the module to import |
+| `type` | `true` | If true, the import will be a type import |
 
 An import statement.
 
@@ -665,21 +623,19 @@ import a, { b, c } from './d'
 <a name="interface"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Interface>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `name` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `name` | `string` | The name of the interface |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
-| `export` | `boolean \| "default"` |
-| `extends` | `string` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the interface declaration |
+| `export` | `boolean \| "default"` | Specifies if the interface should be exported. Can be a boolean or 'default' for default export |
+| `extends` | `string` | The interfaces that the interface extends |
 
 A TypeScript interface type.
 
@@ -733,29 +689,27 @@ export default interface MyComponentProps
 <a name="method"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Method>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `name` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `name` | `string` | The name of the method |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `accessor` | `"get" \| "set"` |
-| `arguments` | `string[]` |
-| `async` | `true` |
-| `children` | `GeckoChildren` |
-| `private` | `true` |
-| `protected` | `true` |
-| `public` | `true` |
-| `returnType` | `string` |
-| `static` | `true` |
-| `typeArguments` | `string[]` |
-| `undocumented` | `true` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `accessor` | `"get" \| "set"` | The accessor of the method, can be 'get' or 'set' |
+| `arguments` | `string[]` | The arguments of the method, optionally including type annotations, for example: `['a: number', 'b: string']` |
+| `async` | `true` | If true, the method will be asynchronous |
+| `children` | `GeckoChildren` | The child elements of the method declaration |
+| `private` | `true` | If true, the method will be private |
+| `protected` | `true` | If true, the method will be protected |
+| `public` | `true` | If true, the method will be public |
+| `returnType` | `string` | The return type of the method |
+| `static` | `true` | If true, the method will be static |
+| `typeArguments` | `string[]` | The type arguments of the method, i.e. `['T']` for `<T>` |
+| `undocumented` | `true` | If true, the method will be undocumented when inside a `<Documented>` block |
 
 A class method. May only be used inside of a `<Class>` element.
 
@@ -789,13 +743,12 @@ class User {
 [↥ Table of Contents](#table-of-contents)
 ### `<Object>`
 
-
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
-| `type` | `true` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the object declaration |
+| `private` | `true` | If true, the object will be a type object, and properties will not be able to contain values |
 
 An object.
 
@@ -825,20 +778,18 @@ Produces:
 <a name="part"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Part>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `tag` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `tag` | `string` | The tag of the part |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
-| `order` | `number` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the part declaration |
+| `order` | `number` | The order of the part |
 
 A part to be later collected by a [`<Collect>`](#collect) tag.
 
@@ -865,27 +816,25 @@ C
 <a name="property"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Property>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `name` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `name` | `string` | The name of the property |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
-| `private` | `true` |
-| `protected` | `true` |
-| `public` | `true` |
-| `readonly` | `true` |
-| `required` | `true` |
-| `static` | `true` |
-| `type` | `string` |
-| `value` | `string` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the property declaration, provide either `value` or `children`, but not both |
+| `private` | `true` | If true, the property will be private |
+| `protected` | `true` | If true, the property will be protected |
+| `public` | `true` | If true, the property will be public |
+| `readonly` | `true` | If true, the property will be readonly |
+| `required` | `true` | If true, the property will be required |
+| `static` | `true` | If true, the property will be static |
+| `type` | `string` | The type of the property |
+| `value` | `string` | The value of the property, provide either `value` or `children`, but not both |
 
 A class property. May only be used inside of a `<Class>`, `<Interface>`, or `<Object>` element. Depending on the context, the property may be a class property, interface property, or object property.
 
@@ -1027,12 +976,11 @@ type Vehicle = {
 [↥ Table of Contents](#table-of-contents)
 ### `<Return>`
 
-
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the return type declaration |
 
 The `<Return>` tag is used to return a value from a function.
 
@@ -1053,15 +1001,14 @@ return 'Hello, world!'
 [↥ Table of Contents](#table-of-contents)
 ### `<Root>`
 
-
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
-| `erase` | `true` |
-| `path` | `string` |
-| `requires` | `string[]` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the root declaration |
+| `erase` | `true` | If true, the root folder will be erased before generating the output |
+| `path` | `string` | The path of the root directory, all generated folders and files will be placed in this directory |
+| `requires` | `string[]` | The file paths upon which the generated files depend, all files specified here will cause Gecko to re-run if they are modified during the generation process |
 
 This tag should wrap all other tags used. It specifies the location of generated folders and files on disk with `path="path/to/generated/content"`. If the `erase` attribute is present, the folder path specified will be erased on each build. Use `erase` with extreme caution!
 
@@ -1087,24 +1034,22 @@ export class User {}
 <a name="set"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Set>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `name` | `string` |
-| `argument` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `name` | `string` | The name of the method |
+| `argument` | `string` |  |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
-| `private` | `true` |
-| `protected` | `true` |
-| `public` | `true` |
-| `undocumented` | `true` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the method declaration |
+| `private` | `true` | If true, the method will be private |
+| `protected` | `true` | If true, the method will be protected |
+| `public` | `true` | If true, the method will be public |
+| `undocumented` | `true` | If true, the method will be undocumented when inside a `<Documented>` block |
 
 `<Set>` creates a class property setter function, and may only be used inside of a `<Class>` element.
 
@@ -1136,12 +1081,11 @@ class MyClass {
 [↥ Table of Contents](#table-of-contents)
 ### `<Text>`
 
-
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The text to be rendered |
 
 Plain text to be written to a file. Adjacent `<Text>` or `<Function>` tags within a `<File>` are separated by a new line.
 
@@ -1167,20 +1111,18 @@ export class User {
 <a name="type"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Type>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `name` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `name` | `string` | The name of the type |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
-| `export` | `boolean \| "default"` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the type declaration |
+| `export` | `boolean \| "default"` | Specifies if the type should be exported. Can be a boolean or 'default' for default export |
 
 A TypeScript type.
 
@@ -1222,22 +1164,20 @@ export type User = {
 <a name="variable"> </a>
 [↥ Table of Contents](#table-of-contents)
 ### `<Variable>`
-
 ### Required Props
 
-| Name | Type |
-| -------- | -------- |
-| `name` | `string` |
-
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `name` | `string` | The name of the variable |
 
 ### Optional Props
 
-| Name | Type |
-| -------- | -------- |
-| `children` | `GeckoChildren` |
-| `export` | `boolean \| "default"` |
-| `mutable` | `true` |
-| `type` | `GeckoChildren` |
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `children` | `GeckoChildren` | The child elements of the variable declaration |
+| `export` | `boolean \| "default"` | Specifies if the variable should be exported. Can be a boolean or 'default' for default export |
+| `mutable` | `true` | Indicates if the variable is mutable (can be reassigned, setting this to true will make gecko print `let` instead of `const`) |
+| `type` | `GeckoChildren` | The type of the variable. Can be a string or GeckoChildren |
 
 A variable.
 

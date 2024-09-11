@@ -1,9 +1,15 @@
 import ts from 'typescript'
 
+export interface DocumentedType {
+  description?: string
+  required: boolean
+  type: string
+}
+
 export function extractInterfaceProps(
   fileName: string,
   interfaceName: string
-): Record<string, any> {
+): Record<string, DocumentedType> {
   const program = ts.createProgram([fileName], {})
   const sourceFile = program.getSourceFile(fileName)
   const typeChecker = program.getTypeChecker()
@@ -14,7 +20,23 @@ export function extractInterfaceProps(
     )
   }
 
-  const result: Record<string, any> = {}
+  function getJSDocComment(
+    node: ts.Node
+  ): string | undefined {
+    const jsDocComments = ts.getJSDocCommentsAndTags(
+      node
+    ) as ts.JSDoc[]
+    if (jsDocComments && jsDocComments.length > 0) {
+      const comment = jsDocComments[0].comment
+      return typeof comment === 'object' &&
+        'length' in comment
+        ? comment.join('\n')
+        : comment
+    }
+    return undefined
+  }
+
+  const result: Record<string, DocumentedType> = {}
 
   function visit(node: ts.Node) {
     if (
@@ -37,20 +59,27 @@ export function extractInterfaceProps(
               prop,
               node
             )
-          const propTypeName =
-            typeChecker.typeToString(propType)
+          const propTypeName = typeChecker.typeToString(
+            propType,
+            undefined,
+            ts.TypeFormatFlags.NoTruncation
+          )
           const declarations = prop.declarations
-          const isOptional =
-            declarations &&
-            declarations.some(
-              (d) =>
-                ts.isPropertySignature(d) &&
-                d.questionToken !== undefined
-            )
-
-          result[prop.name] = {
-            type: propTypeName,
-            required: !isOptional,
+          if (declarations) {
+            const propNode = declarations[0]
+            const isOptional =
+              declarations &&
+              declarations.some(
+                (d) =>
+                  ts.isPropertySignature(d) &&
+                  d.questionToken !== undefined
+              )
+            const description = getJSDocComment(propNode)
+            result[prop.name] = {
+              description,
+              required: !isOptional,
+              type: propTypeName,
+            }
           }
         })
       }

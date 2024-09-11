@@ -1,5 +1,7 @@
 A function. May be exported as default with `export="default"` or exported as named with `export name="myFunctionName"`.
 
+A `name` is required when exporting as named, ok to omit `name` with `export="default"` or for unexported, anonymous functions.
+
 Example:
 
 ```tsx
@@ -15,17 +17,6 @@ export default function myFunctionName() {
   console.log('Hello world')
 }
 ```
-
-The `<Function>` tag accepts the following properties:
-
-- `name` (required): A string representing the name of the function.
-- `arguments`: An optional array of strings representing the function's parameters.
-- `async`: An optional boolean (true) to make the function asynchronous.
-- `children`: Optional child elements representing the function's body.
-- `export`: An optional boolean or string ('default') to specify if and how the function should be exported.
-- `returnType`: An optional string specifying the function's return type.
-- `typeArguments`: An optional array of strings representing generic type parameters.
-- `undocumented`: An optional boolean (true) to indicate if the function should be skipped when documentation is generated with [`<Documented>`](./Documented.md).
 
 Example:
 
