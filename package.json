@@ -4,7 +4,7 @@
   "private": false,
   "bin": "./gecko",
   "scripts": {
-    "build": "tsx --tsconfig ./tsconfig.json -r tsconfig-paths/register ./build.ts",
+    "build": "tsx --tsconfig ./tsconfig.json -r tsconfig-paths/register ./scripts/build.ts",
     "format": "npx prettier -w **/*.ts",
     "clean": "find ./ '(' -name 'node_modules' -o -name 'gecko_generated' ')' -type d -exec rm -rf {} +"
   },

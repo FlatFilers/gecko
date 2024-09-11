@@ -1,5 +1,3 @@
-### `<FileTemplate>`
-
 A file template. File templates apply to all files that match a given glob pattern. The available template variables are:
 
 - `{{filename}}`: The name of the file.

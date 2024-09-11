@@ -1,5 +1,3 @@
-### `<Documented>`
-
 The `<Documented>` tag is used to specify the automated documentation format for the generated code.
 
 Currently, the only supported documentation format is JSDoc.

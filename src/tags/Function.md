@@ -1,5 +1,3 @@
-### `<Function>`
-
 A function. May be exported as default with `export="default"` or exported as named with `export name="myFunctionName"`.
 
 Example:

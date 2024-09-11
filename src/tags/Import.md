@@ -1,5 +1,3 @@
-### `<Import>`
-
 An import statement.
 
 Example:

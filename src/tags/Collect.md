@@ -1,5 +1,3 @@
-### `<Collect>`
-
 Collect all [`<Part>`](./Part.md)s matching a tag.
 
 Example:

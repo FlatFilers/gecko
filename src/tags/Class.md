@@ -1,5 +1,3 @@
-### `<Class>`
-
 A class.
 
 Optional flags (attributes) include `export` to export the class and `abstract` for abstract classes. May be exported as default with `export="default"` or exported as named with `export name="MyClass"`.

@@ -1,5 +1,3 @@
-### `<Property>`
-
 A class property. May only be used inside of a `<Class>`, `<Interface>`, or `<Object>` element. Depending on the context, the property may be a class property, interface property, or object property.
 
 Properties in different contexts have varying attributes and behaviors:

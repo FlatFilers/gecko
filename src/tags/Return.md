@@ -1,5 +1,3 @@
-### `<Return>`
-
 The `<Return>` tag is used to return a value from a function.
 
 ```tsx

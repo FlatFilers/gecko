@@ -1,16 +1,16 @@
 import { Method, MethodProps } from './Method'
 
-export function Get(
-  props: Pick<
-    MethodProps,
-    | 'children'
-    | 'name'
-    | 'private'
-    | 'protected'
-    | 'public'
-    | 'returnType'
-    | 'undocumented'
-  >
-) {
+export type GetProps = Pick<
+  MethodProps,
+  | 'children'
+  | 'name'
+  | 'private'
+  | 'protected'
+  | 'public'
+  | 'returnType'
+  | 'undocumented'
+>
+
+export function Get(props: GetProps) {
   return Method({ ...props, accessor: 'get' })
 }
