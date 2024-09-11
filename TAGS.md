@@ -128,7 +128,7 @@ export default class User {
 
 | Name | Type | Description |
 | -------- | -------- | -------- |
-| `tag` | `string` |  |
+| `tag` | `string` | The tag name of the collect tag |
 
 ### Optional Props
 
@@ -748,7 +748,7 @@ class User {
 | Name | Type | Description |
 | -------- | -------- | -------- |
 | `children` | `GeckoChildren` | The child elements of the object declaration |
-| `private` | `true` | If true, the object will be a type object, and properties will not be able to contain values |
+| `type` | `true` | If true, the object will be a type object, and properties will not be able to contain values |
 
 An object.
 

@@ -5,7 +5,7 @@ export interface ObjectProps {
   children?: GeckoChildren
 
   /** If true, the object will be a type object, and properties will not be able to contain values */
-  private?: true
+  type?: true
 }
 
 export type type = 'object'
