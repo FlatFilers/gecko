@@ -1,5 +1,3 @@
-### `<Set>`
-
 `<Set>` creates a class property setter function, and may only be used inside of a `<Class>` element.
 
 Flags (attributes) include at most one of `private`, `protected`, or `public`.

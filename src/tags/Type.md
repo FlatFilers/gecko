@@ -1,5 +1,3 @@
-### `<Type>`
-
 A TypeScript type.
 
 Example:

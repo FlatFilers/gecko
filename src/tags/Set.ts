@@ -1,18 +1,18 @@
 import { Method, MethodProps } from './Method'
 
-export function Set(
-  props: Pick<
-    MethodProps,
-    | 'children'
-    | 'name'
-    | 'private'
-    | 'protected'
-    | 'public'
-    | 'undocumented'
-  > & {
-    argument: string
-  }
-) {
+export type SetProps = Pick<
+  MethodProps,
+  | 'children'
+  | 'name'
+  | 'private'
+  | 'protected'
+  | 'public'
+  | 'undocumented'
+> & {
+  argument: string
+}
+
+export function Set(props: SetProps) {
   return Method({
     ...props,
     accessor: 'set',

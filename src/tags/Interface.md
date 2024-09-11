@@ -1,5 +1,3 @@
-### `<Interface>`
-
 A TypeScript interface type.
 
 Example:

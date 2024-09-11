@@ -1,5 +1,3 @@
-### `<Variable>`
-
 A variable.
 
 Example:

@@ -1,5 +1,3 @@
-### `<Part>`
-
 A part to be later collected by a [`<Collect>`](./Collect.md) tag.
 
 Example:

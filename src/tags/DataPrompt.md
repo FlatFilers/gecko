@@ -1,5 +1,3 @@
-### `<DataPrompt>`
-
 A data prompt, which prompts an AI agent to return the specified data in the given TypeScript type format before continuing code generation.
 
 Example:

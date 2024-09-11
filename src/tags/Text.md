@@ -1,5 +1,3 @@
-### `<Text>`
-
 Plain text to be written to a file. Adjacent `<Text>` or `<Function>` tags within a `<File>` are separated by a new line.
 
 Example:

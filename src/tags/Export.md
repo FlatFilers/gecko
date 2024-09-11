@@ -1,5 +1,3 @@
-### `<Export>`
-
 An export statement, which re-exports some or all of the exports from a module.
 
 Example:

@@ -1,5 +1,3 @@
-### `<Method>`
-
 A class method. May only be used inside of a `<Class>` element.
 
 Example:

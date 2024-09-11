@@ -1,5 +1,3 @@
-### `<Object>`
-
 An object.
 
 Example:
