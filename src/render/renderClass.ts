@@ -7,6 +7,16 @@ export function renderClass(
   context: CommitContext,
   _class: GeckoClassElement
 ) {
+  if (
+    _class.props.export &&
+    _class.props.export !== 'default' &&
+    (typeof _class.props.name !== 'string' ||
+      _class.props.name.length == 0)
+  ) {
+    throw new Error(
+      'Class name is required when exporting as named'
+    )
+  }
   const abstract = _class.props.abstract ? 'abstract ' : ''
   const body = formatChildren(_class.props.children)
     .map((x) => renderContent(context, x))
