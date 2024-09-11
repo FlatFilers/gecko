@@ -49,21 +49,17 @@ async function build() {
         const requiredPropsSection = Object.keys(
           interfacePropsRequired
         ).length
-          ? `
-### Required Props
+          ? `### Required Props
 
-${requiredPropsDoc}
-`
+${requiredPropsDoc}`
           : ''
 
         const optionalPropsSection = Object.keys(
           interfacePropsOptional
         ).length
-          ? `
-### Optional Props
+          ? `### Optional Props
 
-${optionalPropsDoc}
-`
+${optionalPropsDoc}`
           : ''
 
         const doc = docFileContent.replace(

@@ -28,6 +28,16 @@ export function renderFunction(
   context: CommitContext,
   func: GeckoFunctionElement
 ) {
+  if (
+    func.props.export &&
+    func.props.export !== 'default' &&
+    (typeof func.props.name !== 'string' ||
+      func.props.name.length == 0)
+  ) {
+    throw new Error(
+      'Function name is required when exporting as named'
+    )
+  }
   const args = func.props.arguments
     ? func.props.arguments.join(', ')
     : ''

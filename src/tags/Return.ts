@@ -1,6 +1,7 @@
 import { GeckoChildren } from '..'
 
 export interface ReturnProps {
+  /** The child elements of the return type declaration */
   children?: GeckoChildren
 }
 
@@ -15,8 +16,5 @@ export interface GeckoReturnElement {
 export function Return(
   props: ReturnProps
 ): GeckoReturnElement {
-  return {
-    type,
-    props,
-  }
+  return { type, props }
 }

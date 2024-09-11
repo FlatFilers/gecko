@@ -5,20 +5,23 @@ export enum DocumentationFormat {
 }
 
 export interface DocumentedProps {
+  /** The child elements of the documented tag */
   children?: GeckoChildren
+
+  /** The formats to document */
   formats: DocumentationFormat[]
 }
 
+export type type = 'documented'
+export const type: type = 'documented'
+
 export interface GeckoDocumentedElement {
-  type: 'documented'
+  type: type
   props: DocumentedProps
 }
 
 export function Documented(
   props: DocumentedProps
 ): GeckoDocumentedElement {
-  return {
-    type: 'documented',
-    props,
-  }
+  return { type, props }
 }
