@@ -72,11 +72,20 @@ export async function commitFileFormatter(
   baseDir: string,
   formatter: GeckoFileFormatterElement
 ) {
-  context.fileFormatterStack.push(formatter)
-  if (formatter.props.children) {
-    await commitFolderChildren(context, baseDir, formatter)
+  const descendingContext: CommitContext = {
+    ...context,
+    fileFormatterStack: [
+      ...context.fileFormatterStack,
+      formatter,
+    ],
   }
-  context.fileFormatterStack.pop()
+  if (formatter.props.children) {
+    await commitFolderChildren(
+      descendingContext,
+      baseDir,
+      formatter
+    )
+  }
 }
 
 interface AfterwardsTask {
@@ -193,11 +202,20 @@ export async function commitDocumented(
   baseDir: string,
   documented: GeckoDocumentedElement
 ) {
-  context.documentedStack.push(documented)
-  if (documented.props.children) {
-    await commitFolderChildren(context, baseDir, documented)
+  const descendingContext: CommitContext = {
+    ...context,
+    documentedStack: [
+      ...context.documentedStack,
+      documented,
+    ],
   }
-  context.documentedStack.pop()
+  if (documented.props.children) {
+    await commitFolderChildren(
+      descendingContext,
+      baseDir,
+      documented
+    )
+  }
 }
 
 export async function commitFileTemplate(
@@ -205,11 +223,20 @@ export async function commitFileTemplate(
   baseDir: string,
   template: GeckoFileTemplateElement
 ) {
-  context.fileTemplateStack.push(template)
-  if (template.props.children) {
-    await commitFolderChildren(context, baseDir, template)
+  const descendingContext: CommitContext = {
+    ...context,
+    fileTemplateStack: [
+      ...context.fileTemplateStack,
+      template,
+    ],
   }
-  context.fileTemplateStack.pop()
+  if (template.props.children) {
+    await commitFolderChildren(
+      descendingContext,
+      baseDir,
+      template
+    )
+  }
 }
 
 export async function commitFolderChildren(
@@ -312,8 +339,8 @@ export async function commitFile(
   file: GeckoFileElement
 ) {
   const relativeDir = (
-    baseDir.startsWith(context.workingDir)
-      ? baseDir.substring(context.workingDir.length)
+    baseDir.startsWith(context.rootDir)
+      ? baseDir.substring(context.rootDir.length)
       : baseDir
   ).replace(/^\//, '')
   const absoluteFilePath = join(baseDir, file.props.name)
@@ -381,7 +408,7 @@ export async function commitFile(
           filePath
         )
       const pathSegments = filePath.split('/')
-      context.committedFiles.set(filePath, {
+      context.committedFiles.set(absoluteFilePath, {
         content: formattedContent,
         encoding: 'utf-8',
         destination: true,
@@ -406,7 +433,7 @@ export async function commitFile(
       }
       await writeModifiedFile(
         context,
-        filePath,
+        absoluteFilePath,
         formattedContent,
         `formatted with ${formatter.props.formatter}`
       )
@@ -414,7 +441,7 @@ export async function commitFile(
     } catch (e) {
       await writeModifiedFile(
         context,
-        filePath,
+        absoluteFilePath,
         content,
         `error when formatting with ${formatter.props.formatter}`
       )
@@ -433,7 +460,7 @@ export async function commitFile(
     }
   } else {
     const pathSegments = filePath.split('/')
-    context.committedFiles.set(filePath, {
+    context.committedFiles.set(absoluteFilePath, {
       content,
       destination: true,
       encoding: 'utf-8',
@@ -456,7 +483,11 @@ export async function commitFile(
       )
       return
     }
-    await writeModifiedFile(context, filePath, content)
+    await writeModifiedFile(
+      context,
+      absoluteFilePath,
+      content
+    )
   }
 }
 
