@@ -9,7 +9,6 @@ export type PartElementsByOrder = Map<
   GeckoPartElement[]
 >
 export interface CommitContext {
-  afterwardsPromises: Promise<void>[]
   committedFilePaths: Set<string>
   committedFiles: Map<string, GeckoDestinationFile>
   documentedStack: GeckoDocumentedElement[]
@@ -19,4 +18,6 @@ export interface CommitContext {
   requiredFilePaths: Set<string>
   restart: boolean
   restartFiles: Set<string>
+  rootDir: string
+  workingDir: string
 }

@@ -9,6 +9,7 @@ import {
   Folder,
   geckoJSX,
   GeckoSource,
+  GeckoStatusFile,
   Part,
   Root,
   TemplateMatch,
@@ -86,6 +87,7 @@ export default function () {
           </Folder>
         </FileTemplate>
       </FileFormatter>
+      <GeckoStatusFile />
     </Root>
   )
 }

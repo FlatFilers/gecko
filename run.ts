@@ -1,12 +1,14 @@
+import { join } from 'path'
 import { commit, printResolveSummary, resolve } from './src'
 import { CommitContext } from './src/types/CommitContext'
 
 async function main() {
+  const workingDir = process.cwd(),
+    rootDir = workingDir
   const { default: generate } = await import(
-    process.cwd() + '/gecko.tsx'
+    join(workingDir, 'gecko.tsx')
   )
   const rootContext: CommitContext = {
-    afterwardsPromises: [],
     committedFilePaths: new Set(),
     committedFiles: new Map(),
     documentedStack: [],
@@ -16,8 +18,10 @@ async function main() {
     requiredFilePaths: new Set(),
     restart: false,
     restartFiles: new Set(),
+    rootDir,
+    workingDir,
   }
-  commit(
+  await commit(
     await resolve(rootContext, await generate()),
     rootContext
   )

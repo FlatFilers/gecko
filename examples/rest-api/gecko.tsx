@@ -9,6 +9,7 @@ import {
   FileTemplate,
   Folder,
   geckoJSX,
+  GeckoStatusFile,
   Root,
   TemplateMatch,
 } from '@flatfile/gecko'
@@ -56,6 +57,7 @@ const tsFileTemplate: TemplateMatch = {
 export default function () {
   return (
     <Root path="project/src/gecko_generated" erase>
+      <GeckoStatusFile />
       <FileFormatter
         formatter="prettier"
         match="*.{js,json,ts,yaml}"

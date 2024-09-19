@@ -23,7 +23,7 @@ import { formatChildren } from './util/formatChildren'
 import { loadFileMaybe } from './util/loadFileMaybe'
 import { matchingTemplates } from './util/matchingTemplates'
 
-const DEBUG = false
+const DEBUG = 0 // + 1 // + 1
 
 export async function commit(
   root: GeckoRootElement,
@@ -33,6 +33,7 @@ export async function commit(
   const baseDir = root.props.path
     ? join(thisDir, root.props.path)
     : thisDir
+  context.rootDir = baseDir
   if (root.props.erase) {
     try {
       await rmdir(baseDir)
@@ -40,7 +41,7 @@ export async function commit(
   }
   await mkdir(baseDir, { recursive: true })
   await commitFolderChildren(context!, baseDir, root)
-  await Promise.all(context.afterwardsPromises)
+  await commitAllAfterwards()
   if (context.restart) {
     console.log(
       `[gecko] restarting because changes were written to the following <Root requires={[...]}> files:`
@@ -62,6 +63,7 @@ export async function commitFolder(
 ) {
   const newBaseDir = join(baseDir, folder.props.name)
   await mkdir(newBaseDir, { recursive: true })
+  console.log(`[gecko] commit 📁${newBaseDir}`)
   await commitFolderChildren(context, newBaseDir, folder)
 }
 
@@ -77,8 +79,14 @@ export async function commitFileFormatter(
   context.fileFormatterStack.pop()
 }
 
-let afterwards_timeoutQueued: any
-const afterwards_timeoutQueue: GeckoAfterwardsElement[] = []
+interface AfterwardsTask {
+  afterwards: GeckoAfterwardsElement
+  baseDir: string
+  context: CommitContext
+}
+
+let afterwardsTimeout: any
+const afterwardsTasks: AfterwardsTask[] = []
 let geckoSource: GeckoSource
 
 function setGeckoSource(
@@ -127,49 +135,57 @@ function setGeckoSource(
   }
 }
 
+let afterwardsId = 0
+
+async function commitAllAfterwards() {
+  let afterwardsTask: AfterwardsTask | undefined
+  while ((afterwardsTask = afterwardsTasks.shift())) {
+    const id = ++afterwardsId
+    try {
+      console.log(
+        `[gecko] commit <Afterwards> #${id} in ${afterwardsTask.baseDir}`
+      )
+      setGeckoSource(
+        afterwardsTask.context,
+        afterwardsTask.baseDir
+      )
+      const contentsToWrite = await (async function () {
+        if (afterwardsTask.afterwards.props.children) {
+          return afterwardsTask.afterwards.props.children?.[0](
+            geckoSource,
+            afterwardsTask.baseDir
+          )
+        }
+      })()
+      if (
+        contentsToWrite &&
+        typeof contentsToWrite !== 'string'
+      ) {
+        await commitFolderChildren(
+          afterwardsTask.context,
+          afterwardsTask.baseDir,
+          contentsToWrite
+        )
+      }
+      console.log(`[gecko] <Afterwards> #${id} complete`)
+    } catch (e) {
+      console.error(
+        `<Afterwards> #${id} error: ${e?.message ?? e}`
+      )
+    }
+  }
+}
+
 export async function commitAfterwards(
   context: CommitContext,
   baseDir: string,
   afterwards: GeckoAfterwardsElement
 ) {
-  context.afterwardsPromises.push(
-    new Promise(function (resolve, reject) {
-      console.log('[gecko] Committing <Afterwards>')
-      afterwards_timeoutQueue.push(afterwards)
-      if (typeof afterwards_timeoutQueued === 'undefined') {
-        afterwards_timeoutQueued = setImmediate(
-          async function () {
-            try {
-              setGeckoSource(context, baseDir)
-              const contentsToWrite =
-                await (async function () {
-                  if (afterwards.props.children) {
-                    return afterwards.props.children?.[0](
-                      geckoSource,
-                      baseDir
-                    )
-                  }
-                })()
-              if (
-                contentsToWrite &&
-                typeof contentsToWrite !== 'string'
-              ) {
-                await commitFolderChildren(
-                  context,
-                  baseDir,
-                  contentsToWrite
-                )
-              }
-              console.log('[gecko] <Afterwards> completed ')
-              resolve()
-            } catch (e) {
-              reject(e)
-            }
-          }
-        )
-      }
-    })
-  )
+  afterwardsTasks.push({
+    afterwards,
+    baseDir,
+    context,
+  })
 }
 
 export async function commitDocumented(
@@ -202,13 +218,15 @@ export async function commitFolderChildren(
   folder: GeckoElement | GeckoChildren[]
 ) {
   if (Array.isArray(folder)) {
-    folder.forEach(
-      (f) =>
+    await Promise.all(
+      folder.map((f) =>
         f !== null &&
         typeof f !== 'number' &&
         typeof f !== 'string' &&
-        typeof f !== 'undefined' &&
-        commitFolderChildren(context, baseDir, f)
+        typeof f !== 'undefined'
+          ? commitFolderChildren(context, baseDir, f)
+          : Promise.resolve()
+      )
     )
     return
   }
@@ -293,14 +311,22 @@ export async function commitFile(
   baseDir: string,
   file: GeckoFileElement
 ) {
-  const filePath = join(baseDir, file.props.name)
-  if (context.committedFilePaths.has(filePath)) {
+  const relativeDir = (
+    baseDir.startsWith(context.workingDir)
+      ? baseDir.substring(context.workingDir.length)
+      : baseDir
+  ).replace(/^\//, '')
+  const absoluteFilePath = join(baseDir, file.props.name)
+  const filePath = join(relativeDir, file.props.name)
+  if (context.committedFilePaths.has(absoluteFilePath)) {
     console.error(
-      `[gecko] warning, additional attempts to write to file ${JSON.stringify(filePath)} are ignored, since this file has already been generated, avoid writing to the same file more than once`
+      `[gecko] warning, additional attempts to write to file ${JSON.stringify(absoluteFilePath)} are ignored, since this file has already been generated, avoid writing to the same file more than once`
     )
     return
   }
-  const existingFileContent = await loadFileMaybe(filePath)
+  const existingFileContent = await loadFileMaybe(
+    absoluteFilePath
+  )
   if (
     file.props.once &&
     typeof existingFileContent === 'string' &&
@@ -311,16 +337,16 @@ export async function commitFile(
     )
     return
   }
-  context.committedFilePaths.add(filePath)
-  if (DEBUG) {
+  context.committedFilePaths.add(absoluteFilePath)
+  if (DEBUG > 0) {
     console.log(
-      `[gecko] <file path=${JSON.stringify(filePath)}>`
+      `[gecko] <file path=${JSON.stringify(absoluteFilePath)}>`
     )
   }
   const rawContent = collectFileContents(context, file)
-  if (DEBUG) {
+  if (DEBUG > 0) {
     console.log(
-      `[gecko] </file path=${JSON.stringify(filePath)}>`
+      `[gecko] </file path=${JSON.stringify(absoluteFilePath)}>`
     )
   }
   const formatter = closestMatchingFormatter(
@@ -438,13 +464,13 @@ export function collectFileContents(
   context: CommitContext,
   file: GeckoFileElement
 ) {
-  if (DEBUG) {
+  if (DEBUG > 1) {
     console.log('file children:')
   }
   return file.props.children
     ? formatChildren(file.props.children)
         .map((x) => {
-          if (DEBUG) {
+          if (DEBUG > 1) {
             console.dir(x)
           }
           return renderContent(context, x)

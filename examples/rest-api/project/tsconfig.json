@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "skipLibCheck": true,
     "isolatedModules": true,
-    "moduleResolution": "NodeNext",
     "lib": ["es2022"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "skipLibCheck": true,
     "target": "es2022"
   }
 }

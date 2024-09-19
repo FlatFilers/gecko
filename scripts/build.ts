@@ -1,8 +1,12 @@
-import { AllTags } from '../src'
 import { readFile, writeFile } from 'fs/promises'
 import path from 'path'
+import { AllTags } from '../src'
 import { extractInterfaceProps } from './lib/extractInterfaceProps'
 import { interfaceMarkdownTable } from './lib/interfaceMarkdownTable'
+
+const tsxTags = {
+  GeckoStatusFile: true, // todo replace with AllTags introspection
+}
 
 async function build() {
   const tagDocs = await Promise.all(
@@ -13,7 +17,7 @@ async function build() {
       )
       const sourceFilePath = path.join(
         './src/tags',
-        `${tag}.ts`
+        `${tag}.ts${tsxTags[tag] ? 'x' : ''}`
       )
       try {
         const docFileContent = await readFile(
