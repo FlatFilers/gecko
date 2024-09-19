@@ -74,6 +74,7 @@ import { FileFormatter } from './tags/FileFormatter.ts'
 import { FileTemplate } from './tags/FileTemplate.ts'
 import { Folder } from './tags/Folder.ts'
 import { Function } from './tags/Function.ts'
+import { GeckoStatusFile } from './tags/GeckoStatusFile.tsx'
 import { Get } from './tags/Get.ts'
 import { Import } from './tags/Import.ts'
 import { Interface } from './tags/Interface.ts'
@@ -100,6 +101,7 @@ export const AllTags = {
   FileTemplate,
   Folder,
   Function,
+  GeckoStatusFile,
   Get,
   Import,
   Interface,

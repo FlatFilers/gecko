@@ -1,4 +1,4 @@
-Prints a file with the status of the Gecko build.
+Creates a file with the status of the Gecko build.
 
 Example:
 

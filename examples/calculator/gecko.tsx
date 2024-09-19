@@ -31,7 +31,7 @@ const generatedTypeScriptFile: TemplateMatch = {
 
 export default function () {
   return (
-    <Root path="" requires={['digitList.ts']}>
+    <Root requires={['digitList.ts']}>
       <FileFormatter
         formatter="prettier"
         match="*.(ts|tsx)"

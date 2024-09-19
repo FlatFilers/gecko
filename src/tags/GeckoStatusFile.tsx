@@ -13,8 +13,9 @@ function renderMarkdownNode(
   pathPrefix: string,
   node: AnyNode
 ): string {
+  const nodePath = `${pathPrefix}${pathPrefix.length > 0 ? '/' : ''}${node.path}`
   if ('size' in node) {
-    return `<div>📄 <a href="${pathPrefix}${pathPrefix.length > 0 ? '/' : ''}${node.path}">${node.name}</a> <code>${prettySize(node.size)}</code></div>`
+    return `<div>📄 <a href="${nodePath}">${node.name}</a> <code>${prettySize(node.size)}</code></div>`
   } else {
     const childrenContent = Array.from(
       node.children.values()
@@ -29,7 +30,7 @@ function renderMarkdownNode(
       )
       .join('\n')
     return `<details open>
-  <summary>📁 <a href="${pathPrefix}${pathPrefix.length > 0 ? '/' : ''}${node.path}">${node.name}</a></summary>
+  <summary>📁 <a href="${nodePath}">${node.name}</a></summary>
   <blockquote>
 ${childrenContent}
   </blockquote>
@@ -42,32 +43,40 @@ function renderFileTree(
   nodes: AnyNode[],
   renderNode: (pathPrefix: string, node: AnyNode) => string
 ) {
-  return nodes
-    .map((n) => renderNode(pathPrefix, n))
-    .join('\n')
+  return (
+    nodes.map((n) => renderNode(pathPrefix, n)).join('\n') +
+    '\n'
+  )
 }
 
-export function GeckoStatusFile() {
+export interface GeckoStatusFileProps {
+  /** File name to create, default is `'GeckoStatus.md'` */
+  name?: string
+}
+
+export function GeckoStatusFile({
+  name = 'GeckoStatus.md',
+}: GeckoStatusFileProps) {
   return (
     <Afterwards>
       {(s: GeckoSource) => {
         const relativePath =
-          s.baseDir === s.context.rootDir
+          s.baseDir === s.context.workingDir
             ? ''
-            : s.baseDir.startsWith(s.context.rootDir)
+            : s.baseDir.startsWith(s.context.workingDir)
               ? s.baseDir
-                  .substring(s.context.rootDir.length)
+                  .substring(s.context.workingDir.length)
                   .replace(/^\//, '')
                   .split('/')
                   .fill('..')
                   .join('/')
-              : s.context.rootDir.startsWith(s.baseDir)
-                ? s.context.rootDir
+              : s.context.workingDir.startsWith(s.baseDir)
+                ? s.context.workingDir
                     .substring(s.baseDir.length)
                     .replace(/^\//, '')
                 : s.baseDir
         return (
-          <File name="GeckoStatus.md">
+          <File name={name}>
             <Text># Gecko Status</Text>
             <Text />
             <Text>## Files</Text>
