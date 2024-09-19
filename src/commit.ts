@@ -312,8 +312,8 @@ export async function commitFile(
   file: GeckoFileElement
 ) {
   const relativeDir = (
-    baseDir.startsWith(context.workingDir)
-      ? baseDir.substring(context.workingDir.length)
+    baseDir.startsWith(context.rootDir)
+      ? baseDir.substring(context.rootDir.length)
       : baseDir
   ).replace(/^\//, '')
   const absoluteFilePath = join(baseDir, file.props.name)
@@ -381,7 +381,7 @@ export async function commitFile(
           filePath
         )
       const pathSegments = filePath.split('/')
-      context.committedFiles.set(filePath, {
+      context.committedFiles.set(absoluteFilePath, {
         content: formattedContent,
         encoding: 'utf-8',
         destination: true,
@@ -406,7 +406,7 @@ export async function commitFile(
       }
       await writeModifiedFile(
         context,
-        filePath,
+        absoluteFilePath,
         formattedContent,
         `formatted with ${formatter.props.formatter}`
       )
@@ -414,7 +414,7 @@ export async function commitFile(
     } catch (e) {
       await writeModifiedFile(
         context,
-        filePath,
+        absoluteFilePath,
         content,
         `error when formatting with ${formatter.props.formatter}`
       )
@@ -433,7 +433,7 @@ export async function commitFile(
     }
   } else {
     const pathSegments = filePath.split('/')
-    context.committedFiles.set(filePath, {
+    context.committedFiles.set(absoluteFilePath, {
       content,
       destination: true,
       encoding: 'utf-8',
@@ -456,7 +456,11 @@ export async function commitFile(
       )
       return
     }
-    await writeModifiedFile(context, filePath, content)
+    await writeModifiedFile(
+      context,
+      absoluteFilePath,
+      content
+    )
   }
 }
 

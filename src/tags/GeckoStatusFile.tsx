@@ -1,3 +1,6 @@
+/** @jsx geckoJSX */
+/** @jsxFrag geckoJSX */
+import { relative } from 'path'
 import {
   Afterwards,
   File,
@@ -61,20 +64,25 @@ export function GeckoStatusFile({
     <Afterwards>
       {(s: GeckoSource) => {
         const relativePath =
-          s.baseDir === s.context.workingDir
+          s.baseDir === s.context.rootDir
             ? ''
-            : s.baseDir.startsWith(s.context.workingDir)
+            : s.baseDir.startsWith(s.context.rootDir)
               ? s.baseDir
-                  .substring(s.context.workingDir.length)
+                  .substring(s.context.rootDir.length)
                   .replace(/^\//, '')
                   .split('/')
                   .fill('..')
                   .join('/')
-              : s.context.workingDir.startsWith(s.baseDir)
-                ? s.context.workingDir
+              : s.context.rootDir.startsWith(s.baseDir)
+                ? s.context.rootDir
                     .substring(s.baseDir.length)
                     .replace(/^\//, '')
                 : s.baseDir
+        console.log({
+          relativePath,
+          baseDir: s.baseDir,
+          rootDir: s.context.rootDir,
+        })
         return (
           <File name={name}>
             <Text># Gecko Status</Text>
