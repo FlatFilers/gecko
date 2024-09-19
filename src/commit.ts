@@ -72,11 +72,20 @@ export async function commitFileFormatter(
   baseDir: string,
   formatter: GeckoFileFormatterElement
 ) {
-  context.fileFormatterStack.push(formatter)
-  if (formatter.props.children) {
-    await commitFolderChildren(context, baseDir, formatter)
+  const descendingContext: CommitContext = {
+    ...context,
+    fileFormatterStack: [
+      ...context.fileFormatterStack,
+      formatter,
+    ],
   }
-  context.fileFormatterStack.pop()
+  if (formatter.props.children) {
+    await commitFolderChildren(
+      descendingContext,
+      baseDir,
+      formatter
+    )
+  }
 }
 
 interface AfterwardsTask {
@@ -193,11 +202,20 @@ export async function commitDocumented(
   baseDir: string,
   documented: GeckoDocumentedElement
 ) {
-  context.documentedStack.push(documented)
-  if (documented.props.children) {
-    await commitFolderChildren(context, baseDir, documented)
+  const descendingContext: CommitContext = {
+    ...context,
+    documentedStack: [
+      ...context.documentedStack,
+      documented,
+    ],
   }
-  context.documentedStack.pop()
+  if (documented.props.children) {
+    await commitFolderChildren(
+      descendingContext,
+      baseDir,
+      documented
+    )
+  }
 }
 
 export async function commitFileTemplate(
@@ -205,11 +223,20 @@ export async function commitFileTemplate(
   baseDir: string,
   template: GeckoFileTemplateElement
 ) {
-  context.fileTemplateStack.push(template)
-  if (template.props.children) {
-    await commitFolderChildren(context, baseDir, template)
+  const descendingContext: CommitContext = {
+    ...context,
+    fileTemplateStack: [
+      ...context.fileTemplateStack,
+      template,
+    ],
   }
-  context.fileTemplateStack.pop()
+  if (template.props.children) {
+    await commitFolderChildren(
+      descendingContext,
+      baseDir,
+      template
+    )
+  }
 }
 
 export async function commitFolderChildren(
