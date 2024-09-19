@@ -33,6 +33,7 @@ export async function commit(
   const baseDir = root.props.path
     ? join(thisDir, root.props.path)
     : thisDir
+  context.rootDir = baseDir
   if (root.props.erase) {
     try {
       await rmdir(baseDir)
@@ -40,7 +41,13 @@ export async function commit(
   }
   await mkdir(baseDir, { recursive: true })
   await commitFolderChildren(context!, baseDir, root)
-  await Promise.all(context.afterwardsPromises)
+  let currentAfterwardsPromise: Promise<void> | undefined
+  while (
+    (currentAfterwardsPromise =
+      context.afterwardsPromises.shift())
+  ) {
+    await currentAfterwardsPromise
+  }
   if (context.restart) {
     console.log(
       `[gecko] restarting because changes were written to the following <Root requires={[...]}> files:`
@@ -62,6 +69,7 @@ export async function commitFolder(
 ) {
   const newBaseDir = join(baseDir, folder.props.name)
   await mkdir(newBaseDir, { recursive: true })
+  console.log(`[gecko] commit 📁${newBaseDir}`)
   await commitFolderChildren(context, newBaseDir, folder)
 }
 
@@ -77,8 +85,16 @@ export async function commitFileFormatter(
   context.fileFormatterStack.pop()
 }
 
-let afterwards_timeoutQueued: any
-const afterwards_timeoutQueue: GeckoAfterwardsElement[] = []
+interface AfterwardsTask {
+  afterwards: GeckoAfterwardsElement
+  baseDir: string
+  context: CommitContext
+  resolve: () => void
+  reject: (reason?: any) => void
+}
+
+let afterwardsTimeout: any
+const afterwardsTasks: AfterwardsTask[] = []
 let geckoSource: GeckoSource
 
 function setGeckoSource(
@@ -127,6 +143,51 @@ function setGeckoSource(
   }
 }
 
+let afterwardsId = 0
+
+function scheduleAfterwardsCommit() {
+  afterwardsTimeout = setImmediate(async function () {
+    let afterwardsTask: AfterwardsTask | undefined
+    while ((afterwardsTask = afterwardsTasks.shift())) {
+      const id = ++afterwardsId
+      try {
+        console.log(
+          `[gecko] commit <Afterwards> #${id} in ${afterwardsTask.baseDir}`
+        )
+        setGeckoSource(
+          afterwardsTask.context,
+          afterwardsTask.baseDir
+        )
+        const contentsToWrite = await (async function () {
+          if (afterwardsTask.afterwards.props.children) {
+            return afterwardsTask.afterwards.props.children?.[0](
+              geckoSource,
+              afterwardsTask.baseDir
+            )
+          }
+        })()
+        if (
+          contentsToWrite &&
+          typeof contentsToWrite !== 'string'
+        ) {
+          await commitFolderChildren(
+            afterwardsTask.context,
+            afterwardsTask.baseDir,
+            contentsToWrite
+          )
+        }
+        console.log(`[gecko] <Afterwards> #${id} complete`)
+        afterwardsTask.resolve()
+      } catch (e) {
+        console.error(
+          `<Afterwards> #${id} error: ${e?.message ?? e}`
+        )
+        afterwardsTask.reject(e)
+      }
+    }
+  })
+}
+
 export async function commitAfterwards(
   context: CommitContext,
   baseDir: string,
@@ -134,42 +195,18 @@ export async function commitAfterwards(
 ) {
   context.afterwardsPromises.push(
     new Promise(function (resolve, reject) {
-      console.log('[gecko] Committing <Afterwards>')
-      afterwards_timeoutQueue.push(afterwards)
-      if (typeof afterwards_timeoutQueued === 'undefined') {
-        afterwards_timeoutQueued = setImmediate(
-          async function () {
-            try {
-              setGeckoSource(context, baseDir)
-              const contentsToWrite =
-                await (async function () {
-                  if (afterwards.props.children) {
-                    return afterwards.props.children?.[0](
-                      geckoSource,
-                      baseDir
-                    )
-                  }
-                })()
-              if (
-                contentsToWrite &&
-                typeof contentsToWrite !== 'string'
-              ) {
-                await commitFolderChildren(
-                  context,
-                  baseDir,
-                  contentsToWrite
-                )
-              }
-              console.log('[gecko] <Afterwards> completed ')
-              resolve()
-            } catch (e) {
-              reject(e)
-            }
-          }
-        )
-      }
+      afterwardsTasks.push({
+        afterwards,
+        baseDir,
+        context,
+        resolve,
+        reject,
+      })
     })
   )
+  if (typeof afterwardsTimeout === 'undefined') {
+    scheduleAfterwardsCommit()
+  }
 }
 
 export async function commitDocumented(
@@ -202,13 +239,15 @@ export async function commitFolderChildren(
   folder: GeckoElement | GeckoChildren[]
 ) {
   if (Array.isArray(folder)) {
-    folder.forEach(
-      (f) =>
+    await Promise.all(
+      folder.map((f) =>
         f !== null &&
         typeof f !== 'number' &&
         typeof f !== 'string' &&
-        typeof f !== 'undefined' &&
-        commitFolderChildren(context, baseDir, f)
+        typeof f !== 'undefined'
+          ? commitFolderChildren(context, baseDir, f)
+          : Promise.resolve()
+      )
     )
     return
   }
@@ -293,7 +332,12 @@ export async function commitFile(
   baseDir: string,
   file: GeckoFileElement
 ) {
-  const filePath = join(baseDir, file.props.name)
+  const relativeDir = (
+    baseDir.startsWith(context.rootDir)
+      ? baseDir.substring(context.rootDir.length)
+      : baseDir
+  ).replace(/^\//, '')
+  const filePath = join(relativeDir, file.props.name)
   if (context.committedFilePaths.has(filePath)) {
     console.error(
       `[gecko] warning, additional attempts to write to file ${JSON.stringify(filePath)} are ignored, since this file has already been generated, avoid writing to the same file more than once`

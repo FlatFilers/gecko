@@ -48,6 +48,7 @@ export {
 } from './tags/FileTemplate.ts'
 export { Folder } from './tags/Folder.ts'
 export { Function } from './tags/Function.ts'
+export { GeckoStatusFile } from './tags/GeckoStatusFile.tsx'
 export { Get } from './tags/Get.ts'
 export { Import } from './tags/Import.ts'
 export { Interface } from './tags/Interface.ts'

@@ -19,4 +19,5 @@ export interface CommitContext {
   requiredFilePaths: Set<string>
   restart: boolean
   restartFiles: Set<string>
+  rootDir: string
 }

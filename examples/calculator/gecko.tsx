@@ -9,6 +9,7 @@ import {
   Folder,
   geckoJSX,
   GeckoSource,
+  GeckoStatusFile,
   Part,
   Root,
   TemplateMatch,
@@ -30,7 +31,7 @@ const generatedTypeScriptFile: TemplateMatch = {
 
 export default function () {
   return (
-    <Root requires={['digitList.ts']}>
+    <Root path="" requires={['digitList.ts']}>
       <FileFormatter
         formatter="prettier"
         match="*.(ts|tsx)"
@@ -86,6 +87,7 @@ export default function () {
           </Folder>
         </FileTemplate>
       </FileFormatter>
+      <GeckoStatusFile />
     </Root>
   )
 }
