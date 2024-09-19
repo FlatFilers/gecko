@@ -18,11 +18,12 @@ function renderMarkdownNode(
 ): string {
   const nodePath = `${pathPrefix}${pathPrefix.length > 0 ? '/' : ''}${node.path}`
   if ('size' in node) {
-    return `<div>📄 <a href="${nodePath}">${node.name}</a> <code>${prettySize(node.size)}</code></div>`
+    return `<div> 📄 <a href="${nodePath}">${node.name}</a> <code>${prettySize(node.size)}</code></div>`
   } else {
     const childrenContent = Array.from(
       node.children.values()
     )
+      .sort((a, b) => a.name.localeCompare(b.name))
       .map(
         (n) =>
           '  ' +
@@ -47,8 +48,10 @@ function renderFileTree(
   renderNode: (pathPrefix: string, node: AnyNode) => string
 ) {
   return (
-    nodes.map((n) => renderNode(pathPrefix, n)).join('\n') +
-    '\n'
+    nodes
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((n) => renderNode(pathPrefix, n))
+      .join('\n') + '\n'
   )
 }
 

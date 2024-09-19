@@ -57,7 +57,9 @@ const tsFileTemplate: TemplateMatch = {
 export default function () {
   return (
     <Root path="project/src/gecko_generated" erase>
-      <GeckoStatusFile />
+      <Folder name="../../..">
+        <GeckoStatusFile />
+      </Folder>
       <FileFormatter
         formatter="prettier"
         match="*.{js,json,ts,yaml}"
