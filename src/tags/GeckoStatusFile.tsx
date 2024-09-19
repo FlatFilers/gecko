@@ -78,11 +78,6 @@ export function GeckoStatusFile({
                     .substring(s.baseDir.length)
                     .replace(/^\//, '')
                 : s.baseDir
-        console.log({
-          relativePath,
-          baseDir: s.baseDir,
-          rootDir: s.context.rootDir,
-        })
         return (
           <File name={name}>
             <Text># Gecko Status</Text>
