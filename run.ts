@@ -28,5 +28,8 @@ async function main() {
 }
 
 main()
-  .catch((e) => globalThis.console.error(e))
+  .catch((e) => {
+    globalThis.console.error(e)
+    process.exit(1)
+  })
   .then(printResolveSummary)
