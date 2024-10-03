@@ -25,6 +25,13 @@ while [ "$first_run" = true ] || [ "$re_run" = true ]; do
   # Run the Gecko TypeScript script
   OPTIONS="$@" tsx --tsconfig $DIR/tsconfig.json -r tsconfig-paths/register $DIR/run.ts
 
+  # Check if there was an error
+  exit_code=$?
+  if [ $exit_code -ne 0 ]; then
+    echo "[gecko] Failure: exit code $exit_code"
+    exit 1
+  fi
+
   # Check if the GECKO_RESTART_SIGNAL file exists
   if [ -f "GECKO_RESTART_SIGNAL" ]; then
     re_run=true
