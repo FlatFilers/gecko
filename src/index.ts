@@ -12,6 +12,7 @@ import { GeckoFileTemplateElement } from './tags/FileTemplate.ts'
 import { GeckoFolderElement } from './tags/Folder.ts'
 import { GeckoFunctionElement } from './tags/Function.ts'
 import { GeckoImportElement } from './tags/Import.ts'
+import { GeckoImportTypeElement } from './tags/ImportType.ts'
 import { GeckoInterfaceElement } from './tags/Interface.ts'
 import { GeckoMethodElement } from './tags/Method.ts'
 import { GeckoObjectElement } from './tags/Object.ts'
@@ -51,6 +52,7 @@ export { Function } from './tags/Function.ts'
 export { GeckoStatusFile } from './tags/GeckoStatusFile.tsx'
 export { Get } from './tags/Get.ts'
 export { Import } from './tags/Import.ts'
+export { ImportType } from './tags/ImportType.ts'
 export { Interface } from './tags/Interface.ts'
 export { Method } from './tags/Method.ts'
 export { Object } from './tags/Object.ts'
@@ -77,6 +79,7 @@ import { Function } from './tags/Function.ts'
 import { GeckoStatusFile } from './tags/GeckoStatusFile.tsx'
 import { Get } from './tags/Get.ts'
 import { Import } from './tags/Import.ts'
+import { ImportType } from './tags/ImportType.ts'
 import { Interface } from './tags/Interface.ts'
 import { Method } from './tags/Method.ts'
 import { Object } from './tags/Object.ts'
@@ -104,6 +107,7 @@ export const AllTags = {
   GeckoStatusFile,
   Get,
   Import,
+  ImportType,
   Interface,
   Method,
   Object,
@@ -130,6 +134,7 @@ export type GeckoResolvedElement =
   | GeckoFolderElement
   | GeckoFunctionElement
   | GeckoImportElement
+  | GeckoImportTypeElement
   | GeckoInterfaceElement
   | GeckoMethodElement
   | GeckoObjectElement
