@@ -6,6 +6,7 @@ import { renderCollect } from './renderCollect'
 import { renderExport } from './renderExport'
 import { renderFunction } from './renderFunction'
 import { renderImport } from './renderImport'
+import { renderImportType } from './renderImportType'
 import { renderInterface } from './renderInterface'
 import { renderMethod } from './renderMethod'
 import { renderObject } from './renderObject'
@@ -53,6 +54,8 @@ export function renderContent(
       return renderFunction(context, content)
     case 'import':
       return renderImport(context, content)
+    case 'importType':
+      return renderImportType(context, content)
     case 'interface':
       return renderInterface(context, content)
     case 'method':
