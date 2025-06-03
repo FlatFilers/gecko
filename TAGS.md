@@ -21,6 +21,7 @@
 - [GeckoStatusFile](#geckostatusfile)
 - [Get](#get)
 - [Import](#import)
+- [ImportType](#importtype)
 - [Interface](#interface)
 - [Method](#method)
 - [Object](#object)
@@ -675,6 +676,8 @@ import React from 'react'
 import type { ReactDOM } from 'react-dom'
 import a, { b, c } from './d'
 ```
+
+
 
 
 <a name="interface"> </a>
